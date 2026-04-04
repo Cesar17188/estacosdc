@@ -1,0 +1,22 @@
+<header class="estancos-header">
+  <div class="logo-container" routerLink="/">
+    <!-- <img src="assets/logo-estancos.svg" alt="Estancos Distilling Company" class="logo"> -->
+     <!-- Logotipo simulado con texto tipográfico -->
+        <div class="logo">ESTANCOS</div>
+        <div class="logo-sub">Distilling Company</div>
+  </div>
+
+  <nav class="main-nav">
+    <ul>
+      <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Inicio</a></li>
+      <li><a routerLink="/espiritus" routerLinkActive="active">Espíritus</a></li>
+      <li><a routerLink="/rommeliers" routerLinkActive="active">Rommeliers</a></li>
+      <li><a routerLink="/contenidos" routerLinkActive="active">Contenidos</a></li>
+      <li><a routerLink="/visitas" routerLinkActive="active">Visitas</a></li>
+    </ul>
+  </nav>
+
+  <div class="header-actions">
+    <button class="btn-tienda" routerLink="/tienda">Tienda</button>
+  </div>
+</header>
