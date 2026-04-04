@@ -111,14 +111,44 @@
       display: flex;
     }
 
-    .main-nav, .header-actions {
-      display: none;
+    /* --- Overlay del Menú Móvil --- */
+    .mobile-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
       width: 100%;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.6);
+      z-index: -1;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease-in-out;
+    }
+
+    .main-nav, .header-actions {
+      width: 100%;
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      margin: 0;
+      padding: 0;
+      transition: all 0.4s ease-in-out;
+    }
+
+    .header-actions {
+      display: flex;
+      justify-content: center;
     }
 
     &.menu-open {
+      .mobile-overlay {
+        opacity: 1;
+        visibility: visible;
+      }
+
       .main-nav {
-        display: block;
+        max-height: 350px; /* Adjust this value if you add/remove links */
+        opacity: 1;
         margin-top: 1rem;
         padding-top: 1rem;
         border-top: 1px solid rgba(212, 175, 55, 0.2);
@@ -131,8 +161,8 @@
       }
 
       .header-actions {
-        display: flex;
-        justify-content: center;
+        max-height: 100px;
+        opacity: 1;
         margin-top: 1.5rem;
         padding-bottom: 1rem;
       }

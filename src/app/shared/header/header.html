@@ -1,4 +1,6 @@
 <header class="estancos-header" [class.menu-open]="isMenuOpen">
+  <!-- Add the overlay element here -->
+  <div class="mobile-overlay" (click)="closeMenu()"></div>
   <div class="logo-container" routerLink="/">
     <!-- <img src="assets/logo-estancos.svg" alt="Estancos Distilling Company" class="logo"> -->
      <!-- Logotipo simulado con texto tipográfico -->
@@ -22,6 +24,6 @@
   </nav>
 
   <div class="header-actions">
-    <button class="btn-tienda" routerLink="/tienda">Tienda</button>
+    <button class="btn-tienda" (click)="closeMenu()" routerLink="/tienda">Tienda</button>
   </div>
 </header>
