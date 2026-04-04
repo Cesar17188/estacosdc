@@ -83,4 +83,59 @@
       }
     }
   }
+
+  /* --- Estilos Responsivos --- */
+  .mobile-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+
+    span {
+      display: block;
+      width: 25px;
+      height: 3px;
+      background-color: #d4af37;
+      transition: all 0.3s ease;
+    }
+  }
+
+  @media (max-width: 768px) {
+    flex-wrap: wrap;
+    padding: 1rem 5%;
+
+    .mobile-toggle {
+      display: flex;
+    }
+
+    .main-nav, .header-actions {
+      display: none;
+      width: 100%;
+    }
+
+    &.menu-open {
+      .main-nav {
+        display: block;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid rgba(212, 175, 55, 0.2);
+
+        ul {
+          flex-direction: column;
+          gap: 1.5rem;
+          align-items: center;
+        }
+      }
+
+      .header-actions {
+        display: flex;
+        justify-content: center;
+        margin-top: 1.5rem;
+        padding-bottom: 1rem;
+      }
+    }
+  }
 }

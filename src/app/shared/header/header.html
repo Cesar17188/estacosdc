@@ -1,10 +1,15 @@
-<header class="estancos-header">
+<header class="estancos-header" [class.menu-open]="isMenuOpen">
   <div class="logo-container" routerLink="/">
     <!-- <img src="assets/logo-estancos.svg" alt="Estancos Distilling Company" class="logo"> -->
      <!-- Logotipo simulado con texto tipográfico -->
         <div class="logo">ESTANCOS</div>
         <div class="logo-sub">Distilling Company</div>
   </div>
+
+  <!-- Add this hamburger toggle button -->
+  <button class="mobile-toggle" (click)="toggleMenu()">
+    <span></span><span></span><span></span>
+  </button>
 
   <nav class="main-nav">
     <ul>
