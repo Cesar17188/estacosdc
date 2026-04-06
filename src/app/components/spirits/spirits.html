@@ -1,0 +1,31 @@
+<section class="spirits-section section-padding">
+      <div class="container">
+
+        <div class="section-header">
+          <span class="section-subtitle">Nuestra Colección</span>
+          <h2>Espíritus de Altura</h2>
+        </div>
+
+        <div class="spirits-grid">
+          <!-- Angular 21 Control Flow: @for -->
+          @for (spirit of spirits; track spirit.name) {
+            <div class="spirit-card">
+
+              <div class="card-image-wrapper">
+                <img [src]="spirit.imageUrl" [alt]="spirit.name" class="card-image">
+              </div>
+
+              <div class="card-content">
+                <h3>{{ spirit.name }}</h3>
+                <p>{{ spirit.description }}</p>
+
+                <!-- En tu app real, usa [routerLink]="spirit.link" en lugar de href -->
+                <a [href]="spirit.link" class="btn-outline">Descubrir</a>
+              </div>
+
+            </div>
+          }
+        </div>
+
+      </div>
+    </section>
