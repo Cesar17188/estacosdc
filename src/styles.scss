@@ -1,1 +1,172 @@
-/* You can add global styles to this file, and also import other style files */
+/* ==========================================================================
+   ESTANCOS DISTILLING COMPANY - ESTILOS GLOBALES
+   ========================================================================== */
+
+/* 1. Importación de Fuentes Premium */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Montserrat:wght@300;400;500;600&display=swap');
+
+/* 2. Variables Globales (Design System) */
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  margin: 0px;
+}
+
+.main-wrapper {
+  flex-grow: 1;
+  margin: 0px;
+}
+
+:root {
+  /* Paleta de Colores */
+  --color-bg-base: #0a0a0a;          /* Fondo principal más oscuro */
+  --color-bg-surface: #121212;       /* Fondo para tarjetas, header, modales */
+  --color-bg-surface-light: #1a1a1a; /* Estados hover en menús */
+  --color-border: #2a2a2a;           /* Líneas divisorias sutiles */
+
+  --color-accent-gold: #d4af37;      /* Dorado premium / Ámbar */
+  --color-accent-hover: #b5952f;     /* Dorado oscuro para interacciones */
+
+  --color-text-main: #f4f4f4;        /* Texto principal (blanco roto para no cansar la vista) */
+  --color-text-muted: #9ca3af;       /* Texto secundario (descripciones, notas) */
+  --color-text-dark: #121212;        /* Texto oscuro (para ir sobre fondos dorados) */
+
+  /* Tipografía */
+  --font-heading: 'Cinzel', serif;
+  --font-body: 'Montserrat', sans-serif;
+
+  /* Transiciones */
+  --transition-smooth: all 0.3s ease-in-out;
+}
+
+/* 3. Reset y Normalización */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-bg-base);
+  color: var(--color-text-main);
+  font-family: var(--font-body);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  margin: 0px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding: 0px;
+}
+body.no-scroll {
+  overflow: hidden;
+}
+
+/* 4. Tipografía Global */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  color: var(--color-text-main);
+  margin-bottom: 1rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+h1 { font-size: 2.5rem; color: var(--color-accent-gold); }
+h2 { font-size: 2rem; }
+h3 { font-size: 1.75rem; }
+
+p {
+  margin-bottom: 1.5rem;
+  color: var(--color-text-muted);
+  font-weight: 300;
+}
+
+a {
+  color: var(--color-accent-gold);
+  text-decoration: none;
+  transition: var(--transition-smooth);
+
+  &:hover {
+    color: var(--color-accent-hover);
+  }
+}
+
+/* 5. Clases Utilitarias Globales */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.section-padding {
+  padding: 5rem 0;
+}
+
+/* 6. Botones Estilizados (Reutilizables en todo el E-commerce) */
+.btn {
+  display: inline-block;
+  padding: 0.8rem 2rem;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: var(--transition-smooth);
+  text-align: center;
+  border: none;
+
+  &-primary {
+    background-color: var(--color-accent-gold);
+    color: var(--color-text-dark);
+
+    &:hover {
+      background-color: var(--color-accent-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+
+  &-outline {
+    background-color: transparent;
+    color: var(--color-accent-gold);
+    border: 1px solid var(--color-accent-gold);
+
+    &:hover {
+      background-color: rgba(212, 175, 55, 0.1);
+    }
+  }
+}
+
+/* 7. Scrollbar Personalizado (Elegancia en los detalles) */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg-base);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-accent-gold);
+}
