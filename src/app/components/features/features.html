@@ -1,0 +1,32 @@
+<section class="features-section section-padding">
+      <div class="features-bg-pattern"></div>
+
+      <div class="container">
+        <div class="section-header">
+          <span class="section-subtitle">Nuestra Filosofía</span>
+          <h2>El Arte de la Destilación</h2>
+        </div>
+
+        <div class="features-grid">
+          <!-- Angular 21 Control Flow: @for -->
+          @for (feature of features; track feature.title) {
+            <div class="feature-item">
+              <!-- Número decorativo de fondo -->
+              <span class="feature-number">{{ feature.number }}</span>
+
+              <!-- Ícono SVG inyectado dinámicamente -->
+              <div class="feature-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                  <path [attr.d]="feature.iconPath" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </div>
+
+              <div class="feature-content">
+                <h3>{{ feature.title }}</h3>
+                <p>{{ feature.description }}</p>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </section>

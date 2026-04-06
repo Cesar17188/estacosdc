@@ -1,0 +1,136 @@
+/* === ESTILOS DE LA SECCIÓN DE CARACTERÍSTICAS === */
+      .features-section {
+        background-color: var(--color-bg-base);
+        position: relative;
+        overflow: hidden;
+      }
+
+      /* Decoración de fondo sutil */
+      .features-bg-pattern {
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background-image: radial-gradient(var(--color-border) 1px, transparent 1px);
+        background-size: 40px 40px;
+        opacity: 0.15;
+        z-index: 0;
+      }
+
+      .section-header {
+        text-align: center;
+        margin-bottom: 4rem;
+        position: relative;
+        z-index: 1;
+      }
+
+      .section-subtitle {
+        color: var(--color-accent-gold);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        margin-bottom: 1rem;
+        display: block;
+        font-weight: 500;
+      }
+
+      .section-header h2 {
+        font-family: var(--font-heading);
+        font-size: clamp(2rem, 3vw, 2.8rem);
+        color: var(--color-text-main);
+        margin: 0;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+      }
+
+      /* Grid de Características */
+      .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 3rem;
+        position: relative;
+        z-index: 1;
+      }
+
+      /* Tarjeta de Característica Individual */
+      .feature-item {
+        background-color: transparent;
+        padding: 2.5rem 2rem;
+        border: 1px solid var(--color-border);
+        border-radius: 4px;
+        text-align: center;
+        transition: var(--transition-smooth);
+        position: relative;
+        overflow: hidden;
+      }
+
+      /* Efecto hover: borde dorado y leve levantamiento */
+      .feature-item:hover {
+        transform: translateY(-8px);
+        border-color: var(--color-accent-gold);
+        background-color: rgba(26, 26, 26, 0.5); /* Ligeramente más claro que el fondo base */
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+      }
+
+      /* Número decorativo de fondo */
+      .feature-number {
+        position: absolute;
+        top: -10px;
+        right: -10px;
+        font-family: var(--font-heading);
+        font-size: 8rem;
+        font-weight: 700;
+        color: rgba(255, 255, 255, 0.02);
+        line-height: 1;
+        transition: var(--transition-smooth);
+        z-index: 0;
+        pointer-events: none;
+      }
+
+      .feature-item:hover .feature-number {
+        color: rgba(212, 175, 55, 0.05); /* Se vuelve dorado muy sutil al hover */
+        transform: scale(1.1);
+      }
+
+      /* Icono */
+      .feature-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        background-color: rgba(212, 175, 55, 0.1);
+        color: var(--color-accent-gold);
+        margin-bottom: 1.5rem;
+        transition: var(--transition-smooth);
+        position: relative;
+        z-index: 1;
+      }
+
+      .feature-item:hover .feature-icon {
+        background-color: var(--color-accent-gold);
+        color: var(--color-bg-surface);
+        transform: scale(1.1);
+      }
+
+      /* Contenido Textual */
+      .feature-content {
+        position: relative;
+        z-index: 1;
+      }
+
+      .feature-content h3 {
+        font-family: var(--font-heading);
+        font-size: 1.3rem;
+        color: var(--color-text-main);
+        margin-bottom: 1rem;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+      }
+
+      .feature-content p {
+        color: var(--color-text-muted);
+        font-size: 0.95rem;
+        line-height: 1.7;
+        margin: 0;
+        font-weight: 300;
+      }

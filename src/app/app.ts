@@ -4,9 +4,10 @@ import { Header } from './shared/header/header';
 import { Hero } from './components/hero/hero';
 import { History } from "./components/history/history";
 import { Spirits } from "./components/spirits/spirits";
+import { Features } from "./components/features/features";
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, Header, Hero, History, Spirits],
+  imports: [RouterOutlet, Header, Hero, History, Spirits, Features],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })
