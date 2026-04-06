@@ -1,0 +1,138 @@
+/* === ESTILOS DE LA SECCIÓN HISTORIA === */
+      .history-section {
+        position: relative;
+        background-color: var(--color-bg-base);
+      }
+
+      /* Elemento decorativo de fondo */
+      .history-bg-accent {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 50%;
+        height: 100%;
+        background: radial-gradient(circle at top right, rgba(212, 175, 55, 0.05), transparent 60%);
+        pointer-events: none;
+      }
+
+      .history-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 4rem;
+        align-items: center;
+        position: relative;
+        z-index: 2;
+      }
+
+      /* Contenido Textual */
+      .history-content {
+        max-width: 500px;
+      }
+
+      .section-subtitle {
+        font-family: var(--font-body);
+        color: var(--color-accent-gold);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        margin-bottom: 1rem;
+        display: block;
+        font-weight: 500;
+      }
+
+      .history-content h2 {
+        font-family: var(--font-heading);
+        font-size: clamp(2rem, 3vw, 2.8rem);
+        color: var(--color-text-main);
+        margin-bottom: 1.5rem;
+        line-height: 1.2;
+      }
+
+      .history-content p {
+        color: var(--color-text-muted);
+        line-height: 1.8;
+        margin-bottom: 1.5rem;
+        font-weight: 300;
+      }
+
+      /* Diseño de Imágenes */
+      .history-visuals {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .image-main {
+        width: 80%;
+        height: auto;
+        border-radius: 4px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+        border: 1px solid var(--color-border);
+        transition: var(--transition-smooth);
+      }
+
+      .history-visuals:hover .image-main {
+        transform: scale(1.02);
+        border-color: rgba(212, 175, 55, 0.3);
+      }
+
+      /* Recuadro decorativo detrás de la imagen */
+      .visual-accent {
+        position: absolute;
+        bottom: -20px;
+        right: 5%;
+        width: 60%;
+        height: 60%;
+        border: 2px solid var(--color-accent-gold);
+        z-index: -1;
+        opacity: 0.5;
+        border-radius: 2px;
+      }
+
+      /* Cita Destacada */
+      .quote-box {
+        margin-top: 3rem;
+        padding: 1.5rem 0 1.5rem 1.5rem;
+        border-left: 3px solid var(--color-accent-gold);
+      }
+
+      .quote-text {
+        font-family: var(--font-heading);
+        font-size: 1.2rem;
+        color: var(--color-text-main);
+        font-style: italic;
+        margin-bottom: 0.5rem;
+      }
+
+      .quote-author {
+        font-size: 0.85rem;
+        color: var(--color-accent-gold);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      /* Responsivo */
+      @media (max-width: 900px) {
+        .history-grid {
+          grid-template-columns: 1fr;
+          gap: 3rem;
+        }
+
+        .history-content {
+          order: 2; /* Texto abajo en móviles */
+          max-width: 100%;
+          text-align: center;
+        }
+
+        .history-visuals {
+          order: 1; /* Imagen arriba en móviles */
+        }
+
+        .quote-box {
+          text-align: left; /* Mantener la cita alineada a la izquierda incluso si el texto principal está centrado */
+          margin-left: auto;
+          margin-right: auto;
+          max-width: 90%;
+        }
+      }
