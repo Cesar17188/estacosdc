@@ -1,0 +1,150 @@
+<section class="section-padding">
+      <div class="container distributors-grid">
+
+        <!-- Columna de Información -->
+        <div class="info-column">
+          <h2>Socios Comerciales</h2>
+          <p class="intro-text">
+            Buscamos aliados estratégicos que compartan nuestra pasión por la calidad y la tradición. Lleva la experiencia premium de Estancos Destillery a restaurantes, hoteles y licorerías de alto nivel en tu región.
+          </p>
+
+          <div class="benefits-list">
+            <!-- Beneficio 1 -->
+            <div class="benefit-item">
+              <div class="benefit-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                </svg>
+              </div>
+              <div class="benefit-text">
+                <h4>Márgenes Competitivos</h4>
+                <p>Estructura de precios preferencial por volumen para maximizar el retorno de tu inversión.</p>
+              </div>
+            </div>
+
+            <!-- Beneficio 2 -->
+            <div class="benefit-item">
+              <div class="benefit-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                </svg>
+              </div>
+              <div class="benefit-text">
+                <h4>Material de Punto de Venta (POS)</h4>
+                <p>Apoyo con exhibidores, cristalería oficial y material gráfico diseñado para destacar nuestros destilados.</p>
+              </div>
+            </div>
+
+            <!-- Beneficio 3 -->
+            <div class="benefit-item">
+              <div class="benefit-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+              </div>
+              <div class="benefit-text">
+                <h4>Soporte y Capacitación</h4>
+                <p>Entrenamiento directo con nuestro Maestro Destilador para tu equipo de ventas y atención personalizada.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Columna del Formulario Reactivo -->
+        <div class="form-column">
+
+          @if (isSubmitted) {
+            <!-- Estado de Éxito -->
+            <div class="success-message">
+              <h4>¡Solicitud Recibida!</h4>
+              <p>Gracias por tu interés en representar a Estancos. Nuestro equipo comercial revisará tu perfil y se pondrá en contacto contigo a la brevedad.</p>
+            </div>
+          } @else {
+            <!-- Formulario -->
+            <div class="form-header">
+              <h3>Envia tu Solicitud</h3>
+              <p>Completa tus datos comerciales a continuación.</p>
+            </div>
+
+            <!-- [formGroup] enlaza la vista con la lógica de TypeScript -->
+            <form [formGroup]="distributorForm" (ngSubmit)="onSubmit()">
+
+              <div class="form-group">
+                <label for="name">Nombre Completo <span class="required-mark">*</span></label>
+                <input
+                  type="text"
+                  id="name"
+                  formControlName="name"
+                  placeholder="Ej. Carlos Mendoza"
+                  [class.is-invalid]="isFieldInvalid('name')"
+                >
+                @if (isFieldInvalid('name')) {
+                  <span class="error-message">El nombre es obligatorio.</span>
+                }
+              </div>
+
+              <div class="form-group">
+                <label for="company">Empresa / Razón Social <span class="required-mark">*</span></label>
+                <input
+                  type="text"
+                  id="company"
+                  formControlName="company"
+                  placeholder="Ej. Distribuidora Andina S.A."
+                  [class.is-invalid]="isFieldInvalid('company')"
+                >
+                @if (isFieldInvalid('company')) {
+                  <span class="error-message">El nombre de la empresa es obligatorio.</span>
+                }
+              </div>
+
+              <div class="form-group">
+                <label for="email">Correo Electrónico Comercial <span class="required-mark">*</span></label>
+                <input
+                  type="email"
+                  id="email"
+                  formControlName="email"
+                  placeholder="ejemplo@tuempresa.com"
+                  [class.is-invalid]="isFieldInvalid('email')"
+                >
+                @if (distributorForm.get('email')?.touched && distributorForm.get('email')?.hasError('required')) {
+                  <span class="error-message">El correo electrónico es obligatorio.</span>
+                }
+                @if (distributorForm.get('email')?.touched && distributorForm.get('email')?.hasError('email')) {
+                  <span class="error-message">Ingresa un formato de correo válido.</span>
+                }
+              </div>
+
+              <div class="form-group">
+                <label for="region">Región / Ciudad de Operación <span class="required-mark">*</span></label>
+                <input
+                  type="text"
+                  id="region"
+                  formControlName="region"
+                  placeholder="Ej. Quito, Pichincha"
+                  [class.is-invalid]="isFieldInvalid('region')"
+                >
+                @if (isFieldInvalid('region')) {
+                  <span class="error-message">La región o ciudad es obligatoria.</span>
+                }
+              </div>
+
+              <div class="form-group">
+                <label for="message">Mensaje (Opcional)</label>
+                <textarea
+                  id="message"
+                  formControlName="message"
+                  placeholder="Cuéntanos un poco sobre tu red de distribución o experiencia en el sector..."
+                  rows="4"
+                ></textarea>
+              </div>
+
+              <button type="submit" class="btn-submit" [disabled]="distributorForm.invalid || isSubmitting">
+                {{ isSubmitting ? 'Procesando...' : 'Enviar Solicitud' }}
+              </button>
+
+            </form>
+          }
+        </div>
+
+      </div>
+    </section>

@@ -1,0 +1,171 @@
+/* === LAYOUT VISITAS === */
+      .visit-section {
+        background-color: var(--color-bg-surface);
+        border-top: 1px solid var(--color-border);
+        border-bottom: 1px solid var(--color-border);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .visit-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0;
+        background-color: var(--color-bg-base);
+        border: 1px solid var(--color-border);
+        border-radius: 4px;
+        overflow: hidden;
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+      }
+
+      @media (max-width: 900px) {
+        .visit-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      /* --- IMAGEN --- */
+      .visit-image-wrapper {
+        position: relative;
+        min-height: 400px;
+        overflow: hidden;
+      }
+
+      .visit-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        position: absolute;
+        top: 0;
+        left: 0;
+        transition: transform 10s ease; /* Zoom muy lento para dar vida */
+      }
+
+      .visit-image-wrapper:hover .visit-image {
+        transform: scale(1.05);
+      }
+
+      /* Capa oscura para mezclar mejor la imagen con la interfaz */
+      .visit-image-overlay {
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: linear-gradient(to right, transparent, rgba(10,10,10, 0.8));
+      }
+
+      @media (max-width: 900px) {
+        .visit-image-overlay {
+          background: linear-gradient(to bottom, transparent, rgba(10,10,10, 0.9));
+        }
+      }
+
+      /* --- CONTENIDO --- */
+      .visit-content {
+        padding: 4rem 3rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        position: relative;
+        z-index: 2;
+      }
+
+      .section-subtitle {
+        color: var(--color-accent-gold);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        margin-bottom: 1rem;
+        display: block;
+        font-weight: 500;
+      }
+
+      .visit-content h2 {
+        font-family: var(--font-heading);
+        font-size: clamp(2rem, 2.5vw, 2.5rem);
+        color: var(--color-text-main);
+        margin-bottom: 1.5rem;
+        line-height: 1.2;
+      }
+
+      .visit-desc {
+        color: var(--color-text-muted);
+        line-height: 1.7;
+        margin-bottom: 2.5rem;
+        font-size: 1.05rem;
+        font-weight: 300;
+      }
+
+      /* --- INFO BLOCKS (Ubicación y Horarios) --- */
+      .info-container {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        margin-bottom: 3rem;
+      }
+
+      .info-block {
+        display: flex;
+        align-items: flex-start;
+        gap: 1.2rem;
+      }
+
+      .info-icon {
+        color: var(--color-accent-gold);
+        background-color: rgba(212, 175, 55, 0.1);
+        padding: 0.8rem;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .info-text h4 {
+        font-family: var(--font-heading);
+        font-size: 1rem;
+        color: var(--color-text-main);
+        margin: 0 0 0.4rem 0;
+        letter-spacing: 1px;
+      }
+
+      .info-text p {
+        margin: 0;
+        color: var(--color-text-muted);
+        font-size: 0.95rem;
+        line-height: 1.5;
+      }
+
+      /* --- BOTÓN --- */
+      .btn-primary {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        background-color: var(--color-accent-gold);
+        color: #121212;
+        border: none;
+        padding: 1rem 2rem;
+        font-family: var(--font-heading);
+        font-weight: 700;
+        font-size: 0.95rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        cursor: pointer;
+        border-radius: 2px;
+        transition: var(--transition-smooth);
+        text-decoration: none;
+        width: fit-content;
+      }
+
+      .btn-primary:hover {
+        background-color: var(--color-accent-hover);
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(212, 175, 55, 0.3);
+      }
+
+      @media (max-width: 600px) {
+        .visit-content {
+          padding: 3rem 1.5rem;
+        }
+        .btn-primary {
+          width: 100%;
+        }
+      }
