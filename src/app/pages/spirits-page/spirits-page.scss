@@ -1,0 +1,227 @@
+/* === HERO DE LA PÁGINA DE ESPÍRITUS === */
+      .catalog-hero {
+        position: relative;
+        padding: 8rem 0 6rem 0;
+        text-align: center;
+        background: linear-gradient(to bottom, var(--color-bg-surface), var(--color-bg-base));
+        border-bottom: 1px solid var(--color-border);
+      }
+
+      .catalog-hero h1 {
+        font-family: var(--font-heading);
+        font-size: clamp(2.5rem, 5vw, 4rem);
+        color: var(--color-accent-gold);
+        margin-bottom: 1rem;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+      }
+
+      .catalog-hero p {
+        color: var(--color-text-muted);
+        font-size: 1.1rem;
+        max-width: 600px;
+        margin: 0 auto;
+        line-height: 1.6;
+      }
+
+      /* === DETALLE DE PRODUCTOS === */
+      .product-section {
+        padding: 6rem 0;
+        border-bottom: 1px solid var(--color-border);
+      }
+
+      .product-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 5rem;
+        align-items: center;
+      }
+
+      @media (max-width: 900px) {
+        .product-grid {
+          grid-template-columns: 1fr;
+          gap: 3rem;
+        }
+      }
+
+      /* Alternar columnas en pantallas grandes */
+      .layout-reverse .product-image-col {
+        order: 2;
+      }
+      .layout-reverse .product-info-col {
+        order: 1;
+      }
+
+      @media (max-width: 900px) {
+        .layout-reverse .product-image-col,
+        .layout-reverse .product-info-col {
+          order: unset; /* En móviles siempre la imagen va arriba */
+        }
+      }
+
+      /* Imagen del Producto */
+      .product-image-wrapper {
+        position: relative;
+        width: 100%;
+        padding-top: 120%; /* Aspect ratio más vertical para botellas */
+        border-radius: 4px;
+        overflow: hidden;
+        border: 1px solid var(--color-border);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+      }
+
+      .product-image-wrapper::after {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: radial-gradient(circle, transparent 40%, rgba(10,10,10,0.8) 100%);
+        pointer-events: none;
+      }
+
+      .product-image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 10s ease;
+      }
+
+      .product-image-wrapper:hover .product-image {
+        transform: scale(1.05);
+      }
+
+      /* Información del Producto */
+      .product-type {
+        color: var(--color-accent-gold);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        margin-bottom: 0.5rem;
+        display: block;
+        font-weight: 500;
+      }
+
+      .product-title {
+        font-family: var(--font-heading);
+        font-size: clamp(2rem, 3vw, 2.5rem);
+        color: var(--color-text-main);
+        margin-bottom: 1.5rem;
+        line-height: 1.1;
+      }
+
+      .product-specs {
+        display: flex;
+        gap: 2rem;
+        margin-bottom: 2rem;
+        padding-bottom: 1.5rem;
+        border-bottom: 1px solid var(--color-border);
+      }
+
+      .spec-item {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .spec-label {
+        font-size: 0.75rem;
+        color: var(--color-text-muted);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 0.2rem;
+      }
+
+      .spec-value {
+        font-family: var(--font-heading);
+        font-size: 1.2rem;
+        color: var(--color-accent-gold);
+      }
+
+      .product-desc {
+        color: var(--color-text-muted);
+        line-height: 1.7;
+        margin-bottom: 2.5rem;
+        font-size: 1.05rem;
+      }
+
+      /* Notas de Cata */
+      .tasting-notes {
+        background-color: var(--color-bg-surface);
+        padding: 2rem;
+        border: 1px solid var(--color-border);
+        border-radius: 2px;
+        border-left: 3px solid var(--color-accent-gold);
+        margin-bottom: 2.5rem;
+      }
+
+      .tasting-notes h4 {
+        font-family: var(--font-heading);
+        font-size: 1.1rem;
+        margin-top: 0;
+        margin-bottom: 1.5rem;
+        color: var(--color-text-main);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      .note-item {
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: flex-start;
+      }
+
+      .note-item:last-child {
+        margin-bottom: 0;
+      }
+
+      .note-label {
+        color: var(--color-accent-gold);
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        width: 80px;
+        flex-shrink: 0;
+        letter-spacing: 1px;
+      }
+
+      .note-desc {
+        color: var(--color-text-muted);
+        font-size: 0.95rem;
+        line-height: 1.5;
+        margin: 0;
+      }
+
+      /* Botón de Compra */
+      .btn-buy {
+        display: inline-block;
+        background-color: var(--color-accent-gold);
+        color: #121212;
+        border: none;
+        padding: 1rem 2.5rem;
+        font-family: var(--font-heading);
+        font-weight: 700;
+        font-size: 0.95rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        cursor: pointer;
+        border-radius: 2px;
+        transition: var(--transition-smooth);
+        text-decoration: none;
+      }
+
+      .btn-buy:hover {
+        background-color: var(--color-accent-hover);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
+      }
+
+      /* Mockup de Footer */
+      .mock-footer {
+        background-color: var(--color-bg-surface);
+        padding: 2rem;
+        text-align: center;
+        border-top: 1px solid var(--color-border);
+        margin-top: auto;
+      }
+      .mock-footer p { margin: 0; font-size: 0.8rem; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 1px; }

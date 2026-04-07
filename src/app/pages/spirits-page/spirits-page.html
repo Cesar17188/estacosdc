@@ -1,0 +1,64 @@
+<main>
+      <!-- HERO DE LA COLECCIÓN -->
+      <section class="catalog-hero">
+        <div class="container">
+          <h1>La Colección Estancos</h1>
+          <p>Descubre el alma de los Andes capturada en cada botella. Destilados de clase mundial, moldeados por la altura y el tiempo.</p>
+        </div>
+      </section>
+
+      <!-- LISTA DE PRODUCTOS DETALLADOS -->
+      @for (product of products; track product.id) {
+        <section class="product-section" [id]="product.id">
+          <div class="container">
+            <div class="product-grid" [class.layout-reverse]="product.reverseLayout">
+
+              <!-- Imagen -->
+              <div class="product-image-col">
+                <div class="product-image-wrapper">
+                  <img [src]="product.imageUrl" [alt]="product.name" class="product-image">
+                </div>
+              </div>
+
+              <!-- Detalles -->
+              <div class="product-info-col">
+                <span class="product-type">{{ product.type }}</span>
+                <h2 class="product-title">{{ product.name }}</h2>
+
+                <div class="product-specs">
+                  <div class="spec-item">
+                    <span class="spec-label">Graduación</span>
+                    <span class="spec-value">{{ product.abv }}</span>
+                  </div>
+                  <div class="spec-item">
+                    <span class="spec-label">Maduración</span>
+                    <span class="spec-value">{{ product.age }}</span>
+                  </div>
+                </div>
+
+                <p class="product-desc">{{ product.description }}</p>
+
+                <div class="tasting-notes">
+                  <h4>Notas de Cata</h4>
+                  <div class="note-item">
+                    <span class="note-label">Nariz:</span>
+                    <p class="note-desc">{{ product.tastingNotes.nose }}</p>
+                  </div>
+                  <div class="note-item">
+                    <span class="note-label">Boca:</span>
+                    <p class="note-desc">{{ product.tastingNotes.palate }}</p>
+                  </div>
+                  <div class="note-item">
+                    <span class="note-label">Final:</span>
+                    <p class="note-desc">{{ product.tastingNotes.finish }}</p>
+                  </div>
+                </div>
+
+                <a href="#/tienda/{{ product.id }}" class="btn-buy">Añadir al Carrito</a>
+              </div>
+
+            </div>
+          </div>
+        </section>
+      }
+    </main>
