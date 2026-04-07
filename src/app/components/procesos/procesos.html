@@ -1,1 +1,34 @@
-<p>procesos works!</p>
+ <section class="section-padding">
+      <div class="container">
+
+        <div class="section-header">
+          <span class="section-subtitle">Artesanía Pura</span>
+          <h2>Nuestros Procesos</h2>
+        </div>
+
+        <div class="processes-timeline">
+          @for (step of processSteps; track step.id) {
+            <div class="process-step">
+
+              <div class="timeline-dot"></div>
+
+              <!-- Imagen del Proceso -->
+              <div class="process-image-col">
+                <div class="process-image-wrapper">
+                  <img [src]="step.imageUrl" [alt]="step.title" class="process-image">
+                </div>
+              </div>
+
+              <!-- Descripción del Proceso -->
+              <div class="process-text-col">
+                <span class="step-number">{{ step.number }}</span>
+                <h3>{{ step.title }}</h3>
+                <p>{{ step.description }}</p>
+              </div>
+
+            </div>
+          }
+        </div>
+
+      </div>
+    </section>
