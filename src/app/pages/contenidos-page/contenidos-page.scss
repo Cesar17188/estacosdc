@@ -1,0 +1,26 @@
+/* Hero de la Página de Contenidos */
+      .content-hero {
+        text-align: center;
+        padding: 6rem 0 4rem 0;
+        background: linear-gradient(to bottom, var(--color-bg-surface), var(--color-bg-base));
+        border-bottom: 1px solid var(--color-border);
+        margin-bottom: 4rem;
+      }
+
+      .content-hero h1 {
+        font-family: var(--font-heading);
+        font-size: clamp(2.5rem, 5vw, 4rem);
+        color: var(--color-accent-gold);
+        margin-bottom: 1rem;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+      }
+
+      .content-hero p {
+        color: var(--color-text-muted);
+        font-size: 1.1rem;
+        max-width: 700px;
+        margin: 0 auto;
+        line-height: 1.6;
+        font-weight: 300;
+      }

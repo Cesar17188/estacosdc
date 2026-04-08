@@ -1,0 +1,20 @@
+<div class="container">
+
+      <div class="section-header">
+        <span class="section-subtitle">Momentos Inmortales</span>
+        <h2>Galería Estancos</h2>
+      </div>
+
+      <div class="gallery-grid">
+        @for (img of images; track img.url) {
+          <!-- Asignamos dinámicamente la clase de tamaño (tall, wide, normal, large) -->
+          <div class="gallery-item" [class]="img.sizeClass">
+            <img [src]="img.url" [alt]="img.alt" loading="lazy">
+            <div class="overlay">
+              <h3>{{ img.title }}</h3>
+            </div>
+          </div>
+        }
+      </div>
+
+    </div>
