@@ -1,0 +1,70 @@
+<!-- Overlay oscuro de fondo -->
+<div
+  class="cart-overlay"
+  [class.open]="cartService.isCartOpen()"
+  (click)="cartService.closeCart()">
+</div>
+
+<!-- Panel lateral del carrito -->
+<aside class="cart-sidebar" [class.open]="cartService.isCartOpen()">
+
+  <!-- Cabecera del Carrito -->
+  <div class="cart-header">
+    <h2>Tu Carrito</h2>
+    <button class="close-cart" (click)="cartService.closeCart()">
+      <svg xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)" width="32" height="32" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+  </div>
+
+  <!-- Lista de Productos -->
+  <div class="cart-items">
+    @if (cartService.cartItems().length === 0) {
+      <div class="empty-cart">
+        <svg xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)" width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1" style="margin: 0 auto 1rem auto; opacity: 0.5;">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007z" />
+        </svg>
+        Tu carrito está vacío.<br>Descubre nuestros destilados.
+      </div>
+    } @else {
+      @for (item of cartService.cartItems(); track item.id) {
+        <div class="cart-item">
+          <div class="cart-item-img">
+            <img [src]="item.imageUrl" [alt]="item.name">
+          </div>
+          <div class="cart-item-details">
+            <div>
+              <h4 class="cart-item-title">{{ item.name }}</h4>
+              <div class="cart-item-price">\${{ item.price | number:'1.2-2' }}</div>
+            </div>
+            <div class="cart-item-actions">
+              <div class="quantity-controls">
+                <button class="btn-icon" (click)="cartService.updateQuantity(item.id, -1)">-</button>
+                <span>{{ item.quantity }}</span>
+                <button class="btn-icon" (click)="cartService.updateQuantity(item.id, 1)">+</button>
+              </div>
+              <button class="remove-item" (click)="cartService.removeFromCart(item.id)">Eliminar</button>
+            </div>
+          </div>
+        </div>
+      }
+    }
+  </div>
+
+  <!-- Pie del Carrito (Totales y Pago) -->
+  <div class="cart-footer">
+    <div class="cart-summary-row">
+      <span>Subtotal</span>
+      <span>\${{ cartService.cartTotal() | number:'1.2-2' }}</span>
+    </div>
+    <div class="cart-summary-row total">
+      <span>Total</span>
+      <span>\${{ cartService.cartTotal() | number:'1.2-2' }}</span>
+    </div>
+    <button class="btn-checkout" [disabled]="cartService.cartItems().length === 0">
+      Proceder al Pago
+    </button>
+  </div>
+
+</aside>

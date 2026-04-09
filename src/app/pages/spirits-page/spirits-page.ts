@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Spirits } from '../../components/spirits/spirits';
 
 interface TastingNotes {
   nose: string;
@@ -22,7 +23,7 @@ interface ProductDetails {
 @Component({
   selector: 'app-spirits-page',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, Spirits],
   templateUrl: './spirits-page.html',
   styleUrl: './spirits-page.scss',
 })

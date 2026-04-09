@@ -1,7 +1,8 @@
-import { Component, Inject, Renderer2, OnDestroy, HostListener } from '@angular/core';
+import { Component, Inject, Renderer2, OnDestroy, HostListener, inject } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { CartService } from '../../services/cart';
 
 @Component({
   selector: 'app-header',
@@ -12,6 +13,8 @@ import { CommonModule } from '@angular/common';
 })
 export class Header implements OnDestroy {
   isMenuOpen = false;
+  // Inyectamos el servicio del carrito
+  cartService = inject(CartService);
 
 constructor(
     private renderer: Renderer2,
