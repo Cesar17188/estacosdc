@@ -1,0 +1,57 @@
+<main>
+      <!-- HERO DE LA TIENDA -->
+      <section class="store-hero">
+        <div class="container">
+          <h1>Boutique Estancos</h1>
+          <p>Adquiere nuestros destilados de altura, ediciones de colección y accesorios exclusivos directamente desde nuestra destilería hasta tu copa.</p>
+        </div>
+      </section>
+
+      <section class="section-padding">
+        <div class="container">
+
+          <!-- BARRA DE FILTROS -->
+          <div class="filters-container">
+            <button class="filter-btn" [class.active]="activeCategory() === 'todos'" (click)="setCategory('todos')">Todos</button>
+            <button class="filter-btn" [class.active]="activeCategory() === 'ron'" (click)="setCategory('ron')">Rones</button>
+            <button class="filter-btn" [class.active]="activeCategory() === 'whisky'" (click)="setCategory('whisky')">Whiskies</button>
+            <button class="filter-btn" [class.active]="activeCategory() === 'accesorios'" (click)="setCategory('accesorios')">Accesorios</button>
+          </div>
+
+          <!-- GRID DE PRODUCTOS -->
+          <div class="products-grid">
+
+            @if (filteredProducts().length === 0) {
+              <div class="no-products">
+                No hay productos disponibles en esta categoría por el momento.
+              </div>
+            } @else {
+              @for (product of filteredProducts(); track product.id) {
+                <div class="product-card">
+
+                  <div class="product-image-wrapper">
+                    @if (product.badge) {
+                      <span class="product-badge">{{ product.badge }}</span>
+                    }
+                    <img [src]="product.imageUrl" [alt]="product.name" class="product-image" loading="lazy">
+                  </div>
+
+                  <div class="product-content">
+                    <span class="product-category">{{ product.category }}</span>
+                    <h3 class="product-title">{{ product.name }}</h3>
+                    <div class="product-price">${{ product.price | number:'1.2-2' }}</div>
+
+                    <button class="btn-primary" [disabled]="product.badge === 'Agotado'" (click)="addToCart(product)">
+                      {{ product.badge === 'Agotado' ? 'Agotado' : 'Añadir al Carrito' }}
+                    </button>
+                  </div>
+
+                </div>
+              }
+            }
+
+          </div>
+
+        </div>
+      </section>
+    </main>
