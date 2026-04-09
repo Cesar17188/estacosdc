@@ -1,0 +1,155 @@
+.container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 1.5em 1.5rem; }
+
+      /* Header de la Sección */
+      .section-header {
+        text-align: center;
+        margin-bottom: 5rem;
+      }
+      .section-subtitle {
+        color: var(--color-accent-gold);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        margin-bottom: 1rem;
+        display: block;
+        font-weight: 500;
+      }
+      .section-header h2 {
+        font-family: var(--font-heading);
+        font-size: clamp(2rem, 3vw, 2.8rem);
+        color: var(--color-text-main);
+        margin: 0;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+      }
+
+      /* === CATEGORÍA DE MARIDAJE (RON / WHISKY) === */
+      .pairing-category {
+        margin-bottom: 6rem;
+      }
+
+      .pairing-category:last-child {
+        margin-bottom: 0;
+      }
+
+      .category-header {
+        margin-bottom: 3rem;
+        border-bottom: 1px solid var(--color-border);
+        padding-bottom: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .category-header h3 {
+        font-family: var(--font-heading);
+        font-size: 2.2rem;
+        color: var(--color-text-main);
+        margin: 0 0 0.5rem 0;
+        letter-spacing: 1px;
+      }
+
+      .category-header p {
+        color: var(--color-accent-gold);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        margin: 0;
+      }
+
+      /* === GRID DE TARJETAS DE MARIDAJE === */
+      .pairing-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2.5rem;
+      }
+
+      /* === TARJETA DE MARIDAJE === */
+      .pairing-card {
+        background-color: var(--color-bg-card);
+        border: 1px solid var(--color-border);
+        border-radius: 4px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        transition: var(--transition-smooth);
+        position: relative;
+      }
+
+      .pairing-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.6);
+        border-color: rgba(212, 175, 55, 0.3);
+      }
+
+      /* Contenedor de Imagen */
+      .card-image-wrapper {
+        width: 100%;
+        height: 220px;
+        overflow: hidden;
+        position: relative;
+        border-bottom: 1px solid var(--color-border);
+      }
+
+      .card-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.8s ease;
+        filter: grayscale(30%) brightness(0.8);
+      }
+
+      .pairing-card:hover .card-image {
+        transform: scale(1.08);
+        filter: grayscale(0%) brightness(1);
+      }
+
+      /* Ícono superpuesto en la imagen (Signo +) */
+      .plus-icon {
+        position: absolute;
+        bottom: -20px;
+        right: 20px;
+        width: 40px;
+        height: 40px;
+        background-color: var(--color-accent-gold);
+        color: #121212;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        z-index: 2;
+        transition: var(--transition-smooth);
+      }
+
+      .pairing-card:hover .plus-icon {
+        transform: rotate(90deg);
+        background-color: var(--color-text-main);
+      }
+
+      /* Contenido de la tarjeta */
+      .card-content {
+        padding: 2.5rem 2rem 2rem 2rem;
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        text-align: center;
+      }
+
+      .card-title {
+        font-family: var(--font-heading);
+        font-size: 1.3rem;
+        color: var(--color-text-main);
+        margin: 0 0 1rem 0;
+        line-height: 1.3;
+        letter-spacing: 1px;
+      }
+
+      .card-description {
+        color: var(--color-text-muted);
+        font-size: 0.95rem;
+        line-height: 1.6;
+        margin: 0;
+        font-weight: 300;
+        flex-grow: 1;
+      }

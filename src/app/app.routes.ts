@@ -3,6 +3,7 @@ import { Home } from './pages/home/home';
 import { SpiritsPage } from './pages/spirits-page/spirits-page';
 import { RommeliersPage } from './pages/rommeliers-page/rommeliers-page';
 import { ContenidosPage } from './pages/contenidos-page/contenidos-page';
+import { VisitasPage } from './pages/visitas-page/visitas-page';
 
 export const routes: Routes = [
     {
@@ -20,5 +21,9 @@ export const routes: Routes = [
     {
         path: 'contenidos',
         component: ContenidosPage
+    },
+    {
+        path: 'visitas',
+        component: VisitasPage
     }
 ];

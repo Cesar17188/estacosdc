@@ -1,0 +1,272 @@
+ /* Botones Globales */
+      .btn-primary, .btn-outline { display: inline-block; padding: 0.8rem 2rem; font-family: var(--font-heading); font-weight: 600; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; border-radius: 2px; transition: var(--transition-smooth); text-align: center; border: none; text-decoration: none;}
+      .btn-primary { background-color: var(--color-accent-gold); color: #121212; }
+      .btn-primary:hover { background-color: var(--color-accent-hover); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3); }
+
+      /* ================= HERO DE VISITAS ================= */
+      .visit-hero {
+        position: relative;
+        padding: 8rem 0;
+        text-align: center;
+        background: url('https://images.unsplash.com/photo-1572555543714-ea66ab2974bb?q=80&w=1920&auto=format&fit=crop') no-repeat center center;
+        background-size: cover;
+        background-attachment: fixed;
+        border-bottom: 1px solid var(--color-border);
+      }
+      .visit-hero-overlay {
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: linear-gradient(to bottom, rgba(10,10,10,0.8), rgba(10,10,10,0.95));
+        z-index: 1;
+      }
+      .visit-hero-content {
+        position: relative;
+        z-index: 2;
+        max-width: 800px;
+        margin: 0 auto;
+      }
+      .visit-hero h1 {
+        font-family: var(--font-heading);
+        font-size: clamp(2.5rem, 5vw, 4rem);
+        color: var(--color-accent-gold);
+        margin-bottom: 1rem;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+      }
+      .visit-hero p {
+        color: var(--color-text-main);
+        font-size: 1.15rem;
+        line-height: 1.6;
+        font-weight: 300;
+        opacity: 0.9;
+      }
+
+      /* ================= EXPERIENCIAS (TOURS) ================= */
+      .section-header { text-align: center; margin-bottom: 5rem; }
+      .section-subtitle { color: var(--color-accent-gold); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 1rem; display: block; font-weight: 500; }
+      .section-header h2 { font-family: var(--font-heading); font-size: clamp(2rem, 3.5vw, 3rem); color: var(--color-text-main); margin: 0; text-transform: uppercase; letter-spacing: 2px; }
+
+      .experiences-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 3rem;
+      }
+
+      .tour-card {
+        background-color: var(--color-bg-card);
+        border: 1px solid var(--color-border);
+        border-radius: 4px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        transition: var(--transition-smooth);
+        position: relative;
+      }
+
+      .tour-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+        border-color: rgba(212, 175, 55, 0.4);
+      }
+
+      .tour-image-wrapper {
+        width: 100%;
+        height: 240px;
+        overflow: hidden;
+        position: relative;
+      }
+
+      .tour-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.8s ease;
+        filter: grayscale(20%);
+      }
+
+      .tour-card:hover .tour-image {
+        transform: scale(1.08);
+        filter: grayscale(0%);
+      }
+
+      .tour-header-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+        gap: 1rem;
+      }
+
+      .tour-price {
+        font-family: var(--font-heading);
+        color: var(--color-accent-gold);
+        font-size: 1.4rem;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+
+      .tour-content {
+        padding: 2.5rem 2rem;
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+      }
+
+      .tour-meta {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--color-accent-gold);
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 1rem;
+      }
+      .tour-meta svg { width: 18px; height: 18px; }
+
+      .tour-title {
+        font-family: var(--font-heading);
+        font-size: 1.6rem;
+        color: var(--color-text-main);
+        margin: 0;
+        letter-spacing: 1px;
+      }
+
+      .tour-description {
+        color: var(--color-text-muted);
+        font-size: 0.95rem;
+        line-height: 1.6;
+        margin-bottom: 2rem;
+        font-weight: 300;
+      }
+
+      .tour-includes {
+        margin-bottom: 2.5rem;
+        flex-grow: 1;
+      }
+
+      .tour-includes h4 {
+        font-size: 0.85rem;
+        color: var(--color-text-main);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 1rem;
+        border-bottom: 1px solid var(--color-border);
+        padding-bottom: 0.5rem;
+      }
+
+      .tour-includes ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      .tour-includes li {
+        color: var(--color-text-muted);
+        font-size: 0.9rem;
+        margin-bottom: 0.8rem;
+        display: flex;
+        align-items: flex-start;
+        gap: 0.5rem;
+      }
+
+      .tour-includes li::before {
+        content: '✓';
+        color: var(--color-accent-gold);
+        font-weight: bold;
+      }
+
+      .tour-card .btn-primary {
+        width: 100%;
+        text-align: center;
+      }
+
+      /* ================= INFO Y HORARIOS ================= */
+      .info-section {
+        background-color: var(--color-bg-surface);
+        border-top: 1px solid var(--color-border);
+        border-bottom: 1px solid var(--color-border);
+      }
+
+      .info-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 4rem;
+        align-items: center;
+      }
+
+      .info-block {
+        display: flex;
+        gap: 1.5rem;
+        margin-bottom: 2.5rem;
+      }
+
+      .info-block:last-child {
+        margin-bottom: 0;
+      }
+
+      .info-icon {
+        flex-shrink: 0;
+        width: 50px;
+        height: 50px;
+        background-color: rgba(212, 175, 55, 0.1);
+        color: var(--color-accent-gold);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid rgba(212, 175, 55, 0.3);
+      }
+
+      .info-text h3 {
+        font-family: var(--font-heading);
+        font-size: 1.2rem;
+        color: var(--color-text-main);
+        margin: 0 0 0.5rem 0;
+        letter-spacing: 1px;
+      }
+
+      .info-text p {
+        color: var(--color-text-muted);
+        line-height: 1.6;
+        margin: 0;
+        font-size: 0.95rem;
+      }
+
+      /* Mapa Decorativo / Placeholder */
+      .map-wrapper {
+        width: 100%;
+        height: 400px;
+        background-color: var(--color-bg-base);
+        border: 1px solid var(--color-border);
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--color-text-muted);
+        font-family: var(--font-heading);
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .map-wrapper::after {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: radial-gradient(circle, transparent 20%, rgba(10,10,10,0.8) 100%);
+        pointer-events: none;
+      }
+
+      .map-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0.5;
+        filter: grayscale(100%) contrast(1.2);
+      }
+
+      @media (max-width: 900px) {
+        .info-grid { grid-template-columns: 1fr; gap: 3rem; }
+      }
