@@ -1,4 +1,4 @@
-import { Component, Inject, Renderer2, OnDestroy, HostListener, inject } from '@angular/core';
+import { Component, Inject, Renderer2, OnDestroy, HostListener, inject, signal } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -16,6 +16,11 @@ export class Header implements OnDestroy {
   // Inyectamos el servicio del carrito
   cartService = inject(CartService);
 
+  // Estado del menú móvil
+  isMobileMenuOpen = signal(false);
+
+  cartCount = signal(2); // Empezamos con 2 productos de prueba
+
 constructor(
     private renderer: Renderer2,
     @Inject(DOCUMENT) private document: Document
@@ -30,12 +35,14 @@ constructor(
 
   toggleMenu() {
     this.isMenuOpen = !this.isMenuOpen;
+    this.isMobileMenuOpen.update(val => !val);
     this.updateBodyScroll();
   }
 
   // Add this method to handle link clicks
   closeMenu() {
     this.isMenuOpen = false;
+    this.isMobileMenuOpen.set(false);
     this.updateBodyScroll();
   }
 
@@ -52,4 +59,5 @@ constructor(
   ngOnDestroy() {
     this.renderer.removeClass(this.document.body, 'no-scroll');
   }
+
 }

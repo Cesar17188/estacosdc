@@ -1,5 +1,6 @@
-import { Component, signal, computed  } from '@angular/core';
+import { Component, signal, computed, inject  } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
+import { CartService } from '../../services/cart';
 
 interface Product {
   id: string;
@@ -17,6 +18,7 @@ interface Product {
   styleUrl: './tienda-page.scss',
 })
 export class TiendaPage {
+  cartService = inject(CartService);
   // === SECCIÓN DE DATOS ===
   products: Product[] = [
     {
@@ -88,7 +90,8 @@ export class TiendaPage {
 
   // Simulación de Añadir al carrito
   addToCart(product: Product) {
-    console.log(`Añadido al carrito: ${product.name} - $${product.price}`);
+    this.cartService.addToCart(product);
+    console.log('Productos en carrito:', this.cartService.cartItems());
     alert(`Has añadido ${product.name} a tu carrito de compras.`);
     // Aquí conectarías con tu servicio de Carrito/Estado (ej. NgRx o un Service con Signals)
   }

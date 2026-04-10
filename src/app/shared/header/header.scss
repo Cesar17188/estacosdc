@@ -84,37 +84,6 @@
     }
   }
 
-  .cart-trigger {
-  position: relative;
-  cursor: pointer;
-  color: var(--color-text-main);
-  transition: var(--transition-smooth);
-  display: flex;
-  align-items: center;
-
-  &:hover {
-    color: var(--color-accent-gold);
-    transform: scale(1.05);
-  }
-}
-
-.cart-badge {
-  position: absolute;
-  top: -8px;
-  right: -8px;
-  background-color: var(--color-accent-gold);
-  color: #121212;
-  font-size: 0.7rem;
-  font-weight: bold;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-body);
-}
-
   /* --- Estilos Responsivos --- */
   .mobile-toggle {
     display: none;

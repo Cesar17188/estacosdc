@@ -5,6 +5,7 @@ import { RommeliersPage } from './pages/rommeliers-page/rommeliers-page';
 import { ContenidosPage } from './pages/contenidos-page/contenidos-page';
 import { VisitasPage } from './pages/visitas-page/visitas-page';
 import { TiendaPage } from './pages/tienda-page/tienda-page';
+import { CartPage } from './pages/cart-page/cart-page';
 
 
 export const routes: Routes = [
@@ -31,5 +32,9 @@ export const routes: Routes = [
     {
         path: 'tienda',
         component: TiendaPage
+    },
+    {
+        path: 'cart',
+        component: CartPage
     }
 ];

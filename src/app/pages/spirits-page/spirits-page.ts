@@ -9,7 +9,7 @@ interface TastingNotes {
   finish: string;
 }
 
-interface ProductDetails {
+interface Product {
   id: string;
   name: string;
   category: 'ron' | 'whisky' | 'accesorios';
@@ -21,6 +21,7 @@ interface ProductDetails {
   tastingNotes: TastingNotes;
   imageUrl: string;
   reverseLayout?: boolean;
+  badge?: string;
 }
 
 // === ESTADO GLOBAL SIMULADO PARA LA VISTA PREVIA ===
@@ -58,16 +59,12 @@ export class SpiritsPage {
 
   // Acciones
   toggleCart() { isCartOpen.update(v => !v); }
-  add(product: ProductDetails) { addToCart(product); }
+  add(product: Product) { addToCart(product); }
   updateQty(id: string, delta: number) { updateQty(id, delta); }
   remove(id: string) { remove(id); }
-  // Y tu método para el botón sería:
-  addToCart(product: ProductDetails) {
-    this.cartService.addToCart(product);
-  }
 
   // Base de datos de nuestros destilados detallados
-  products: ProductDetails[] = [
+  products: Product[] = [
     {
       id: 'ron-estancos-anejo',
       name: 'Ron Añejo Estancos',
@@ -137,4 +134,29 @@ export class SpiritsPage {
       reverseLayout: true
     }
   ];
+
+    // Signal para guardar la categoría activa actual
+  activeCategory = signal<string>('todos');
+
+   // Computed Signal: Reacciona automáticamente cuando `activeCategory` cambia
+    filteredProducts = computed(() => {
+      const category = this.activeCategory();
+      if (category === 'todos') {
+        return this.products;
+      }
+      return this.products.filter(product => product.category === category);
+    });
+
+    // Función para actualizar la categoría desde el HTML
+    setCategory(category: string) {
+      this.activeCategory.set(category);
+    }
+
+    // Simulación de Añadir al carrito
+    addToCart(product: Product) {
+      this.cartService.addToCart(product);
+      console.log('Productos en carrito:', this.cartService.cartItems());
+      alert(`Has añadido ${product.name} a tu carrito de compras.`);
+      // Aquí conectarías con tu servicio de Carrito/Estado (ej. NgRx o un Service con Signals)
+    }
 }

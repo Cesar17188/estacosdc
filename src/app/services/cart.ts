@@ -1,7 +1,7 @@
 import { Injectable, signal, computed } from '@angular/core';
 
 // === INTERFACES ===
-// Exportamos las interfaces para poder usarlas en otros componentes
+// Exportamos las interfaces para poder usarlas en toda la app
 export interface Product {
   id: string;
   name: string;
@@ -15,63 +15,46 @@ export interface CartItem extends Product {
   quantity: number;
 }
 
-
 @Injectable({
-  providedIn: 'root', // Esto hace que el servicio sea un Singleton (una única instancia para toda la app)
+  providedIn: 'root' // Singleton: Una única instancia de datos para toda la aplicación
 })
 export class CartService {
-  // === ESTADO REACTIVO (Signals) ===
-  // Inicializamos el carrito vacío y el panel lateral cerrado
-  cartItems = signal<CartItem[]>([]);
-  isCartOpen = signal<boolean>(false);
 
-   // === ESTADO DERIVADO (Computed Signals) ===
+  // === ESTADO REACTIVO PRINCIPAL (Signals) ===
+  // Inicializamos el carrito vacío
+  cartItems = signal<CartItem[]>([]);
+
+  // === ESTADO DERIVADO (Computed Signals) ===
   // Calcula el total a pagar automáticamente cada vez que cartItems cambia
   cartTotal = computed(() => {
     return this.cartItems().reduce((total, item) => total + (item.price * item.quantity), 0);
   });
 
-  // Calcula la cantidad total de artículos para el numerito rojo del Header
+  // Calcula la cantidad total de artículos (ideal para el numerito rojo del Header)
   cartCount = computed(() => {
     return this.cartItems().reduce((count, item) => count + item.quantity, 0);
   });
 
   // === MÉTODOS ===
 
-  // Alternar el panel lateral del carrito
-  toggleCart() {
-    this.isCartOpen.update(open => !open);
-  }
-
-  openCart() {
-    this.isCartOpen.set(true);
-  }
-
-  closeCart() {
-    this.isCartOpen.set(false);
-  }
-
   // Añadir un producto al carrito
   addToCart(product: Product) {
     this.cartItems.update(items => {
       const existingItem = items.find(item => item.id === product.id);
 
-      // Si el producto ya está, sumamos 1 a la cantidad
+      // Si el producto ya está en el carrito, solo sumamos 1 a la cantidad
       if (existingItem) {
         return items.map(item =>
           item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
         );
       }
 
-      // Si no está, lo agregamos con cantidad 1
+      // Si no está, lo agregamos como un elemento nuevo con cantidad 1
       return [...items, { ...product, quantity: 1 }];
     });
-
-    // Abrimos el carrito para dar feedback visual al usuario
-    this.openCart();
   }
 
-  // Actualizar cantidad (+ o -) desde el carrito
+  // Actualizar cantidad (+ o -) desde la página del carrito
   updateQuantity(productId: string, delta: number) {
     this.cartItems.update(items => {
       return items.map(item => {
@@ -90,7 +73,7 @@ export class CartService {
     this.cartItems.update(items => items.filter(item => item.id !== productId));
   }
 
-  // Vaciar el carrito (útil para después de procesar el pago)
+  // Vaciar el carrito (útil para después de que el usuario finaliza su compra)
   clearCart() {
     this.cartItems.set([]);
   }

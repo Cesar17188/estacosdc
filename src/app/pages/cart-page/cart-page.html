@@ -1,0 +1,92 @@
+<main>
+      <section class="cart-hero">
+        <div class="container">
+          <h1>Tu Carrito de Compras</h1>
+        </div>
+      </section>
+
+      <section class="cart-page-content">
+        <div class="container">
+
+          @if (cartItems().length === 0) {
+            <div class="empty-cart-message">
+              <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1" style="margin: 0 auto 1.5rem auto; color: var(--color-border);">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007z" />
+              </svg>
+              <h2>Tu copa está vacía</h2>
+              <p>Aún no has agregado ningún destilado a tu carrito.</p>
+              <a href="#/espiritus" class="btn-outline">Descubrir Colección</a>
+            </div>
+          } @else {
+            <div class="cart-grid">
+
+              <!-- COLUMNA IZQUIERDA: TABLA DE PRODUCTOS -->
+              <div class="cart-table-container">
+                <table class="cart-table">
+                  <thead>
+                    <tr>
+                      <th colspan="2">Producto</th>
+                      <th>Precio</th>
+                      <th>Cantidad</th>
+                      <th>Subtotal</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (item of cartService.cartItems(); track item.id) {
+                      <tr>
+                        <td style="width: 100px;">
+                          <div class="cart-item-img"><img [src]="item.imageUrl" [alt]="item.name"></div>
+                        </td>
+                        <td>
+                          <h4 class="cart-item-title">{{ item.name }}</h4>
+                          <span class="cart-item-category">{{ item.category }}</span>
+                        </td>
+                        <td class="td-price">\${{ item.price | number:'1.2-2' }}</td>
+                        <td>
+                          <div class="quantity-controls">
+                            <button class="btn-icon-small" (click)="cartService.updateQuantity(item.id, -1)">-</button>
+                            <span>{{ item.quantity }}</span>
+                            <button class="btn-icon-small" (click)="cartService.updateQuantity(item.id, +1)">+</button>
+                          </div>
+                        </td>
+                        <td class="td-total">\${{ (item.price * item.quantity) | number:'1.2-2' }}</td>
+                        <td>
+                          <button class="remove-btn" (click)="cartService.removeFromCart(item.id)" title="Eliminar Producto">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                          </button>
+                        </td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- COLUMNA DERECHA: RESUMEN DE PEDIDO -->
+              <aside class="cart-summary">
+                <h3 class="summary-title">Resumen del Pedido</h3>
+
+                <div class="summary-row">
+                  <span>Subtotal</span>
+                  <span>\${{ cartService.cartTotal() | number:'1.2-2' }}</span>
+                </div>
+                <div class="summary-row">
+                  <span>Envío</span>
+                  <span>Calculado en el pago</span>
+                </div>
+
+                <div class="summary-row total">
+                  <span>Total Estimado</span>
+                  <span>\${{ cartService.cartTotal() | number:'1.2-2' }}</span>
+                </div>
+
+                <button class="btn-checkout">Proceder al Pago</button>
+              </aside>
+
+            </div>
+          }
+        </div>
+      </section>
+    </main>
