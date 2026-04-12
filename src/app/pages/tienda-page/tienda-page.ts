@@ -1,14 +1,17 @@
-import { Component, signal, computed, inject  } from '@angular/core';
+import { Component, signal, computed, inject, OnInit  } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
-import { CartService } from '../../services/cart';
+import { CartService, Product as CartProduct } from '../../services/cart';
+import { SupabaseService } from '../../services/supabase';
 
+// Interfaz adaptada a las columnas de Supabase
 interface Product {
   id: string;
   name: string;
   category: 'ron' | 'whisky' | 'accesorios';
   price: number;
-  imageUrl: string;
-  badge?: string; // Ej: 'Nuevo', 'Agotado', 'Cask Strength'
+  image_url: string;
+  badge?: string;
+  stock_quantity: number;
 }
 
 @Component({
@@ -17,82 +20,78 @@ interface Product {
   templateUrl: './tienda-page.html',
   styleUrl: './tienda-page.scss',
 })
-export class TiendaPage {
+export class TiendaPage implements OnInit{
+  // === INYECCIÓN DE SERVICIOS ===
+  // Nota para proyecto local: Usa imports reales
   cartService = inject(CartService);
-  // === SECCIÓN DE DATOS ===
-  products: Product[] = [
-    {
-      id: 'ron-estancos-anejo',
-      name: 'Ron Añejo Estancos (750ml)',
-      category: 'ron',
-      price: 45.00,
-      imageUrl: 'https://images.unsplash.com/photo-1614316311652-3d712f602b9f?q=80&w=400&auto=format&fit=crop',
-      badge: 'Más Vendido'
-    },
-    {
-      id: 'whiskey-chillos-valley',
-      name: 'Whiskey Chillos Valley Grain (750ml)',
-      category: 'whisky',
-      price: 55.00,
-      imageUrl: 'https://images.unsplash.com/photo-1569529465841-dfecdab7503b?q=80&w=400&auto=format&fit=crop'
-    },
-    {
-      id: 'whisky-coleccionista',
-      name: 'Whisky Chillos Coleccionista Cask Strength',
-      category: 'whisky',
-      price: 85.00,
-      imageUrl: 'https://images.unsplash.com/photo-1601614945413-5b839215096a?q=80&w=400&auto=format&fit=crop',
-      badge: 'Edición Limitada'
-    },
-    {
-      id: 'copa-glencairn',
-      name: 'Copa Glencairn Oficial Estancos',
-      category: 'accesorios',
-      price: 15.00,
-      imageUrl: 'https://images.unsplash.com/photo-1597075687490-8f673c6c17f6?q=80&w=400&auto=format&fit=crop'
-    },
-    {
-      id: 'kit-cocteleria',
-      name: 'Kit de Coctelería Andina Premium',
-      category: 'accesorios',
-      price: 120.00,
-      imageUrl: 'https://images.unsplash.com/photo-1551538827-9c037cb4f32a?q=80&w=400&auto=format&fit=crop',
-      badge: 'Agotado'
-    },
-    {
-      id: 'ron-estancos-reserva',
-      name: 'Ron Reserva Familiar 12 Años',
-      category: 'ron',
-      price: 95.00,
-      imageUrl: 'https://images.unsplash.com/photo-1582222345511-137f8ebcddf5?q=80&w=400&auto=format&fit=crop',
-      badge: 'Nuevo'
-    }
-  ];
-
-  // === LÓGICA DE FILTRADO (ANGULAR SIGNALS) ===
-
-  // Signal para guardar la categoría activa actual
+  private supabaseService = inject(SupabaseService);
+  // === ESTADO REACTIVO ===
+  products = signal<any[]>([]);
+  isLoading = signal<boolean>(true); // Controla el spinner
   activeCategory = signal<string>('todos');
+  searchQuery = signal<string>(''); // Nuevo estado para la búsqueda de texto
 
-  // Computed Signal: Reacciona automáticamente cuando `activeCategory` cambia
-  filteredProducts = computed(() => {
+   filteredProducts = computed(() => {
     const category = this.activeCategory();
-    if (category === 'todos') {
-      return this.products;
-    }
-    return this.products.filter(product => product.category === category);
-  });
+    const query = this.searchQuery().toLowerCase();
+    let currentProducts = this.products();
 
-  // Función para actualizar la categoría desde el HTML
+    // 1. Filtrar por categoría
+    if (category !== 'todos') {
+      currentProducts = currentProducts.filter(p => p.category === category);
+    }
+
+    // 2. Filtrar por búsqueda de texto (nombre o categoría)
+    if (query) {
+      currentProducts = currentProducts.filter(p =>
+        p.name.toLowerCase().includes(query) ||
+        p.category.toLowerCase().includes(query)
+      );
+    }
+
+    return currentProducts;
+  });
+  // === CICLO DE VIDA DE ANGULAR ===
+  // Se ejecuta automáticamente al cargar la página
+  async ngOnInit() {
+    try {
+      this.isLoading.set(true); // Encendemos el loader
+
+      // Llamada asíncrona a Supabase
+      const dbProducts = await this.supabaseService.getActiveProducts();
+
+      // Guardamos la data en nuestro estado local
+      this.products.set(dbProducts || []);
+
+    } catch (error) {
+      console.error('Error al cargar los productos de Supabase:', error);
+      // Opcional: Mostrar una alerta o mensaje de error al usuario
+    } finally {
+      this.isLoading.set(false); // Apagamos el loader
+    }
+  }
+
+  // === ACCIONES DE UI ===
   setCategory(category: string) {
     this.activeCategory.set(category);
   }
+  onSearch(event: Event) {
+    const input = event.target as HTMLInputElement;
+    this.searchQuery.set(input.value);
+  }
 
-  // Simulación de Añadir al carrito
   addToCart(product: Product) {
-    this.cartService.addToCart(product);
-    console.log('Productos en carrito:', this.cartService.cartItems());
-    alert(`Has añadido ${product.name} a tu carrito de compras.`);
-    // Aquí conectarías con tu servicio de Carrito/Estado (ej. NgRx o un Service con Signals)
+    // Mapeamos el objeto local 'Product' (con image_url de DB)
+    // al formato que espera el CartService (con imageUrl)
+    const productToCart: CartProduct = {
+      id: product.id,
+      name: product.name,
+      category: product.category,
+      price: product.price,
+      imageUrl: product.image_url,
+      badge: product.badge
+    };
+    this.cartService.addToCart(productToCart);
+    alert(`Se añadió ${product.name} a tu carrito.`);
   }
 }

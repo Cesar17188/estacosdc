@@ -10,6 +10,15 @@
       <section class="section-padding">
         <div class="container">
 
+          <!-- BÚSQUEDA Y FILTROS -->
+          <div class="filters-wrapper">
+            <input
+              type="text"
+              placeholder="Buscar por nombre o categoría..."
+              class="search-input"
+              (input)="onSearch($event)"
+            >
+
           <!-- BARRA DE FILTROS -->
           <div class="filters-container">
             <button class="filter-btn" [class.active]="activeCategory() === 'todos'" (click)="setCategory('todos')">Todos</button>
@@ -17,6 +26,8 @@
             <button class="filter-btn" [class.active]="activeCategory() === 'whisky'" (click)="setCategory('whisky')">Whiskies</button>
             <button class="filter-btn" [class.active]="activeCategory() === 'accesorios'" (click)="setCategory('accesorios')">Accesorios</button>
           </div>
+          </div>
+
 
           <!-- GRID DE PRODUCTOS -->
           <div class="products-grid">
@@ -33,7 +44,7 @@
                     @if (product.badge) {
                       <span class="product-badge">{{ product.badge }}</span>
                     }
-                    <img [src]="product.imageUrl" [alt]="product.name" class="product-image" loading="lazy">
+                    <img [src]="product.image_url" [alt]="product.name" class="product-image" loading="lazy">
                   </div>
 
                   <div class="product-content">
