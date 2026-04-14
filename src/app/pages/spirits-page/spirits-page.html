@@ -1,5 +1,4 @@
 <main>
-      <!-- HERO DE LA COLECCIÓN -->
       <section class="catalog-hero">
         <div class="container">
           <h1>La Colección Estancos</h1>
@@ -7,67 +6,93 @@
         </div>
       </section>
 
-      <!-- LISTA DE PRODUCTOS DETALLADOS -->
-      @for (product of products; track product.id) {
-        <section class="product-section" [id]="product.id">
-          <div class="container">
-            <div class="product-grid" [class.layout-reverse]="product.reverseLayout">
+      <!-- VERIFICACIÓN DEL ESTADO DE CARGA -->
+      @if (isLoading()) {
+        <div class="loader-container">
+          <div class="spinner"></div>
+          <div class="loader-text">Cargando Notas de Cata...</div>
+        </div>
+      } @else {
 
-              <!-- Imagen -->
-              <div class="product-image-col">
-                <div class="product-image-wrapper">
-                  <img [src]="product.imageUrl" [alt]="product.name" class="product-image">
-                </div>
-              </div>
+        <!-- LISTA DE PRODUCTOS DINÁMICA -->
+        @for (product of products(); track product.id) {
+          <section class="product-section" [id]="product.id">
+            <div class="container">
 
-              <!-- Detalles -->
-              <div class="product-info-col">
-                <span class="product-type">{{ product.type }}</span>
-                <h2 class="product-title">{{ product.name }}</h2>
+              <!-- La clase layout-reverse alterna izquierda/derecha dinámicamente -->
+              <div class="product-grid" [class.layout-reverse]="product.reverseLayout">
 
-                <div class="product-specs">
-                  <div class="spec-item">
-                    <span class="spec-label">Graduación</span>
-                    <span class="spec-value">{{ product.abv }}</span>
-                  </div>
-                  <div class="spec-item">
-                    <span class="spec-label">Maduración</span>
-                    <span class="spec-value">{{ product.age }}</span>
-                  </div>
-                </div>
-
-                <p class="product-desc">{{ product.description }}</p>
-
-                <div class="tasting-notes">
-                  <h4>Notas de Cata</h4>
-                  <div class="note-item">
-                    <span class="note-label">Nariz:</span>
-                    <p class="note-desc">{{ product.tastingNotes.nose }}</p>
-                  </div>
-                  <div class="note-item">
-                    <span class="note-label">Boca:</span>
-                    <p class="note-desc">{{ product.tastingNotes.palate }}</p>
-                  </div>
-                  <div class="note-item">
-                    <span class="note-label">Final:</span>
-                    <p class="note-desc">{{ product.tastingNotes.finish }}</p>
+                <!-- Imagen -->
+                <div class="product-image-col">
+                  <div class="product-image-wrapper">
+                    <img
+                      [src]="product.image_url"
+                      [alt]="product.name"
+                      class="product-image"
+                      (error)="onImageError($event)"
+                    >
                   </div>
                 </div>
 
+                <!-- Detalles y Notas de Cata -->
+                <div class="product-info-col">
+                  <span class="product-type">{{ product.type || 'Espíritu Andino' }}</span>
+                  <h2 class="product-title">{{ product.name }}</h2>
 
-                <!-- BOTÓN DE COMPRA CONECTADO AL ESTADO -->
-                <button class="btn-buy" [disabled]="product.badge === 'Agotado'" (click)="addToCart(product)">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                  </svg>
-                  Añadir al Carrito - \${{ product.price | number:'1.2-2' }}
-                </button>
+                  <div class="product-specs">
+                    <div class="spec-item">
+                      <span class="spec-label">Graduación</span>
+                      <span class="spec-value">{{ product.abv || 'N/A' }}</span>
+                    </div>
+                    <div class="spec-item">
+                      <span class="spec-label">Maduración</span>
+                      <span class="spec-value">{{ product.age || 'N/A' }}</span>
+                    </div>
+                  </div>
 
+                  <p class="product-desc">{{ product.description }}</p>
+
+                  <!-- Lectura de JSONB desde Supabase -->
+                  @if (product.tasting_notes) {
+                    <div class="tasting-notes">
+                      <h4>Notas de Cata</h4>
+                      <div class="note-item">
+                        <span class="note-label">Nariz:</span>
+                        <p class="note-desc">{{ product.tasting_notes.nose }}</p>
+                      </div>
+                      <div class="note-item">
+                        <span class="note-label">Boca:</span>
+                        <p class="note-desc">{{ product.tasting_notes.palate }}</p>
+                      </div>
+                      <div class="note-item">
+                        <span class="note-label">Final:</span>
+                        <p class="note-desc">{{ product.tasting_notes.finish }}</p>
+                      </div>
+                    </div>
+                  }
+
+                  <!-- Botón de Añadir con Precio -->
+                  <button class="btn-buy" (click)="add(product)">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                    </svg>
+                    Añadir al Carrito - \${{ product.price | number:'1.2-2' }}
+                  </button>
+
+                </div>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
+        }
       }
     </main>
 
-
+    <!-- TOAST NOTIFICATION DE AGREGADO AL CARRITO -->
+    @if (toastMessage()) {
+      <div class="toast-notification">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+        </svg>
+        <span>{{ toastMessage() }}</span>
+      </div>
+    }

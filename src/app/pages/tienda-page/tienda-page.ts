@@ -88,7 +88,7 @@ export class TiendaPage implements OnInit{
       name: product.name,
       category: product.category,
       price: product.price,
-      imageUrl: product.image_url,
+      image_url: product.image_url,
       badge: product.badge
     };
     this.cartService.addToCart(productToCart);

@@ -7,7 +7,7 @@ export interface Product {
   name: string;
   category: 'ron' | 'whisky' | 'accesorios';
   price: number;
-  imageUrl: string;
+  image_url: string;
   badge?: string;
 }
 

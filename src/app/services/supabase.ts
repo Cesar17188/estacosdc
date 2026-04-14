@@ -47,6 +47,43 @@ export class SupabaseService {
   }
 
   /**
+   * Obtiene los 3 espíritus destacados para la página de inicio (Home)
+   */
+  async getFeaturedSpirits() {
+    const { data, error } = await this.supabase
+      .from('products')
+      .select('*')
+      .in('category', ['ron', 'whisky']) // Filtra solo licores, excluye accesorios
+      .eq('is_active', true)
+      .limit(3); // Trae máximo 3 resultados
+
+    if (error) {
+      console.error('Error obteniendo espíritus destacados:', error);
+      throw error;
+    }
+    return data;
+  }
+
+  /**
+   * Obtiene el catálogo completo de espíritus (Página de Espíritus)
+   */
+  async getSpirits() {
+    const { data, error } = await this.supabase
+      .from('products')
+      .select('*')
+      .in('category', ['ron', 'whisky'])
+      .eq('is_active', true)
+      .order('created_at', { ascending: true }); // Ordena por los más antiguos primero
+
+    if (error) {
+      console.error('Error obteniendo catálogo de espíritus:', error);
+      throw error;
+    }
+    return data;
+  }
+
+
+  /**
    * Guarda un nuevo prospecto (lead) del formulario B2B de Aliados.
    */
   async submitDistributorRequest(requestData: any) {

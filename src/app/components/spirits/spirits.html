@@ -1,31 +1,49 @@
-<section class="spirits-section section-padding">
-      <div class="container">
+<main style="flex-grow: 1;">
+      <section class="spirits-section section-padding">
+        <div class="container">
 
-        <div class="section-header">
-          <span class="section-subtitle">Nuestra Colección</span>
-          <h2>Espíritus de Altura</h2>
-        </div>
+          <div class="section-header">
+            <span class="section-subtitle">Nuestra Colección</span>
+            <h2>Espíritus de Altura</h2>
+          </div>
 
-        <div class="spirits-grid">
-          <!-- Angular 21 Control Flow: @for -->
-          @for (spirit of spirits; track spirit.name) {
-            <div class="spirit-card">
+          <!-- ESTADO DE CARGA -->
+          @if (isLoading()) {
+            <div class="loader-container">
+              <div class="spinner"></div>
+              <div class="loader-text">Obteniendo Colección...</div>
+            </div>
+          } @else {
+            <!-- GRID DE PRODUCTOS -->
+            <div class="spirits-grid">
+              @for (spirit of spirits(); track spirit.id) {
+                <div class="spirit-card">
 
-              <div class="card-image-wrapper">
-                <img [src]="spirit.imageUrl" [alt]="spirit.name" class="card-image">
-              </div>
+                  <div class="card-image-wrapper">
+                    <img
+                      [src]="spirit.image_url"
+                      [alt]="spirit.name"
+                      class="card-image"
+                      (error)="onImageError($event)"
+                    >
+                  </div>
 
-              <div class="card-content">
-                <h3>{{ spirit.name }}</h3>
-                <p>{{ spirit.description }}</p>
+                  <div class="card-content">
+                    <span class="spirit-category">{{ spirit.category }}</span>
+                    <h3>{{ spirit.name }}</h3>
+                    <p>{{ spirit.description }}</p>
 
-                <!-- En tu app real, usa [routerLink]="spirit.link" en lugar de href -->
-                <a [href]="spirit.link" class="btn-outline">Descubrir</a>
-              </div>
+                    <div class="card-actions">
+                      <!-- Link para ir a ver el detalle (spirits-page) -->
+                      <a routerLink="/espiritus/{{ spirit.id }}" class="btn-outline" style="width: 100%;">Descubrir</a>
+                    </div>
+                  </div>
 
+                </div>
+              }
             </div>
           }
-        </div>
 
-      </div>
-    </section>
+        </div>
+      </section>
+    </main>
