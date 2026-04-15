@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common'; // Necesario para el pipe json en depuración si se usara
+import { SupabaseService } from '../../services/supabase';
 
 @Component({
   selector: 'app-distributors',
@@ -12,6 +13,7 @@ import { CommonModule } from '@angular/common'; // Necesario para el pipe json e
 export class Distributors {
    // Inyectamos el FormBuilder de Angular
   private fb = inject(FormBuilder);
+  supabaseService = inject(SupabaseService);
 
   // Variable para controlar la vista de éxito
   isSubmitted = false;
@@ -46,6 +48,8 @@ export class Distributors {
     const formData = this.distributorForm.value;
 
     try {
+      // 1. Guardar silenciosamente en Supabase
+      await this.supabaseService.submitDistributorRequest(formData);
       // Usamos el endpoint de formsubmit que convierte JSON a un correo
       const response = await fetch('https://formsubmit.co/ajax/estancos.d.c@outlook.com', {
         method: 'POST',
@@ -66,9 +70,6 @@ export class Distributors {
       });
 
       if (response.ok) {
-        // Al mismo tiempo, podrías enviar estos datos a Supabase aquí
-        // await this.supabaseService.submitDistributorRequest(formData);
-
         this.isSubmitted = true;
         this.distributorForm.reset();
       } else {
