@@ -19,6 +19,7 @@ interface Product {
   age: string;
   price: number;
   description: string;
+  long_description: string;
   tasting_notes: TastingNotes;
   image_url: string;
   reverseLayout?: boolean;

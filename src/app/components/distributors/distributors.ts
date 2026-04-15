@@ -16,6 +16,7 @@ export class Distributors {
   // Variable para controlar la vista de éxito
   isSubmitted = false;
   isSubmitting = false;
+  submitError = ''; // Almacena mensajes de error si falla la conexión
 
   // Definición del Formulario Reactivo con sus validaciones seguras
   distributorForm = this.fb.group({
@@ -33,7 +34,7 @@ export class Distributors {
   }
 
   // Método que se ejecuta al presionar "Enviar Solicitud"
-  onSubmit() {
+  async onSubmit() {
     // Si alguien altera el HTML y logra enviar, esta barrera de TypeScript lo detiene
     if (this.distributorForm.invalid) {
       this.distributorForm.markAllAsTouched();
@@ -41,14 +42,43 @@ export class Distributors {
     }
 
     this.isSubmitting = true;
+    this.submitError = '';
+    const formData = this.distributorForm.value;
 
-    // Aquí iría tu conexión real con Supabase para guardar el lead B2B.
-    // Por ahora simulamos una carga de red de 1.5 segundos.
-    setTimeout(() => {
-      console.log('Datos seguros enviados a Supabase:', this.distributorForm.value);
+    try {
+      // Usamos el endpoint de formsubmit que convierte JSON a un correo
+      const response = await fetch('https://formsubmit.co/ajax/estancos.d.c@outlook.com', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          Nombre: formData.name,
+          Empresa: formData.company,
+          Email: formData.email,
+          Region: formData.region,
+          Mensaje: formData.message || 'Sin mensaje adicional',
+          // Opciones de configuración para FormSubmit
+          _subject: `Nueva solicitud B2B de ${formData.company}`, // Asunto del correo
+          _template: 'box' // Estilo del correo que recibirás
+        })
+      });
+
+      if (response.ok) {
+        // Al mismo tiempo, podrías enviar estos datos a Supabase aquí
+        // await this.supabaseService.submitDistributorRequest(formData);
+
+        this.isSubmitted = true;
+        this.distributorForm.reset();
+      } else {
+        throw new Error('La respuesta de red no fue satisfactoria.');
+      }
+    } catch (error) {
+      console.error('Error enviando el correo:', error);
+      this.submitError = 'Hubo un problema al enviar tu solicitud. Por favor, intenta de nuevo.';
+    } finally {
       this.isSubmitting = false;
-      this.isSubmitted = true;
-      this.distributorForm.reset();
-    }, 1500);
+    }
   }
 }
