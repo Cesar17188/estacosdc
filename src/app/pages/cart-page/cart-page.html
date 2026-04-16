@@ -36,7 +36,7 @@
                     @for (item of cartService.cartItems(); track item.id) {
                       <tr>
                         <td style="width: 100px;">
-                          <div class="cart-item-img"><img [src]="item.imageUrl" [alt]="item.name"></div>
+                          <div class="cart-item-img"><img [src]="item.image_url" [alt]="item.name"></div>
                         </td>
                         <td>
                           <h4 class="cart-item-title">{{ item.name }}</h4>
