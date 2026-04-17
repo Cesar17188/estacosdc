@@ -82,6 +82,24 @@ export class SupabaseService {
     return data;
   }
 
+  /**
+   * Obtiene las imágenes para la página de Galería
+   */
+  async getGalleryImages() {
+    const { data, error } = await this.supabase
+      .from('gallery_images')
+      .select('*')
+      // Opcional: puedes descomentar la siguiente línea si quieres que
+      // las fotos añadidas más recientemente aparezcan primero.
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error('Error obteniendo imagenes de galería:', error);
+      throw error;
+    }
+    return data;
+  }
+
 
   /**
    * Guarda un nuevo prospecto (lead) del formulario B2B de Aliados.

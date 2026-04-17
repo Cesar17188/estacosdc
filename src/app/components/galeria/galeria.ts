@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
+import { SupabaseService } from '../../services/supabase';
+import { CommonModule } from '@angular/common';
 
 interface GalleryImage {
   url: string;
@@ -10,60 +12,43 @@ interface GalleryImage {
 
 @Component({
   selector: 'app-galeria',
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './galeria.html',
   styleUrl: './galeria.scss',
 })
-export class Galeria {
-  // Arreglo de 8 imágenes con clases de tamaño para crear un Masonry Grid asimétrico
-  images: GalleryImage[] = [
-    {
-      url: 'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?q=80&w=800&auto=format&fit=crop',
-      alt: 'Coctel sirviéndose en vaso',
-      title: 'El Arte de la Mezcla',
-      sizeClass: 'tall' // Ocupa 2 filas hacia abajo
-    },
-    {
-      url: 'https://images.unsplash.com/photo-1527281400683-1aae777175f8?q=80&w=800&auto=format&fit=crop',
-      alt: 'Barricas de roble en bodega',
-      title: 'Reposo en las Alturas',
-      sizeClass: 'wide' // Ocupa 2 columnas a lo ancho
-    },
-    {
-      url: 'https://images.unsplash.com/photo-1582885461973-c60f25603816?q=80&w=800&auto=format&fit=crop',
-      alt: 'Alambique de cobre brillando',
-      title: 'Corazón de Cobre',
-      sizeClass: 'normal' // Tamaño estándar
-    },
-    {
-      url: 'https://images.unsplash.com/photo-1569529465841-dfecdab7503b?q=80&w=800&auto=format&fit=crop',
-      alt: 'Vaso de whisky con hielo oscuro',
-      title: 'Oro Líquido',
-      sizeClass: 'normal'
-    },
-    {
-      url: 'https://images.unsplash.com/photo-1470337458703-415120a41f67?q=80&w=1000&auto=format&fit=crop',
-      alt: 'Ambiente de bar premium oscuro',
-      title: 'La Experiencia',
-      sizeClass: 'large' // Ocupa 2 filas y 2 columnas (la foto protagonista)
-    },
-    {
-      url: 'https://images.unsplash.com/photo-1516997121675-4c2d1684aa3e?q=80&w=800&auto=format&fit=crop',
-      alt: 'Bartender preparando un trago',
-      title: 'Pasión y Precisión',
-      sizeClass: 'tall'
-    },
-    {
-      url: 'https://images.unsplash.com/photo-1614316311652-3d712f602b9f?q=80&w=800&auto=format&fit=crop',
-      alt: 'Botella de Ron en ambiente de madera',
-      title: 'Herencia Cañera',
-      sizeClass: 'normal'
-    },
-    {
-      url: 'https://images.unsplash.com/photo-1551538827-9c037cb4f32a?q=80&w=800&auto=format&fit=crop',
-      alt: 'Detalles de coctelería con cítricos',
-      title: 'Notas Cítricas',
-      sizeClass: 'wide'
+export class Galeria implements OnInit {
+  supabaseService = inject(SupabaseService);
+
+  // Estados reactivos
+  images = signal<GalleryImage[]>([]);
+  isLoading = signal<boolean>(true);
+  selectedImage = signal<GalleryImage | null>(null);
+
+  async ngOnInit() {
+    try {
+      this.isLoading.set(true);
+      const dbImages = await this.supabaseService.getGalleryImages();
+      console.log(dbImages);
+      this.images.set(dbImages || []);
+    } catch (error) {
+      console.error('Error cargando la galería:', error);
+    } finally {
+      this.isLoading.set(false);
     }
-  ];
+  }
+
+  // Funciones del Lightbox
+  openLightbox(img: GalleryImage) {
+    this.selectedImage.set(img);
+    // Evita que la página haga scroll mientras el lightbox está abierto
+    document.body.style.overflow = 'hidden';
+  }
+
+  closeLightbox(event: Event) {
+    event.stopPropagation();
+    this.selectedImage.set(null);
+    // Restaura el scroll de la página
+    document.body.style.overflow = 'auto';
+  }
+
 }
