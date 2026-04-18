@@ -1,54 +1,101 @@
-import { Component } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { SupabaseService } from '../../services/supabase';
 
+// Interfaz actualizada con los nuevos campos de contenido
 interface CocktailPost {
   id: string;
   title: string;
-  baseSpirit: string; // Ej: 'Ron Estancos', 'Whisky Estancos'
+  base_spirit: string;
   excerpt: string;
-  imageUrl: string;
-  readTime: string;
+  image_url: string;
+  read_time: string;
+  ingredients?: string[];
+  instructions?: string[];
 }
+
 
 @Component({
   selector: 'app-cocteleria',
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './cocteleria.html',
   styleUrl: './cocteleria.scss',
 })
-export class Cocteleria {
-  // Arreglo de recetas de coctelería simulando entradas de blog
-  cocktailPosts: CocktailPost[] = [
-    {
-      id: 'old-fashioned-altura',
-      title: 'Old Fashioned de Altura',
-      baseSpirit: 'Whisky Chillos Valley',
-      excerpt: 'Una reinterpretación robusta del clásico. Las notas de roble carbonizado de nuestro whiskey estilo bourbon se realzan con un toque de sirope de panela y bitters de naranja.',
-      imageUrl: 'https://images.unsplash.com/photo-1595981267035-7b04d84ee52a?q=80&w=800&auto=format&fit=crop',
-      readTime: '3 min'
-    },
-    {
-      id: 'cuba-libre-andina',
-      title: 'Cuba Libre Andina',
-      baseSpirit: 'Ron Estancos',
-      excerpt: 'Refrescante y profunda. Descubre cómo nuestro ron añejado a 2500 msnm transforma por completo la tradicional mezcla caribeña, aportando matices de cacao y vainilla.',
-      imageUrl: 'https://images.unsplash.com/photo-1615887023516-9b6bcd559e87?q=80&w=800&auto=format&fit=crop',
-      readTime: '2 min'
-    },
-    {
-      id: 'whisky-sour-paramo',
-      title: 'Sour del Páramo',
-      baseSpirit: 'Whisky Single Malt',
-      excerpt: 'El equilibrio perfecto entre la potencia de nuestra malta andina y la frescura de los cítricos locales. Una receta sedosa que sorprenderá a tu paladar.',
-      imageUrl: 'https://images.unsplash.com/photo-1556679343-c7306c1976bc?q=80&w=800&auto=format&fit=crop',
-      readTime: '4 min'
-    },
-    {
-      id: 'mojito-estancos',
-      title: 'Mojito Reserva Estancos',
-      baseSpirit: 'Ron Estancos',
-      excerpt: 'Un twist premium para tus tardes. Elevamos el clásico mojito utilizando nuestro ron oscuro añejado, hierbabuena fresca y un toque sutil de jengibre.',
-      imageUrl: 'https://images.unsplash.com/photo-1551538827-9c037cb4f32a?q=80&w=800&auto=format&fit=crop',
-      readTime: '3 min'
+export class Cocteleria implements OnInit {
+  supabaseService = inject(SupabaseService);
+
+  // Estados reactivos
+  cocktails = signal<CocktailPost[]>([]);
+  isLoading = signal<boolean>(true);
+
+  // NUEVO ESTADO: Rastrea qué cóctel está seleccionado actualmente
+  selectedCocktail = signal<CocktailPost | null>(null);
+
+  // NUEVOS ESTADOS PARA EL FILTRADO
+  activeFilter = signal<string>('todos');
+
+  // Extraemos las categorías únicas (licores base) dinámicamente de los datos
+  categories = computed(() => {
+    const uniqueSpirits = new Set(this.cocktails().map(c => c.base_spirit));
+    return ['todos', ...Array.from(uniqueSpirits)];
+  });
+
+   // Filtramos la cuadrícula de cócteles basándonos en el filtro activo
+  filteredCocktails = computed(() => {
+    const filter = this.activeFilter();
+    const allCocktails = this.cocktails();
+
+    if (filter === 'todos') {
+      return allCocktails;
     }
-  ];
+
+    return allCocktails.filter(c => c.base_spirit === filter);
+  });
+
+  async ngOnInit() {
+    try {
+      this.isLoading.set(true);
+      const dbCocktails = await this.supabaseService.getCocktails();
+      this.cocktails.set(dbCocktails || []);
+    } catch (error) {
+      console.error('Error cargando las recetas de coctelería:', error);
+    } finally {
+      this.isLoading.set(false);
+    }
+  }
+
+  // ACCIONES DE LA UI
+  setFilter(category: string) {
+    this.activeFilter.set(category);
+  }
+
+  // ACCIONES DE LA UI
+  openRecipe(post: CocktailPost) {
+    this.selectedCocktail.set(post);
+    // Hacemos scroll suave específicamente hacia la sección del componente
+    // Utilizamos setTimeout para asegurar que la vista del detalle ya fue renderizada en el DOM
+    setTimeout(() => {
+      const section = document.getElementById('cocteleria-section');
+      if (section) {
+        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 50);
+  }
+
+  closeRecipe() {
+    this.selectedCocktail.set(null);
+    // Opcional: También podemos hacer scroll al volver a la cuadrícula
+    setTimeout(() => {
+      const section = document.getElementById('cocteleria-section');
+      if (section) {
+        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 50);
+  }
+
+  // Fallback por si la imagen de la base de datos se rompe
+  onImageError(event: Event) {
+    const target = event.target as HTMLImageElement;
+    target.src = 'https://images.unsplash.com/photo-1551538827-9c037cb4f32a?q=80&w=800&auto=format&fit=crop';
+  }
 }

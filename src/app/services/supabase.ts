@@ -100,6 +100,26 @@ export class SupabaseService {
     return data;
   }
 
+  /**
+   * Obtiene todas las recetas de coctelería activas
+   */
+  async getCocktails() {
+    const { data, error } = await this.supabase
+      .from('cocktail_recipes')
+      // Seleccionamos los campos y renombramos 'slug' a 'id' para que coincida con el frontend
+      .select('id:slug, title, base_spirit, excerpt, image_url, read_time, ingredients, instructions')
+      .eq('is_active', true)
+      .order('created_at', { ascending: false }); // Las recetas más nuevas primero
+
+    if (error) {
+      console.error('Error obteniendo recetas de coctelería:', error);
+      throw error;
+    }
+
+    return data;
+  }
+
+
 
   /**
    * Guarda un nuevo prospecto (lead) del formulario B2B de Aliados.

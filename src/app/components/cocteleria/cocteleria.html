@@ -1,43 +1,128 @@
-<section class="container">
+ <!-- Asignamos un ID único a la sección para poder hacer scroll específicamente hasta aquí -->
+    <section id="cocteleria-section" class="container">
 
-      <div class="section-header">
-        <span class="section-subtitle">Mixología de Altura</span>
-        <h2>Coctelería de Autor</h2>
-      </div>
+      @if (isLoading()) {
+        <!-- LOADER -->
+        <div class="loader-container">
+          <div class="spinner"></div>
+          <div class="loader-text">Preparando Recetas...</div>
+        </div>
+      } @else {
 
-      <div class="blog-grid">
-        @for (post of cocktailPosts; track post.id) {
+        <!-- SI NO HAY RECETA SELECCIONADA: MOSTRAMOS LA CUADRÍCULA -->
+        @if (!selectedCocktail()) {
+          <div class="section-header">
+            <span class="section-subtitle">Mixología de Altura</span>
+            <h2>Coctelería de Autor</h2>
+          </div>
 
-          <!-- En la app real, el href será [routerLink]="['/cocteleria', post.id]" -->
-          <a href="#/cocteleria/{{ post.id }}" class="blog-card">
+          <!-- FILTROS DINÁMICOS POR LICOR BASE -->
+          <div class="filters-container">
+            @for (category of categories(); track category) {
+              <button
+                class="filter-btn"
+                [class.active]="activeFilter() === category"
+                (click)="setFilter(category)">
+                {{ category === 'todos' ? 'Todos los licores' : category }}
+              </button>
+            }
+          </div>
 
-            <div class="card-image-wrapper">
-              <span class="card-tag">{{ post.baseSpirit }}</span>
-              <img [src]="post.imageUrl" [alt]="post.title" class="card-image" loading="lazy">
-            </div>
-
-            <div class="card-content">
-              <div class="card-meta">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <span>{{ post.readTime }} lectura</span>
+          <div class="blog-grid">
+            @if (filteredCocktails().length === 0) {
+              <div class="no-results">
+                No hay recetas disponibles para este licor base en este momento.
               </div>
+            } @else {
+              @for (post of filteredCocktails(); track post.id) {
+                <!-- Al hacer clic, abrimos la receta -->
+                <div class="blog-card" (click)="openRecipe(post)">
 
-              <h3 class="card-title">{{ post.title }}</h3>
-              <p class="card-excerpt">{{ post.excerpt }}</p>
+                  <div class="card-image-wrapper">
+                    <span class="card-tag">{{ post.base_spirit }}</span>
+                    <img [src]="post.image_url" [alt]="post.title" class="card-image" loading="lazy" (error)="onImageError($event)">
+                  </div>
 
-              <div class="read-more">
-                Ver Receta
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                </svg>
-              </div>
-            </div>
+                  <div class="card-content">
+                    <div class="card-meta">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      <span>{{ post.read_time }} de preparación</span>
+                    </div>
 
-          </a>
+                    <h3 class="card-title">{{ post.title }}</h3>
+                    <p class="card-excerpt">{{ post.excerpt }}</p>
 
+                    <div class="read-more">
+                      Ver Receta Completa
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                      </svg>
+                    </div>
+                  </div>
+
+                </div>
+              }
+            }
+          </div>
         }
-      </div>
+
+        <!-- SI HAY RECETA SELECCIONADA: MOSTRAMOS EL ARTÍCULO COMPLETO -->
+        @else {
+          <!-- Botón Volver -->
+          <button class="btn-back" (click)="closeRecipe()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M7 16l-4-4m0 0l4-4m-4 4h18" />
+            </svg>
+            Volver a Coctelería
+          </button>
+
+          <!-- Artículo Principal -->
+          <article class="recipe-article">
+
+            <div class="article-hero">
+              <img [src]="selectedCocktail()?.image_url" [alt]="selectedCocktail()?.title" (error)="onImageError($event)">
+              <div class="article-hero-overlay">
+                <span class="card-tag">{{ selectedCocktail()?.base_spirit }}</span>
+                <h1 class="article-title">{{ selectedCocktail()?.title }}</h1>
+                <div class="article-meta">
+                  <div class="meta-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    Tiempo: {{ selectedCocktail()?.read_time }}
+                  </div>
+                  <div class="meta-item" style="color: var(--color-accent-gold);">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" /></svg>
+                    Nivel: Medio
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="article-body">
+              <!-- Columna Izquierda: Ingredientes -->
+              <div class="article-ingredients">
+                <h3>Ingredientes</h3>
+                <ul class="ingredients-list">
+                  @for (ingredient of selectedCocktail()?.ingredients; track ingredient) {
+                    <li>{{ ingredient }}</li>
+                  }
+                </ul>
+              </div>
+
+              <!-- Columna Derecha: Paso a paso -->
+              <div class="article-instructions">
+                <h3>Preparación</h3>
+                <ol class="instructions-list">
+                  @for (step of selectedCocktail()?.instructions; track step) {
+                    <li>{{ step }}</li>
+                  }
+                </ol>
+              </div>
+            </div>
+
+          </article>
+        }
+      }
 
     </section>
