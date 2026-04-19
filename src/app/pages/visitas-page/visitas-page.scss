@@ -234,7 +234,7 @@
         font-size: 0.95rem;
       }
 
-      /* Mapa Decorativo / Placeholder */
+      /* Mapa Decorativo e Interactivo */
       .map-wrapper {
         width: 100%;
         height: 400px;
@@ -244,28 +244,20 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        color: var(--color-text-muted);
-        font-family: var(--font-heading);
-        text-transform: uppercase;
-        letter-spacing: 2px;
         position: relative;
         overflow: hidden;
       }
 
-      .map-wrapper::after {
-        content: '';
-        position: absolute;
-        top: 0; left: 0; right: 0; bottom: 0;
-        background: radial-gradient(circle, transparent 20%, rgba(10,10,10,0.8) 100%);
-        pointer-events: none;
-      }
-
-      .map-image {
+      .map-wrapper iframe {
         width: 100%;
         height: 100%;
-        object-fit: cover;
-        opacity: 0.5;
-        filter: grayscale(100%) contrast(1.2);
+        border: none;
+        filter: grayscale(80%) contrast(1.2) opacity(0.8);
+        transition: var(--transition-smooth);
+      }
+
+      .map-wrapper:hover iframe {
+        filter: grayscale(20%) contrast(1.1) opacity(1);
       }
 
       @media (max-width: 900px) {
