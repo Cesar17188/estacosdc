@@ -211,3 +211,27 @@
         font-size: 1.1rem;
         border: 1px dashed var(--color-border);
       }
+
+      /* ================= MENSAJE TOAST ================= */
+      .toast-notification {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        background-color: var(--color-accent-gold);
+        color: #121212;
+        padding: 1rem 2rem;
+        border-radius: 4px;
+        font-family: var(--font-body);
+        font-weight: 600;
+        z-index: 1000;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        animation: slideIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+      }
+
+      @keyframes slideIn {
+        from { transform: translateX(120%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+      }

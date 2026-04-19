@@ -1,5 +1,5 @@
 <main>
-      <!-- HERO -->
+            <!-- HERO -->
       <section class="visit-hero">
         <div class="visit-hero-overlay"></div>
         <div class="container visit-hero-content">
@@ -16,44 +16,58 @@
             <h2>Elige tu Recorrido</h2>
           </div>
 
-          <div class="experiences-grid">
-            @for (tour of tours; track tour.id) {
-              <div class="tour-card">
+          @if (isLoading()) {
+            <div class="loader-container">
+              <div class="spinner"></div>
+              <div class="loader-text">Cargando Experiencias...</div>
+            </div>
+          } @else {
+            <div class="experiences-grid">
+              @for (tour of tours(); track tour.id) {
+                <div class="tour-card">
 
-                <div class="tour-image-wrapper">
-                  <img [src]="tour.imageUrl" [alt]="tour.title" class="tour-image">
+                  <div class="tour-image-wrapper">
+                    <img [src]="tour.image_url" [alt]="tour.name" class="tour-image">
+                  </div>
+
+                  <div class="tour-content">
+                    <div class="tour-meta">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      <!-- Leemos la duración desde el JSON de tour_details -->
+                      <span>Duración: {{ tour.tour_details.duration }}</span>
+                    </div>
+
+                    <div class="tour-header-row">
+                      <h3 class="tour-title">{{ tour.name }}</h3>
+                      <span class="tour-price">\${{ tour.price | number:'1.2-2' }}</span>
+                    </div>
+
+                    <p class="tour-description">{{ tour.description }}</p>
+
+                    <div class="tour-includes">
+                      <h4>¿Qué incluye?</h4>
+                      <ul>
+                        @for (item of tour.tour_details.includes; track item) {
+                          <li>{{ item }}</li>
+                        }
+                      </ul>
+                    </div>
+
+                    <!-- Botón para agregar al carrito mapeando los datos correctamente -->
+                    <button class="btn-primary" (click)="addTourToCart(tour)">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                      </svg>
+                      Añadir al Carrito
+                    </button>
+                  </div>
+
                 </div>
-
-                <div class="tour-content">
-                  <div class="tour-meta">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <span>Duración: {{ tour.duration }}</span>
-                  </div>
-
-                  <div class="tour-header-row">
-                    <h3 class="tour-title">{{ tour.title }}</h3>
-                    <span class="tour-price">{{ tour.price }}</span>
-                  </div>
-
-                  <p class="tour-description">{{ tour.description }}</p>
-
-                  <div class="tour-includes">
-                    <h4>¿Qué incluye?</h4>
-                    <ul>
-                      @for (item of tour.includes; track item) {
-                        <li>{{ item }}</li>
-                      }
-                    </ul>
-                  </div>
-
-                  <a href="#/agendar/{{ tour.id }}" class="btn-primary">Reservar Ahora</a>
-                </div>
-
-              </div>
-            }
-          </div>
+              }
+            </div>
+          }
         </div>
       </section>
 
@@ -116,3 +130,13 @@
       </section>
 
     </main>
+
+    <!-- TOAST NOTIFICATION DE AGREGADO AL CARRITO -->
+    @if (toastMessage()) {
+      <div class="toast-notification">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+        </svg>
+        <span>{{ toastMessage() }}</span>
+      </div>
+    }

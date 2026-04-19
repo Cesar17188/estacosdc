@@ -119,6 +119,23 @@ export class SupabaseService {
     return data;
   }
 
+  /**
+   * Obtiene todos los tours activos de la base de datos.
+   */
+  async getTours() {
+    const { data, error } = await this.supabase
+      .from('products')
+      .select('*')
+      .eq('category', 'experiencia')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error('Error obteniendo productos:', error);
+      throw error;
+    }
+    return data;
+  }
+
 
 
   /**

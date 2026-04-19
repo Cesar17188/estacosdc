@@ -30,6 +30,7 @@ export class TiendaPage implements OnInit{
   isLoading = signal<boolean>(true); // Controla el spinner
   activeCategory = signal<string>('todos');
   searchQuery = signal<string>(''); // Nuevo estado para la búsqueda de texto
+  toastMessage = signal<string | null>(null);
 
    filteredProducts = computed(() => {
     const category = this.activeCategory();
@@ -92,6 +93,13 @@ export class TiendaPage implements OnInit{
       badge: product.badge
     };
     this.cartService.addToCart(productToCart);
-    alert(`Se añadió ${product.name} a tu carrito.`);
+    this.showToast(`Se ha añadido "${product.name}" a tu carrito.`);
+  }
+
+  showToast(msg: string) {
+    this.toastMessage.set(msg);
+    setTimeout(() => {
+      this.toastMessage.set(null);
+    }, 3000);
   }
 }

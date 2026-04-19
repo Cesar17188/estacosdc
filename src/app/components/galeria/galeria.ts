@@ -28,7 +28,6 @@ export class Galeria implements OnInit {
     try {
       this.isLoading.set(true);
       const dbImages = await this.supabaseService.getGalleryImages();
-      console.log(dbImages);
       this.images.set(dbImages || []);
     } catch (error) {
       console.error('Error cargando la galería:', error);

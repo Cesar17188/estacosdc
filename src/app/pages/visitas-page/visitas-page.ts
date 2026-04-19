@@ -1,63 +1,70 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { SupabaseService } from '../../services/supabase';
+import { CartService } from '../../services/cart';
 
-interface TourExperience {
+// Interfaz que mapea a lo que recibimos de Supabase
+interface TourProduct {
   id: string;
-  title: string;
-  duration: string;
-  price: string;
+  name: string;
+  category: 'experiencia';
+  price: number;
   description: string;
-  includes: string[];
-  imageUrl: string;
+  image_url: string;
+  tour_details: {
+    duration: string;
+    includes: string[];
+  };
 }
 
 @Component({
   selector: 'app-visitas-page',
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './visitas-page.html',
   styleUrl: './visitas-page.scss',
 })
-export class VisitasPage {
-  tours: TourExperience[] = [
-    {
-      id: 'tour-clasico',
-      title: 'Recorrido Andino',
-      duration: '1 hora',
-      price: '$20',
-      description: 'Nuestra visita introductoria. Conoce el corazón de Estancos recorriendo la sala de alambiques y las bodegas de añejamiento, culminando con una degustación guiada.',
-      includes: [
-        'Recorrido guiado por las instalaciones',
-        'Cata de 2 destilados (Ron y Whiskey Clásico)',
-        '10% de descuento en la tienda física'
-      ],
-      imageUrl: 'https://images.unsplash.com/photo-1582885461973-c60f25603816?q=80&w=800&auto=format&fit=crop'
-    },
-    {
-      id: 'cata-maestro',
-      title: 'Cata del Maestro Destilador',
-      duration: '2 horas',
-      price: '$30',
-      description: 'Una inmersión profunda para verdaderos conocedores. Explora el proceso técnico detallado y degusta nuestros destilados de colección directamente extraídos de la barrica.',
-      includes: [
-        'Recorrido VIP por áreas restringidas',
-        'Cata de 4 destilados (incluyendo Cask Strength)',
-        'Degustación directa desde la barrica',
-        'Copa Glencairn oficial de regalo'
-      ],
-      imageUrl: 'https://images.unsplash.com/photo-1527281400683-1aae777175f8?q=80&w=800&auto=format&fit=crop'
-    },
-    {
-      id: 'experiencia-rommelier',
-      title: 'Experiencia Rommelier',
-      duration: '3 horas',
-      price: '$50',
-      description: 'La experiencia definitiva de Estancos. Combina nuestro recorrido técnico con una masterclass de coctelería andina y una sesión completa de maridaje de autor.',
-      includes: [
-        'Recorrido guiado completo',
-        'Masterclass de Mixología (prepara 2 cócteles)',
-        'Sesión de maridaje con quesos y chocolates locales',
-        'Botella miniatura de cortesía'
-      ],
-      imageUrl: 'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?q=80&w=800&auto=format&fit=crop'
+export class VisitasPage implements OnInit {
+  // En tu entorno real, esto sería: inject(SupabaseService)
+  supabaseService = inject(SupabaseService);
+  // En tu entorno real, esto sería: inject(CartService)
+  cartService = inject(CartService);
+
+  tours = signal<TourProduct[]>([]);
+  isLoading = signal<boolean>(true);
+  toastMessage = signal<string | null>(null);
+
+  async ngOnInit() {
+    try {
+      this.isLoading.set(true);
+      // Usamos el servicio simulado para obtener los tours en la vista previa
+      const dbTours = await this.supabaseService.getTours();
+      this.tours.set(dbTours || []);
+    } catch (error) {
+      console.error('Error obteniendo tours:', error);
+    } finally {
+      this.isLoading.set(false);
     }
-  ];
+  }
+
+  addTourToCart(tour: TourProduct) {
+    // Transformamos el objeto TourProduct al formato Product que espera el carrito
+    const cartProduct = {
+      id: tour.id,
+      name: tour.name,
+      category: tour.category,
+      price: tour.price,
+      image_url: tour.image_url // Mapeamos image_url a imageUrl
+    };
+
+    this.cartService.addToCart(cartProduct);
+
+    this.showToast(`Se ha añadido "${tour.name}" a tu carrito.`);
+  }
+
+  showToast(msg: string) {
+    this.toastMessage.set(msg);
+    setTimeout(() => {
+      this.toastMessage.set(null);
+    }, 3000);
+  }
 }

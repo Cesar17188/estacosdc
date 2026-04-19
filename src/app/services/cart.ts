@@ -5,7 +5,7 @@ import { Injectable, signal, computed } from '@angular/core';
 export interface Product {
   id: string;
   name: string;
-  category: 'ron' | 'whisky' | 'accesorios';
+  category: 'ron' | 'whisky' | 'accesorios' | 'experiencia';
   price: number;
   image_url: string;
   badge?: string;
