@@ -1,0 +1,212 @@
+/* ================= CONTENIDO DE LA WEB (Fondo) ================= */
+      .website-content {
+        min-height: 100vh;
+        background-color: var(--color-bg-base);
+        padding: 2rem;
+        text-align: center;
+        filter: blur(0px);
+        transition: filter 0.8s ease;
+      }
+
+      .website-content.blurred {
+        filter: blur(10px);
+        pointer-events: none;
+        user-select: none;
+      }
+
+      .btn-reset {
+        margin-top: 2rem;
+        background: transparent;
+        border: 1px dashed var(--color-border);
+        color: var(--color-text-muted);
+        padding: 0.5rem 1rem;
+        cursor: pointer;
+        font-family: var(--font-body);
+        border-radius: 4px;
+        transition: var(--transition-smooth);
+      }
+      .btn-reset:hover { border-color: var(--color-accent-gold); color: var(--color-accent-gold); }
+
+      /* ================= AGE GATE MODAL ================= */
+      .age-gate-overlay {
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background-color: rgba(10, 10, 10, 0.85);
+        backdrop-filter: blur(15px);
+        z-index: 9999;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.6s ease, visibility 0.6s ease;
+      }
+
+      .age-gate-overlay.show {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .age-gate-modal {
+        background-color: var(--color-bg-surface);
+        border: 1px solid var(--color-accent-gold);
+        padding: 4rem 3rem;
+        max-width: 500px;
+        width: 90%;
+        text-align: center;
+        border-radius: 4px;
+        box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+        transform: translateY(30px);
+        transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      }
+
+      .age-gate-overlay.show .age-gate-modal {
+        transform: translateY(0);
+      }
+
+      .modal-logo {
+        font-family: var(--font-heading);
+        color: var(--color-text-main);
+        font-size: 2rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 4px;
+        margin-bottom: 2rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .modal-logo-icon {
+        width: 50px; height: 50px;
+        border: 2px solid var(--color-accent-gold);
+        display: flex; align-items: center; justify-content: center;
+        color: var(--color-accent-gold);
+        font-size: 1.5rem;
+      }
+
+      .modal-title {
+        font-family: var(--font-heading);
+        font-size: 1.3rem;
+        color: var(--color-accent-gold);
+        margin-bottom: 1rem;
+      }
+
+      .modal-text {
+        color: var(--color-text-muted);
+        line-height: 1.6;
+        margin-bottom: 2.5rem;
+        font-size: 0.95rem;
+      }
+
+      /* === FORMULARIO DE FECHA DE NACIMIENTO === */
+      .dob-form {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+      }
+
+      .dob-inputs {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+      }
+
+      .input-group {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .input-group label {
+        font-size: 0.75rem;
+        color: var(--color-text-muted);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      .dob-input {
+        width: 70px;
+        background-color: var(--color-bg-base);
+        border: 1px solid var(--color-border);
+        color: var(--color-text-main);
+        padding: 0.8rem;
+        font-family: var(--font-body);
+        font-size: 1.1rem;
+        text-align: center;
+        border-radius: 2px;
+        outline: none;
+        transition: var(--transition-smooth);
+      }
+
+      .dob-input.year {
+        width: 90px;
+      }
+
+      .dob-input:focus {
+        border-color: var(--color-accent-gold);
+        box-shadow: 0 0 0 1px var(--color-accent-gold);
+      }
+
+      /* Ocultar flechas en los inputs numéricos */
+      .dob-input::-webkit-outer-spin-button,
+      .dob-input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+      .dob-input[type=number] {
+        -moz-appearance: textfield;
+      }
+
+      .btn-enter {
+        width: 100%;
+        padding: 1.2rem;
+        font-family: var(--font-heading);
+        font-weight: 700;
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        cursor: pointer;
+        border-radius: 2px;
+        transition: var(--transition-smooth);
+        border: none;
+        background-color: var(--color-accent-gold);
+        color: #121212;
+      }
+
+      .btn-enter:hover:not(:disabled) {
+        background-color: var(--color-accent-hover);
+        transform: translateY(-2px);
+      }
+
+      .btn-enter:disabled {
+        background-color: var(--color-border);
+        color: var(--color-text-muted);
+        cursor: not-allowed;
+      }
+
+      .error-msg {
+        color: #ef4444;
+        font-size: 0.9rem;
+        margin-top: 1.5rem;
+        background-color: rgba(239, 68, 68, 0.1);
+        padding: 1rem;
+        border-radius: 4px;
+        animation: shake 0.5s ease-in-out;
+      }
+
+      .disclaimer {
+        margin-top: 2rem;
+        font-size: 0.75rem;
+        color: #666;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+      }
+
+      @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-5px); }
+        75% { transform: translateX(5px); }
+      }

@@ -152,4 +152,76 @@ export class SupabaseService {
     }
     return data;
   }
+
+    /**
+   * Crea un nuevo pedido en la base de datos y guarda sus ítems correspondientes.
+   * @param orderDetails Los datos del formulario de envío
+   * @param cartItems El arreglo de productos en el carrito
+   * @param totalAmount El valor total a pagar
+   */
+  async createOrder(orderDetails: any, cartItems: any[], totalAmount: number) {
+
+    // 1. MAGIA AQUÍ: Generamos el ID único en Angular.
+    // Esto evita tener que hacer un .select() que viole las políticas de privacidad de lectura de Supabase.
+    const orderId = crypto.randomUUID();
+
+    // 2. Construimos el objeto para la tabla principal 'orders'
+    const orderData = {
+      id: orderId, // Asignamos explícitamente el ID que acabamos de generar
+      total_amount: totalAmount,
+      contact_email: orderDetails.email,
+      status: 'pendiente',
+      shipping_address: {
+        fullName: orderDetails.fullName,
+        phone: orderDetails.phone,
+        city: orderDetails.city,
+        sector: orderDetails.sector,
+        address: orderDetails.address
+      }
+    };
+
+    // 3. Insertamos la orden SIN usar .select() al final
+    const { error: orderError } = await this.supabase
+      .from('orders')
+      .insert([orderData]);
+
+    if (orderError) {
+      console.error('Error al crear la orden principal:', orderError);
+      throw orderError;
+    }
+
+    // 4. Construimos el arreglo de productos para la tabla 'order_items'
+    const itemsData = cartItems.map(item => ({
+      order_id: orderId, // Usamos el mismo ID
+      product_id: item.id,
+      quantity: item.quantity,
+      unit_price: item.price
+    }));
+
+    // 5. Insertamos todos los ítems de una sola vez
+    const { error: itemsError } = await this.supabase
+      .from('order_items')
+      .insert(itemsData);
+
+    if (itemsError) {
+      console.error('Error al insertar los items de la orden:', itemsError);
+
+      // Lógica de reversión (rollback): Borramos la orden si fallan los ítems
+      console.log('Revirtiendo la orden principal para evitar datos huérfanos...');
+      const { error: rollbackError } = await this.supabase
+        .from('orders')
+        .delete()
+        .eq('id', orderId);
+
+      if (rollbackError) {
+        console.error('Error crítico al intentar revertir la orden:', rollbackError);
+      }
+
+      throw itemsError;
+    }
+
+    // Si todo salió bien, devolvemos éxito
+    return { success: true, orderId: orderId };
+  }
+
 }

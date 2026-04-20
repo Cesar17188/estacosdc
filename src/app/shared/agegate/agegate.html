@@ -1,0 +1,52 @@
+<!-- EL MODAL DE VERIFICACIÓN DE EDAD -->
+    <div class="age-gate-overlay" [class.show]="showGate()">
+      <div class="age-gate-modal">
+
+        <div class="modal-logo">
+          <div class="modal-logo-icon">E</div>
+          Estancos
+        </div>
+
+        <h2 class="modal-title">¡Bienvenido a Estancos!</h2>
+        <p class="modal-text">
+          Para disfrutar de nuestra experiencia y destilados de altura, por favor confírmanos tu fecha de nacimiento (debes tener la edad legal para consumir alcohol en tu país).
+        </p>
+
+        <form [formGroup]="dobForm" class="dob-form" (ngSubmit)="verifyAge()">
+          <div class="dob-inputs">
+            <div class="input-group">
+              <label for="day">Día</label>
+              <input type="number" id="day" formControlName="day" class="dob-input" placeholder="DD" min="1" max="31">
+            </div>
+            <div class="input-group">
+              <label for="month">Mes</label>
+              <input type="number" id="month" formControlName="month" class="dob-input" placeholder="MM" min="1" max="12">
+            </div>
+            <div class="input-group">
+              <label for="year">Año</label>
+              <input type="number" id="year" formControlName="year" class="dob-input year" placeholder="AAAA" min="1900" [max]="currentYear">
+            </div>
+          </div>
+
+          <button type="submit" class="btn-enter" [disabled]="dobForm.invalid">Descubrir Estancos</button>
+        </form>
+
+        @if (errorMsg()) {
+          <div class="error-msg">
+            {{ errorMsg() }}
+          </div>
+        }
+
+        <div class="disclaimer">
+          Disfruta con Responsabilidad.
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTENIDO SIMULADO DE TU WEB DE FONDO -->
+    <div class="website-content" [class.blurred]="showGate()">
+      <h1 style="font-family: 'Cinzel', serif; color: #d4af37; font-size: 3rem; margin-top: 10vh;">Estancos Distilling Co.</h1>
+      <p style="color: #9ca3af; font-size: 1.2rem;">Bienvenido a la experiencia completa.</p>
+
+      <button class="btn-reset" (click)="resetGate()">Reiniciar Verificación (Para probar de nuevo)</button>
+    </div>

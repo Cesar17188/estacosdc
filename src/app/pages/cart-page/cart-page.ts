@@ -1,6 +1,7 @@
 import { Component, signal, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CartService } from '../../services/cart';
+import { RouterLink } from "@angular/router";
 
 // === ESTADO GLOBAL SIMULADO PARA LA VISTA PREVIA ===
 // En tu app real, inyectarás CartService aquí y leerás sus signals
@@ -31,7 +32,7 @@ const cartCount = computed(() => cartItems().reduce((count, item) => count + ite
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './cart-page.html',
   styleUrl: './cart-page.scss',
 })
