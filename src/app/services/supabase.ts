@@ -439,4 +439,42 @@ export class SupabaseService {
     return true;
   }
 
+  /**
+   * Obtiene todos los productos para el panel de administración
+   */
+  async getAllProducts() {
+    const { data, error } = await this.supabase
+      .from('products')
+      .select('id, slug, name, category, price, stock_quantity, is_active, image_url')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error('Error obteniendo inventario:', error);
+      throw error;
+    }
+    return data;
+  }
+
+  /**
+   * Actualiza los datos de un producto (stock, precio, estado)
+   */
+  async updateProduct(productId: string, updates: any) {
+    const { error } = await this.supabase
+      .from('products')
+      .update({
+        name: updates.name,
+        price: updates.price,
+        stock_quantity: updates.stock_quantity,
+        category: updates.category,
+        is_active: updates.is_active
+      })
+      .eq('id', productId);
+
+    if (error) {
+      console.error('Error actualizando producto:', error);
+      throw error;
+    }
+    return true;
+  }
+
 }

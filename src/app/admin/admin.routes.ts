@@ -3,6 +3,7 @@ import { AdminLayout } from './admin-layout/admin-layout';
 import { AdminLogin } from './admin-login/admin-login';
 import { Dashboard } from './dashboard/dashboard';
 import { Pedidos } from './pedidos/pedidos';
+import { Catalogo } from './catalogo/catalogo';
 import { authGuard } from '../guards/auth-guard'; // <-- IMPORTAMOS EL GUARD
 
 
@@ -21,6 +22,7 @@ export const ADMIN_ROUTES: Routes = [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', component: Dashboard },
       { path: 'pedidos', component: Pedidos },
+      { path: 'catalogo', component: Catalogo },
       // { path: 'ventas', component: VentasComponent },
     ]
   }
