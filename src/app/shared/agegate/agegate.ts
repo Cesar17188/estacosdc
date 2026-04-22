@@ -1,6 +1,8 @@
-import { Component, signal, OnInit, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, signal, OnInit, inject, PLATFORM_ID } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { NavigationEnd, Router } from '@angular/router';
+import { filter, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-agegate',
@@ -10,6 +12,15 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 })
 export class Agegate implements OnInit{
   private fb = inject(FormBuilder);
+
+  // 2. Inyectamos el ID de la plataforma
+  private platformId = inject(PLATFORM_ID);
+
+   // Hacemos que el Router sea opcional para que no falle en el entorno de previsualización (Canvas)
+  private router = inject(Router, { optional: true });
+
+  // Guardamos la suscripción para evitar fugas de memoria
+  private routerSub?: Subscription;
 
   showGate = signal<boolean>(true);
   errorMsg = signal<string>('');
@@ -23,11 +34,49 @@ export class Agegate implements OnInit{
   });
 
   ngOnInit() {
-    const isVerified = localStorage.getItem('estancos_age_verified');
-    if (isVerified === 'true') {
-      this.showGate.set(false);
+    if (isPlatformBrowser(this.platformId)) {
+
+      // 1. Revisión Inmediata (basada en la URL actual de la ventana)
+      this.evaluateRouteAndGate(window.location.href);
+
+      // 2. Suscripción Reactiva (escucha constantemente si navegas a otra página)
+      if (this.router) {
+        this.routerSub = this.router.events.pipe(
+          filter(event => event instanceof NavigationEnd)
+        ).subscribe((event: any) => {
+          this.evaluateRouteAndGate(event.urlAfterRedirects);
+        });
+      }
     }
   }
+
+  // Se destruye la escucha si el componente se elimina
+  ngOnDestroy() {
+    if (this.routerSub) {
+      this.routerSub.unsubscribe();
+    }
+  }
+
+   /**
+   * Función centralizada que decide si mostrar o no la pantalla
+   * dependiendo de la URL y el LocalStorage.
+   */
+  private evaluateRouteAndGate(url: string) {
+    // Si la URL tiene "admin", forzamos a ocultar el filtro
+    if (url.includes('/admin')) {
+      this.showGate.set(false);
+      return;
+    }
+
+    // Si NO es admin, verificamos el localStorage normal
+    const isVerified = localStorage.getItem('estancos_age_verified');
+    if (isVerified !== 'true') {
+      this.showGate.set(true);
+    } else {
+      this.showGate.set(false); // Aseguramos que se oculte si ya está verificado
+    }
+  }
+
 
   verifyAge() {
     if (this.dobForm.invalid) {
@@ -59,19 +108,13 @@ export class Agegate implements OnInit{
 
     // 3. Validar si tiene 18 años o más
     if (age >= 18) {
-      localStorage.setItem('estancos_age_verified', 'true');
+      if (isPlatformBrowser(this.platformId)) {
+        localStorage.setItem('estancos_age_verified', 'true');
+      }
       this.showGate.set(false);
       this.errorMsg.set('');
     } else {
-      this.errorMsg.set('¡Gracias por tu interés! Lamentablemente, debes tener al menos 18 años para explorar nuestra destilería. ¡Te esperamos en el futuro!');
+      this.errorMsg.set('¡Gracias por tu interés! Lamentablemente tu edad no te permite acceder a este sitio. Si crees que esto es un error, por favor contáctanos.');
     }
-  }
-
-  // Función exclusiva para probar en este Canvas interactivo
-  resetGate() {
-    localStorage.removeItem('estancos_age_verified');
-    this.dobForm.reset();
-    this.showGate.set(true);
-    this.errorMsg.set('');
   }
 }

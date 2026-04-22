@@ -224,4 +224,146 @@ export class SupabaseService {
     return { success: true, orderId: orderId };
   }
 
+  /**
+   * Datos para el Dashboard del Administrador
+   * 1. Obtiene las estadísticas generales (KPIs) para el Dashboard
+   */
+  async getDashboardStats() {
+    // A. Total de Ventas (Órdenes pagadas, enviadas o entregadas)
+    const { data: salesData } = await this.supabase
+      .from('orders')
+      .select('total_amount')
+      .in('status', ['pagado', 'enviado', 'entregado']);
+
+    // Sumamos los totales
+    const totalSales = salesData ? salesData.reduce((sum, order) => sum + Number(order.total_amount), 0) : 0;
+
+    // B. Pedidos Pendientes (usamos count para no descargar todos los registros)
+    const { count: pendingOrders } = await this.supabase
+      .from('orders')
+      .select('*', { count: 'exact', head: true })
+      .eq('status', 'pendiente');
+
+    // C. Nuevos Leads (Solicitudes de distribuidores sin contactar)
+    const { count: newLeads } = await this.supabase
+      .from('distributor_requests')
+      .select('*', { count: 'exact', head: true })
+      .eq('status', 'nuevo');
+
+    // D. Tours Activos (Reservas pendientes o confirmadas)
+    const { count: activeTours } = await this.supabase
+      .from('tour_bookings')
+      .select('*', { count: 'exact', head: true })
+      .in('status', ['pendiente', 'confirmado']);
+
+    return {
+      totalSales: totalSales,
+      pendingOrders: pendingOrders || 0,
+      newLeads: newLeads || 0,
+      activeTours: activeTours || 0
+    };
+  }
+
+  /**
+   * 2. Obtiene los últimos pedidos para la tabla
+   */
+  async getRecentOrders() {
+    const { data, error } = await this.supabase
+      .from('orders')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .limit(5); // Traemos solo los 5 más recientes
+
+    if (error) {
+      console.error('Error obteniendo órdenes recientes:', error);
+      throw error;
+    }
+
+    // Mapeamos los datos para adaptarlos a la tabla del Dashboard
+    return data.map(order => {
+      const dateObj = new Date(order.created_at);
+      const formattedDate = dateObj.toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' });
+
+      return {
+        // Tomamos solo la primera parte del UUID para mostrar un "ID corto" estilo factura
+        id: `ORD-${order.id.split('-')[0].toUpperCase()}`,
+        customer: order.shipping_address?.fullName || 'Cliente Anónimo',
+        date: formattedDate,
+        amount: Number(order.total_amount),
+        status: order.status
+      };
+    });
+  }
+
+  /**
+   * 3. Obtiene las últimas solicitudes B2B (Leads)
+   */
+  async getRecentLeads() {
+    const { data, error } = await this.supabase
+      .from('distributor_requests')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .limit(4);
+
+    if (error) {
+      console.error('Error obteniendo leads recientes:', error);
+      throw error;
+    }
+
+    return data.map(lead => {
+      const dateObj = new Date(lead.created_at);
+      const formattedDate = dateObj.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
+
+      return {
+        company: lead.company,
+        contactName: lead.name,
+        region: lead.region,
+        status: lead.status,
+        date: formattedDate
+      };
+    });
+  }
+// ==========================================================================
+  // MÉTODOS DE AUTENTICACIÓN (CRM)
+  // ==========================================================================
+
+  /**
+   * Inicia sesión con correo y contraseña.
+   */
+  async signIn(email: string, pass: string) {
+    const { data, error } = await this.supabase.auth.signInWithPassword({
+      email: email,
+      password: pass,
+    });
+
+    if (error) {
+      console.error('Error de autenticación:', error.message);
+      throw error;
+    }
+
+    return data;
+  }
+
+  /**
+   * Cierra la sesión activa del usuario.
+   */
+  async signOut() {
+    const { error } = await this.supabase.auth.signOut();
+    if (error) {
+      console.error('Error al cerrar sesión:', error.message);
+      throw error;
+    }
+  }
+
+  /**
+   * Verifica si hay una sesión activa (Útil para proteger las rutas del CRM).
+   */
+  async getSession() {
+    const { data, error } = await this.supabase.auth.getSession();
+    if (error) {
+      console.error('Error obteniendo sesión:', error.message);
+      return null;
+    }
+    return data.session;
+  }
 }

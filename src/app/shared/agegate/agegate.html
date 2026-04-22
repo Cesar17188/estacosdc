@@ -1,5 +1,6 @@
 <!-- EL MODAL DE VERIFICACIÓN DE EDAD -->
-    <div class="age-gate-overlay" [class.show]="showGate()">
+@if (showGate()) {
+<div class="age-gate-overlay" [class.show]="showGate()">
       <div class="age-gate-modal">
 
         <div class="modal-logo">
@@ -38,7 +39,7 @@
         }
 
         <div class="disclaimer">
-          Disfruta con Responsabilidad.
+          Disfruta con Responsabilidad. <br>El consumo excesivo de alcohol puede perjudicar su salud.
         </div>
       </div>
     </div>
@@ -48,5 +49,5 @@
       <h1 style="font-family: 'Cinzel', serif; color: #d4af37; font-size: 3rem; margin-top: 10vh;">Estancos Distilling Co.</h1>
       <p style="color: #9ca3af; font-size: 1.2rem;">Bienvenido a la experiencia completa.</p>
 
-      <button class="btn-reset" (click)="resetGate()">Reiniciar Verificación (Para probar de nuevo)</button>
     </div>
+  }

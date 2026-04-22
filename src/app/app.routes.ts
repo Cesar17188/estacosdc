@@ -10,6 +10,12 @@ import { CheckoutPage } from './pages/checkout-page/checkout-page';
 
 
 export const routes: Routes = [
+   // 1. RUTA DEL CRM (AISLADA Y CON CARGA DIFERIDA)
+  {
+    path: 'admin',
+    loadChildren: () => import('./admin/admin.routes').then(m => m.ADMIN_ROUTES)
+  },
+
     {
         path: '',
         component: Home

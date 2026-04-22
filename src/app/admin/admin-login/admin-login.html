@@ -1,0 +1,81 @@
+<div class="login-container">
+
+      <!-- Éxito: Oculta el formulario al loguearse correctamente y muestra el mensaje de redirección -->
+      @if (loginSuccess()) {
+        <div class="success-overlay">
+          <svg class="success-icon" xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <h2>Acceso Concedido</h2>
+          <p style="color: var(--color-text-muted); font-size: 0.85rem;">Redirigiendo al Dashboard...</p>
+        </div>
+      }
+
+      <div class="login-header">
+        <div class="logo-icon">E</div>
+        <h1>Estancos</h1>
+        <p>Portal Administrativo</p>
+      </div>
+
+      <!-- Alerta de Credenciales Incorrectas -->
+      @if (authError()) {
+        <div class="auth-error">
+          {{ authError() }}
+        </div>
+      }
+
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+
+        <div class="form-group">
+          <label for="email">Correo Electrónico</label>
+          <input
+            type="email"
+            id="email"
+            formControlName="email"
+            class="form-control"
+            placeholder="admin@estancos.com"
+            [class.is-invalid]="isInvalid('email')"
+            autocomplete="email"
+          >
+          @if (isInvalid('email')) {
+            <span class="error-text">Ingresa un correo electrónico válido.</span>
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="password" style="display: flex; justify-content: space-between;">
+            Contraseña
+          </label>
+          <input
+            type="password"
+            id="password"
+            formControlName="password"
+            class="form-control"
+            placeholder="••••••••"
+            [class.is-invalid]="isInvalid('password')"
+            autocomplete="current-password"
+          >
+          @if (isInvalid('password')) {
+            <span class="error-text">La contraseña es obligatoria.</span>
+          }
+        </div>
+
+        <button type="submit" class="btn-submit" [disabled]="loginForm.invalid || isLoading()">
+          @if (isLoading()) {
+            <svg class="spinner" style="width: 20px; height: 20px; animation: spin 1s linear infinite;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" style="opacity: 0.25;"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            Autenticando...
+          } @else {
+            Ingresar al Sistema
+          }
+        </button>
+
+      </form>
+
+      <div class="login-footer">
+        Acceso restringido para el personal de Estancos Distilling Co.
+      </div>
+
+    </div>

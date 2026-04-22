@@ -1,0 +1,240 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+      :host {
+        --crm-bg-base: #0f1014;
+        --crm-bg-surface: #1a1b23;
+        --crm-border: #323546;
+        --crm-accent: #d4af37;
+        --crm-text-main: #f3f4f6;
+        --crm-text-muted: #9ca3af;
+
+        --font-ui: 'Inter', sans-serif;
+        --font-heading: 'Cinzel', serif;
+
+        display: flex;
+        height: 100vh;
+        width: 100%;
+        font-family: var(--font-ui);
+        background-color: var(--crm-bg-base);
+        color: var(--crm-text-main);
+        overflow: hidden;
+      }
+
+      * { box-sizing: border-box; }
+/* ================= SIDEBAR (MENÚ LATERAL) ================= */
+      .crm-sidebar {
+        width: 260px;
+        background-color: var(--crm-bg-surface);
+        border-right: 1px solid var(--crm-border);
+        display: flex;
+        flex-direction: column;
+        flex-shrink: 0;
+        transition: transform 0.3s ease;
+        z-index: 100;
+      }
+
+      .sidebar-brand {
+        height: 70px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 1.5rem;
+        border-bottom: 1px solid var(--crm-border);
+      }
+
+      .sidebar-brand .logo {
+        font-family: var(--font-heading);
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: var(--crm-accent);
+        letter-spacing: 2px;
+        text-transform: uppercase;
+      }
+
+      /* Botón para cerrar el sidebar en móviles */
+      .btn-close-sidebar {
+        display: none;
+        background: none;
+        border: none;
+        color: var(--crm-text-muted);
+        cursor: pointer;
+      }
+
+      .sidebar-nav {
+        padding: 1.5rem 1rem;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        overflow-y: auto;
+      }
+
+      .nav-item {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        padding: 0.8rem 1rem;
+        color: var(--crm-text-muted);
+        text-decoration: none;
+        border-radius: 6px;
+        transition: all 0.2s ease;
+        font-size: 0.9rem;
+        font-weight: 500;
+        cursor: pointer;
+      }
+
+      .nav-item:hover {
+        background-color: rgba(212, 175, 55, 0.1);
+        color: var(--crm-text-main);
+      }
+
+      .nav-item.active {
+        background-color: var(--crm-accent);
+        color: #121212;
+      }
+
+      .nav-item svg { width: 20px; height: 20px; }
+
+      .nav-section-title {
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: var(--crm-text-muted);
+        margin: 1.5rem 0 0.5rem 1rem;
+        opacity: 0.6;
+      }
+
+      .sidebar-footer {
+        padding: 1.5rem;
+        border-top: 1px solid var(--crm-border);
+      }
+
+      .user-profile {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .avatar {
+        width: 36px; height: 36px;
+        border-radius: 50%;
+        background-color: var(--crm-accent);
+        color: #121212;
+        display: flex; align-items: center; justify-content: center;
+        font-weight: 700; font-size: 0.9rem;
+        flex-shrink: 0;
+      }
+
+      .user-info { display: flex; flex-direction: column; overflow: hidden; }
+      .user-name { font-size: 0.85rem; font-weight: 600; color: var(--crm-text-main); white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
+      .user-role { font-size: 0.75rem; color: var(--crm-text-muted); }
+
+      /* ================= ÁREA PRINCIPAL ================= */
+      .crm-main {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        position: relative;
+      }
+
+      /* Topbar */
+      .crm-topbar {
+        height: 70px;
+        background-color: var(--crm-bg-surface);
+        border-bottom: 1px solid var(--crm-border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 2rem;
+        flex-shrink: 0;
+      }
+
+      .topbar-left {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .btn-menu {
+        display: none;
+        background: transparent;
+        border: 1px solid var(--crm-border);
+        color: var(--crm-text-main);
+        width: 36px;
+        height: 36px;
+        border-radius: 4px;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+      }
+
+      .breadcrumb {
+        font-size: 0.9rem;
+        color: var(--crm-text-muted);
+      }
+
+      .breadcrumb span.current {
+        color: var(--crm-text-main);
+        font-weight: 500;
+      }
+
+      .topbar-actions {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+      }
+
+      .btn-logout {
+        background: transparent; border: none;
+        color: var(--crm-text-muted);
+        display: flex; align-items: center; gap: 0.5rem;
+        font-size: 0.85rem; cursor: pointer; transition: color 0.2s;
+      }
+      .btn-logout:hover { color: #ef4444; }
+
+      /* Contenido Desplazable */
+      .crm-content-scroll {
+        flex-grow: 1;
+        overflow-y: auto;
+        padding: 2rem;
+        background-color: var(--crm-bg-base);
+      }
+
+      /* Overlay oscuro para móviles cuando el sidebar está abierto */
+      .sidebar-overlay {
+        display: none;
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background-color: rgba(0,0,0,0.6);
+        backdrop-filter: blur(2px);
+        z-index: 90;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      /* ================= RESPONSIVE (MÓVILES) ================= */
+      @media (max-width: 900px) {
+        .crm-sidebar {
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          left: 0;
+          transform: translateX(-100%);
+        }
+
+        .crm-sidebar.open {
+          transform: translateX(0);
+        }
+
+        .btn-menu { display: flex; }
+        .btn-close-sidebar { display: block; }
+        .crm-topbar { padding: 0 1rem; }
+
+        .sidebar-overlay.show {
+          display: block;
+          opacity: 1;
+        }
+
+        .breadcrumb { display: none; } /* Ocultar breadcrumb en móviles para ahorrar espacio */
+      }

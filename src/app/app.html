@@ -1,13 +1,16 @@
-
+<!-- El Age Gate se muestra siempre -->
 <app-agegate></app-agegate>
 
-<app-header></app-header>
+<!-- Mostrar Header SOLO si NO estamos en una ruta de admin -->
+@if (!isAdminRoute()) {
+  <app-header></app-header>
+}
 
-
-<main class="main-wrapper">
-    <router-outlet />
+<main class="main-workspace">
+  <router-outlet></router-outlet>
 </main>
 
-<app-footer></app-footer>
-
-
+<!-- Mostrar Footer y Sidebar del Carrito SOLO si NO estamos en una ruta de admin -->
+@if (!isAdminRoute()) {
+  <app-footer></app-footer>
+}
