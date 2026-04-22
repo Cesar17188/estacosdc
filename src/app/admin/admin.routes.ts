@@ -2,7 +2,8 @@ import { Routes } from '@angular/router';
 import { AdminLayout } from './admin-layout/admin-layout';
 import { AdminLogin } from './admin-login/admin-login';
 import { Dashboard } from './dashboard/dashboard';
-// import { DashboardComponent } from './dashboard/dashboard.component';
+import { authGuard } from '../guards/auth-guard'; // <-- IMPORTAMOS EL GUARD
+
 
 export const ADMIN_ROUTES: Routes = [
   {
@@ -14,6 +15,7 @@ export const ADMIN_ROUTES: Routes = [
     // Todas las demás pantallas SÍ usan el admin-layout (con el menú lateral)
     path: '',
     component: AdminLayout,
+    canActivate: [authGuard], // <-- ¡MAGIA! Esto protege esta ruta y TODAS sus hijas
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', component: Dashboard },
