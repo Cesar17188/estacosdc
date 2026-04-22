@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { AdminLayout } from './admin-layout/admin-layout';
 import { AdminLogin } from './admin-login/admin-login';
 import { Dashboard } from './dashboard/dashboard';
+import { Pedidos } from './pedidos/pedidos';
 import { authGuard } from '../guards/auth-guard'; // <-- IMPORTAMOS EL GUARD
 
 
@@ -19,6 +20,7 @@ export const ADMIN_ROUTES: Routes = [
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', component: Dashboard },
+      { path: 'pedidos', component: Pedidos },
       // { path: 'ventas', component: VentasComponent },
     ]
   }

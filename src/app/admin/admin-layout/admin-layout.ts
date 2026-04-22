@@ -1,10 +1,10 @@
 import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterOutlet } from "@angular/router";
+import { RouterOutlet, RouterLink, RouterLinkActive } from "@angular/router";
 
 @Component({
   selector: 'app-admin-layout',
-  imports: [CommonModule, RouterOutlet],
+  imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive],
   templateUrl: './admin-layout.html',
   styleUrl: './admin-layout.scss',
 })

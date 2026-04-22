@@ -366,4 +366,77 @@ export class SupabaseService {
     }
     return data.session;
   }
+
+   /**
+   * Obtiene todos los pedidos para el panel de administración
+   */
+  async getAllOrders() {
+    const { data, error } = await this.supabase
+      .from('orders')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error('Error obteniendo órdenes:', error);
+      throw error;
+    }
+
+    // Mapeamos los datos para adaptarlos a la tabla de la UI
+    return data.map(order => ({
+      // Mostramos un ID corto y amigable
+      id: `ORD-${order.id.split('-')[0].toUpperCase()}`,
+      original_id: order.id, // Guardamos el UUID original oculto para hacer actualizaciones
+      created_at: order.created_at,
+      customer: order.shipping_address?.fullName || 'Sin nombre',
+      email: order.contact_email,
+      total_amount: Number(order.total_amount),
+      status: order.status,
+      shipping_address: order.shipping_address
+    }));
+  }
+
+  /**
+   * Obtiene los productos (items) de un pedido específico
+   */
+  async getOrderDetails(orderId: string) {
+    // Usamos la sintaxis de Supabase para hacer JOIN con la tabla 'products'
+    const { data, error } = await this.supabase
+      .from('order_items')
+      .select(`
+        quantity,
+        unit_price,
+        products ( name )
+      `)
+      .eq('order_id', orderId);
+
+    if (error) {
+      console.error('Error obteniendo detalles del pedido:', error);
+      throw error;
+    }
+
+    // Aplanamos la respuesta para que la UI la lea fácilmente
+    return data.map((item: any) => ({
+      product_name: item.products?.name || 'Producto Desconocido',
+      quantity: item.quantity,
+      unit_price: Number(item.unit_price)
+    }));
+  }
+
+  /**
+   * Actualiza el estado de un pedido (ej. de 'pagado' a 'enviado')
+   */
+  async updateOrderStatus(orderId: string, newStatus: string) {
+    const { error } = await this.supabase
+      .from('orders')
+      .update({ status: newStatus })
+      .eq('id', orderId);
+
+    if (error) {
+      console.error('Error actualizando el estado de la orden:', error);
+      throw error;
+    }
+
+    return true;
+  }
+
 }
