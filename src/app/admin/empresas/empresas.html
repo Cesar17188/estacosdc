@@ -1,0 +1,122 @@
+<main class="crm-main">
+      <div class="crm-content-scroll">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Solicitudes de Distribución</h1>
+            <p class="page-subtitle">Gestiona las empresas interesadas en ser aliados estratégicos.</p>
+          </div>
+          <button class="btn-outline" (click)="loadLeads()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+            Actualizar
+          </button>
+        </div>
+
+        <!-- TABLA DE LEADS -->
+        <div class="data-panel">
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Empresa / Contacto</th>
+                  <th>Ubicación</th>
+                  <th>Fecha de Solicitud</th>
+                  <th>Estado en CRM</th>
+                </tr>
+              </thead>
+              <tbody>
+                @if (isLoading()) {
+                  @for (i of [1,2,3,4,5]; track i) {
+                    <tr><td colspan="4"><div class="skeleton-row" style="margin:0;"></div></td></tr>
+                  }
+                } @else {
+                  @for (lead of leads(); track lead.id) {
+                    <tr (click)="openLeadDetails(lead)">
+                      <td>
+                        <h4 class="company-name">{{ lead.company }}</h4>
+                        <div class="contact-name">{{ lead.name }}</div>
+                      </td>
+                      <td style="color: var(--crm-text-muted);">{{ lead.region }}</td>
+                      <td style="color: var(--crm-text-muted);">{{ formatDate(lead.created_at) }}</td>
+                      <td>
+                        <span class="status-badge" [ngClass]="lead.status">
+                          {{ formatStatus(lead.status) }}
+                        </span>
+                      </td>
+                    </tr>
+                  }
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </main>
+
+    <!-- PANEL LATERAL (SLIDE OVER) PARA DETALLES DEL LEAD -->
+    <div class="slide-overlay" [class.open]="isPanelOpen()" (click)="closePanel()">
+      @if (selectedLead()) {
+        <div class="slide-panel" (click)="$event.stopPropagation()">
+
+          <div class="slide-header">
+            <div>
+              <h2>{{ selectedLead()?.company }}</h2>
+              <p>Solicitud recibida el {{ formatDate(selectedLead()?.created_at) }}</p>
+            </div>
+            <button class="btn-close" (click)="closePanel()">
+              <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+            </button>
+          </div>
+
+          <div class="slide-body">
+
+            <div class="info-group">
+              <span class="info-label">Contacto Principal</span>
+              <div class="info-value">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" style="color: var(--crm-accent)"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" /></svg>
+                {{ selectedLead()?.name }}
+              </div>
+            </div>
+
+            <div class="info-group">
+              <span class="info-label">Correo Electrónico</span>
+              <div class="info-value">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" style="color: var(--crm-accent)"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" /></svg>
+                <a [href]="'mailto:' + selectedLead()?.email">{{ selectedLead()?.email }}</a>
+              </div>
+            </div>
+
+            <div class="info-group">
+              <span class="info-label">Región de Operación</span>
+              <div class="info-value">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" style="color: var(--crm-accent)"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" /></svg>
+                {{ selectedLead()?.region }}
+              </div>
+            </div>
+
+            <div class="info-group">
+              <span class="info-label">Mensaje / Interés Comercial</span>
+              <div class="message-box">
+                "{{ selectedLead()?.message }}"
+              </div>
+            </div>
+
+          </div>
+
+          <div class="slide-footer">
+            <span class="info-label" style="margin-bottom: 0.8rem;">Actualizar Estado del Prospecto</span>
+            <select class="status-select" #statusSelect [value]="selectedLead()?.status">
+              <option value="nuevo">Nuevo (Sin contactar)</option>
+              <option value="contactado">Contactado (Reunión agendada)</option>
+              <option value="en_evaluacion">En Evaluación (Revisando precios)</option>
+              <option value="aprobado">Aprobado (Distribuidor Activo)</option>
+              <option value="rechazado">Rechazado / No interesado</option>
+            </select>
+            <button class="btn-primary" [disabled]="isUpdating()" (click)="updateStatus(statusSelect.value)">
+              {{ isUpdating() ? 'Guardando...' : 'Guardar Cambios' }}
+            </button>
+          </div>
+
+        </div>
+      }
+    </div>

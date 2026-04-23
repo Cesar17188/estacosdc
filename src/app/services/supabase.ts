@@ -477,4 +477,38 @@ export class SupabaseService {
     return true;
   }
 
+    /**
+   * Obtiene todas las solicitudes de empresas/distribuidores
+   */
+  async getAllLeads() {
+    const { data, error } = await this.supabase
+      .from('distributor_requests')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error('Error obteniendo solicitudes B2B:', error);
+      throw error;
+    }
+
+    return data;
+  }
+
+  /**
+   * Actualiza el estado de un lead B2B en el CRM
+   */
+  async updateLeadStatus(leadId: string, newStatus: string) {
+    const { error } = await this.supabase
+      .from('distributor_requests')
+      .update({ status: newStatus })
+      .eq('id', leadId);
+
+    if (error) {
+      console.error('Error actualizando el estado del prospecto:', error);
+      throw error;
+    }
+
+    return true;
+  }
+
 }
