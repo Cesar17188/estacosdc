@@ -314,7 +314,7 @@ export class SupabaseService {
   }
 
   // --- GESTIÓN DE CATÁLOGO / INVENTARIO ---
-  async getAllProductsAdmin() {
+  async getAllProducts() {
     const { data, error } = await this.supabase
       .from('products')
       .select('id, slug, name, category, price, stock_quantity, is_active, image_url')
@@ -323,7 +323,7 @@ export class SupabaseService {
     return data;
   }
 
-  async updateProductAdmin(productId: string, updates: any) {
+  async updateProduct(productId: string, updates: any) {
     const { error } = await this.supabase
       .from('products')
       .update({
