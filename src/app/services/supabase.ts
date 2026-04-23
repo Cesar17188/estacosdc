@@ -1,173 +1,162 @@
 import { Injectable } from '@angular/core';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
-import { environment } from '../../env/environment.development';
+import { environment } from '../../env/environment';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class SupabaseService {
-   // Variable privada que sostiene la conexión
   private supabase: SupabaseClient;
 
   constructor() {
-    // Inicializamos el cliente usando las variables de entorno
     this.supabase = createClient(
       environment.supabaseUrl,
       environment.supabaseKey
     );
   }
 
-  // === MÉTODOS GETTER (Para exponer el cliente) ===
-
-  /**
-   * Retorna la instancia principal de Supabase.
-   * Útil para operaciones generales (auth, storage, etc).
-   */
   get client(): SupabaseClient {
     return this.supabase;
   }
 
-  // === EJEMPLOS DE MÉTODOS ESPECÍFICOS PARA TU PROYECTO ===
+  // ==========================================================================
+  // 1. AUTENTICACIÓN Y PERFIL (AUTH)
+  // ==========================================================================
 
-  /**
-   * Obtiene todos los productos activos de la base de datos.
-   */
+  async signIn(email: string, pass: string) {
+    const { data, error } = await this.supabase.auth.signInWithPassword({
+      email: email,
+      password: pass,
+    });
+    if (error) throw error;
+    return data;
+  }
+
+  async signOut() {
+    const { error } = await this.supabase.auth.signOut();
+    if (error) throw error;
+  }
+
+  async getSession() {
+    const { data, error } = await this.supabase.auth.getSession();
+    if (error) return null;
+    return data.session;
+  }
+
+  async getUserProfile() {
+    const { data: sessionData, error: sessionError } = await this.supabase.auth.getSession();
+    if (sessionError || !sessionData.session) return null;
+
+    const userId = sessionData.session.user.id;
+    const { data, error } = await this.supabase
+      .from('profiles')
+      .select('first_name, last_name, is_staff')
+      .eq('id', userId)
+      .single();
+
+    if (error) {
+      // Retornamos una estructura consistente si falla la consulta
+      return {
+        email: sessionData.session.user.email,
+        first_name: null,
+        last_name: null,
+        is_staff: false
+      };
+    }
+    return { ...data, email: sessionData.session.user.email };
+  }
+
+
+  // ==========================================================================
+  // 2. WEB PÚBLICA (E-COMMERCE, CATÁLOGO, VISITAS, BLOG)
+  // ==========================================================================
+
   async getActiveProducts() {
     const { data, error } = await this.supabase
       .from('products')
       .select('*')
       .eq('is_active', true)
       .order('created_at', { ascending: false });
-
-    if (error) {
-      console.error('Error obteniendo productos:', error);
-      throw error;
-    }
+    if (error) throw error;
     return data;
   }
 
-  /**
-   * Obtiene los 3 espíritus destacados para la página de inicio (Home)
-   */
   async getFeaturedSpirits() {
     const { data, error } = await this.supabase
       .from('products')
       .select('*')
-      .in('category', ['ron', 'whisky']) // Filtra solo licores, excluye accesorios
+      .in('category', ['ron', 'whisky'])
       .eq('is_active', true)
-      .limit(3); // Trae máximo 3 resultados
-
-    if (error) {
-      console.error('Error obteniendo espíritus destacados:', error);
-      throw error;
-    }
+      .limit(3);
+    if (error) throw error;
     return data;
   }
 
-  /**
-   * Obtiene el catálogo completo de espíritus (Página de Espíritus)
-   */
   async getSpirits() {
     const { data, error } = await this.supabase
       .from('products')
       .select('*')
       .in('category', ['ron', 'whisky'])
       .eq('is_active', true)
-      .order('created_at', { ascending: true }); // Ordena por los más antiguos primero
-
-    if (error) {
-      console.error('Error obteniendo catálogo de espíritus:', error);
-      throw error;
-    }
+      .order('created_at', { ascending: true });
+    if (error) throw error;
     return data;
   }
 
-  /**
-   * Obtiene las imágenes para la página de Galería
-   */
-  async getGalleryImages() {
-    const { data, error } = await this.supabase
-      .from('gallery_images')
-      .select('*')
-      // Opcional: puedes descomentar la siguiente línea si quieres que
-      // las fotos añadidas más recientemente aparezcan primero.
-      .order('created_at', { ascending: false });
-
-    if (error) {
-      console.error('Error obteniendo imagenes de galería:', error);
-      throw error;
-    }
-    return data;
-  }
-
-  /**
-   * Obtiene todas las recetas de coctelería activas
-   */
-  async getCocktails() {
-    const { data, error } = await this.supabase
-      .from('cocktail_recipes')
-      // Seleccionamos los campos y renombramos 'slug' a 'id' para que coincida con el frontend
-      .select('id:slug, title, base_spirit, excerpt, image_url, read_time, ingredients, instructions')
-      .eq('is_active', true)
-      .order('created_at', { ascending: false }); // Las recetas más nuevas primero
-
-    if (error) {
-      console.error('Error obteniendo recetas de coctelería:', error);
-      throw error;
-    }
-
-    return data;
-  }
-
-  /**
-   * Obtiene todos los tours activos de la base de datos.
-   */
   async getTours() {
     const { data, error } = await this.supabase
       .from('products')
       .select('*')
       .eq('category', 'experiencia')
-      .order('created_at', { ascending: false });
-
-    if (error) {
-      console.error('Error obteniendo productos:', error);
-      throw error;
-    }
+      .eq('is_active', true)
+      .order('price', { ascending: true });
+    if (error) throw error;
     return data;
   }
 
+  async getCocktails() {
+    const { data, error } = await this.supabase
+      .from('cocktail_recipes')
+      .select('id:slug, title, base_spirit, excerpt, image_url, read_time, ingredients, instructions')
+      .eq('is_active', true)
+      .order('created_at', { ascending: false });
+    if (error) throw error;
+    return data;
+  }
 
+  async getGalleryImages() {
+    const { data, error } = await this.supabase
+      .from('gallery_images')
+      .select('*');
+    if (error) throw error;
+    return data;
+  }
 
-  /**
-   * Guarda un nuevo prospecto (lead) del formulario B2B de Aliados.
-   */
   async submitDistributorRequest(requestData: any) {
     const { data, error } = await this.supabase
       .from('distributor_requests')
       .insert([requestData]);
-
-    if (error) {
-      console.error('Error guardando la solicitud:', error);
-      throw error;
-    }
+    if (error) throw error;
     return data;
   }
 
-    /**
-   * Crea un nuevo pedido en la base de datos y guarda sus ítems correspondientes.
-   * @param orderDetails Los datos del formulario de envío
-   * @param cartItems El arreglo de productos en el carrito
-   * @param totalAmount El valor total a pagar
-   */
-  async createOrder(orderDetails: any, cartItems: any[], totalAmount: number) {
+  async submitTourBooking(bookingData: any) {
+    const { data, error } = await this.supabase
+      .from('tour_bookings')
+      .insert([bookingData]);
+    if (error) throw error;
+    return data;
+  }
 
-    // 1. MAGIA AQUÍ: Generamos el ID único en Angular.
-    // Esto evita tener que hacer un .select() que viole las políticas de privacidad de lectura de Supabase.
+  // ==========================================================================
+  // 3. CHECKOUT (CARRITO DE COMPRAS)
+  // ==========================================================================
+
+  async createOrder(orderDetails: any, cartItems: any[], totalAmount: number) {
     const orderId = crypto.randomUUID();
 
-    // 2. Construimos el objeto para la tabla principal 'orders'
     const orderData = {
-      id: orderId, // Asignamos explícitamente el ID que acabamos de generar
+      id: orderId,
       total_amount: totalAmount,
       contact_email: orderDetails.email,
       status: 'pendiente',
@@ -180,81 +169,48 @@ export class SupabaseService {
       }
     };
 
-    // 3. Insertamos la orden SIN usar .select() al final
-    const { error: orderError } = await this.supabase
-      .from('orders')
-      .insert([orderData]);
+    const { error: orderError } = await this.supabase.from('orders').insert([orderData]);
+    if (orderError) throw orderError;
 
-    if (orderError) {
-      console.error('Error al crear la orden principal:', orderError);
-      throw orderError;
-    }
-
-    // 4. Construimos el arreglo de productos para la tabla 'order_items'
     const itemsData = cartItems.map(item => ({
-      order_id: orderId, // Usamos el mismo ID
+      order_id: orderId,
       product_id: item.id,
       quantity: item.quantity,
       unit_price: item.price
     }));
 
-    // 5. Insertamos todos los ítems de una sola vez
-    const { error: itemsError } = await this.supabase
-      .from('order_items')
-      .insert(itemsData);
+    const { error: itemsError } = await this.supabase.from('order_items').insert(itemsData);
 
     if (itemsError) {
-      console.error('Error al insertar los items de la orden:', itemsError);
-
-      // Lógica de reversión (rollback): Borramos la orden si fallan los ítems
-      console.log('Revirtiendo la orden principal para evitar datos huérfanos...');
-      const { error: rollbackError } = await this.supabase
-        .from('orders')
-        .delete()
-        .eq('id', orderId);
-
-      if (rollbackError) {
-        console.error('Error crítico al intentar revertir la orden:', rollbackError);
-      }
-
+      await this.supabase.from('orders').delete().eq('id', orderId);
       throw itemsError;
     }
 
-    // Si todo salió bien, devolvemos éxito
     return { success: true, orderId: orderId };
   }
 
-  /**
-   * Datos para el Dashboard del Administrador
-   * 1. Obtiene las estadísticas generales (KPIs) para el Dashboard
-   */
+
+  // ==========================================================================
+  // 4. MÓDULO CRM (PANEL DE ADMINISTRADOR)
+  // ==========================================================================
+
+  // --- DASHBOARD (KPIs) ---
   async getDashboardStats() {
-    // A. Total de Ventas (Órdenes pagadas, enviadas o entregadas)
     const { data: salesData } = await this.supabase
       .from('orders')
       .select('total_amount')
       .in('status', ['pagado', 'enviado', 'entregado']);
 
-    // Sumamos los totales
     const totalSales = salesData ? salesData.reduce((sum, order) => sum + Number(order.total_amount), 0) : 0;
 
-    // B. Pedidos Pendientes (usamos count para no descargar todos los registros)
     const { count: pendingOrders } = await this.supabase
-      .from('orders')
-      .select('*', { count: 'exact', head: true })
-      .eq('status', 'pendiente');
+      .from('orders').select('*', { count: 'exact', head: true }).eq('status', 'pendiente');
 
-    // C. Nuevos Leads (Solicitudes de distribuidores sin contactar)
     const { count: newLeads } = await this.supabase
-      .from('distributor_requests')
-      .select('*', { count: 'exact', head: true })
-      .eq('status', 'nuevo');
+      .from('distributor_requests').select('*', { count: 'exact', head: true }).eq('status', 'nuevo');
 
-    // D. Tours Activos (Reservas pendientes o confirmadas)
     const { count: activeTours } = await this.supabase
-      .from('tour_bookings')
-      .select('*', { count: 'exact', head: true })
-      .in('status', ['pendiente', 'confirmado']);
+      .from('tour_bookings').select('*', { count: 'exact', head: true }).in('status', ['pendiente', 'confirmado']);
 
     return {
       totalSales: totalSales,
@@ -264,157 +220,47 @@ export class SupabaseService {
     };
   }
 
-  /**
-   * 2. Obtiene los últimos pedidos para la tabla
-   */
+  // --- GESTIÓN DE PEDIDOS ---
   async getRecentOrders() {
     const { data, error } = await this.supabase
-      .from('orders')
-      .select('*')
-      .order('created_at', { ascending: false })
-      .limit(5); // Traemos solo los 5 más recientes
+      .from('orders').select('*').order('created_at', { ascending: false }).limit(5);
+    if (error) throw error;
+    return this.mapOrdersForUI(data);
+  }
 
-    if (error) {
-      console.error('Error obteniendo órdenes recientes:', error);
-      throw error;
-    }
+  async getAllOrders() {
+    const { data, error } = await this.supabase
+      .from('orders').select('*').order('created_at', { ascending: false });
+    if (error) throw error;
+    return this.mapOrdersForUI(data);
+  }
 
-    // Mapeamos los datos para adaptarlos a la tabla del Dashboard
+  private mapOrdersForUI(data: any[]) {
     return data.map(order => {
       const dateObj = new Date(order.created_at);
       const formattedDate = dateObj.toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' });
-
       return {
-        // Tomamos solo la primera parte del UUID para mostrar un "ID corto" estilo factura
         id: `ORD-${order.id.split('-')[0].toUpperCase()}`,
-        customer: order.shipping_address?.fullName || 'Cliente Anónimo',
+        original_id: order.id,
+        created_at: order.created_at,
+        customer: order.shipping_address?.fullName || 'Sin nombre',
+        email: order.contact_email,
         date: formattedDate,
         amount: Number(order.total_amount),
-        status: order.status
+        total_amount: Number(order.total_amount),
+        status: order.status,
+        shipping_address: order.shipping_address
       };
     });
   }
 
-  /**
-   * 3. Obtiene las últimas solicitudes B2B (Leads)
-   */
-  async getRecentLeads() {
-    const { data, error } = await this.supabase
-      .from('distributor_requests')
-      .select('*')
-      .order('created_at', { ascending: false })
-      .limit(4);
-
-    if (error) {
-      console.error('Error obteniendo leads recientes:', error);
-      throw error;
-    }
-
-    return data.map(lead => {
-      const dateObj = new Date(lead.created_at);
-      const formattedDate = dateObj.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
-
-      return {
-        company: lead.company,
-        contactName: lead.name,
-        region: lead.region,
-        status: lead.status,
-        date: formattedDate
-      };
-    });
-  }
-// ==========================================================================
-  // MÉTODOS DE AUTENTICACIÓN (CRM)
-  // ==========================================================================
-
-  /**
-   * Inicia sesión con correo y contraseña.
-   */
-  async signIn(email: string, pass: string) {
-    const { data, error } = await this.supabase.auth.signInWithPassword({
-      email: email,
-      password: pass,
-    });
-
-    if (error) {
-      console.error('Error de autenticación:', error.message);
-      throw error;
-    }
-
-    return data;
-  }
-
-  /**
-   * Cierra la sesión activa del usuario.
-   */
-  async signOut() {
-    const { error } = await this.supabase.auth.signOut();
-    if (error) {
-      console.error('Error al cerrar sesión:', error.message);
-      throw error;
-    }
-  }
-
-  /**
-   * Verifica si hay una sesión activa (Útil para proteger las rutas del CRM).
-   */
-  async getSession() {
-    const { data, error } = await this.supabase.auth.getSession();
-    if (error) {
-      console.error('Error obteniendo sesión:', error.message);
-      return null;
-    }
-    return data.session;
-  }
-
-   /**
-   * Obtiene todos los pedidos para el panel de administración
-   */
-  async getAllOrders() {
-    const { data, error } = await this.supabase
-      .from('orders')
-      .select('*')
-      .order('created_at', { ascending: false });
-
-    if (error) {
-      console.error('Error obteniendo órdenes:', error);
-      throw error;
-    }
-
-    // Mapeamos los datos para adaptarlos a la tabla de la UI
-    return data.map(order => ({
-      // Mostramos un ID corto y amigable
-      id: `ORD-${order.id.split('-')[0].toUpperCase()}`,
-      original_id: order.id, // Guardamos el UUID original oculto para hacer actualizaciones
-      created_at: order.created_at,
-      customer: order.shipping_address?.fullName || 'Sin nombre',
-      email: order.contact_email,
-      total_amount: Number(order.total_amount),
-      status: order.status,
-      shipping_address: order.shipping_address
-    }));
-  }
-
-  /**
-   * Obtiene los productos (items) de un pedido específico
-   */
   async getOrderDetails(orderId: string) {
-    // Usamos la sintaxis de Supabase para hacer JOIN con la tabla 'products'
     const { data, error } = await this.supabase
       .from('order_items')
-      .select(`
-        quantity,
-        unit_price,
-        products ( name )
-      `)
+      .select(`quantity, unit_price, products ( name )`)
       .eq('order_id', orderId);
+    if (error) throw error;
 
-    if (error) {
-      console.error('Error obteniendo detalles del pedido:', error);
-      throw error;
-    }
-
-    // Aplanamos la respuesta para que la UI la lea fácilmente
     return data.map((item: any) => ({
       product_name: item.products?.name || 'Producto Desconocido',
       quantity: item.quantity,
@@ -422,43 +268,62 @@ export class SupabaseService {
     }));
   }
 
-  /**
-   * Actualiza el estado de un pedido (ej. de 'pagado' a 'enviado')
-   */
   async updateOrderStatus(orderId: string, newStatus: string) {
-    const { error } = await this.supabase
-      .from('orders')
-      .update({ status: newStatus })
-      .eq('id', orderId);
-
-    if (error) {
-      console.error('Error actualizando el estado de la orden:', error);
-      throw error;
-    }
-
+    const { error } = await this.supabase.from('orders').update({ status: newStatus }).eq('id', orderId);
+    if (error) throw error;
     return true;
   }
 
-  /**
-   * Obtiene todos los productos para el panel de administración
-   */
-  async getAllProducts() {
+  // --- GESTIÓN DE EMPRESAS (LEADS B2B) ---
+  async getRecentLeads() {
+    const { data, error } = await this.supabase
+      .from('distributor_requests').select('*').order('created_at', { ascending: false }).limit(4);
+    if (error) throw error;
+    return data.map(lead => ({
+      ...lead,
+      contactName: lead.name,
+      date: new Date(lead.created_at).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })
+    }));
+  }
+
+  async getAllLeads() {
+    const { data, error } = await this.supabase
+      .from('distributor_requests').select('*').order('created_at', { ascending: false });
+    if (error) throw error;
+    return data;
+  }
+
+  async updateLeadStatus(leadId: string, newStatus: string) {
+    const { error } = await this.supabase.from('distributor_requests').update({ status: newStatus }).eq('id', leadId);
+    if (error) throw error;
+    return true;
+  }
+
+  // --- GESTIÓN DE RESERVAS DE TOURS ---
+  async getAllTourBookings() {
+    const { data, error } = await this.supabase
+      .from('tour_bookings').select('*').order('booking_date', { ascending: false });
+    if (error) throw error;
+    return data;
+  }
+
+  async updateTourBookingStatus(bookingId: string, newStatus: string) {
+    const { error } = await this.supabase.from('tour_bookings').update({ status: newStatus }).eq('id', bookingId);
+    if (error) throw error;
+    return true;
+  }
+
+  // --- GESTIÓN DE CATÁLOGO / INVENTARIO ---
+  async getAllProductsAdmin() {
     const { data, error } = await this.supabase
       .from('products')
       .select('id, slug, name, category, price, stock_quantity, is_active, image_url')
       .order('created_at', { ascending: false });
-
-    if (error) {
-      console.error('Error obteniendo inventario:', error);
-      throw error;
-    }
+    if (error) throw error;
     return data;
   }
 
-  /**
-   * Actualiza los datos de un producto (stock, precio, estado)
-   */
-  async updateProduct(productId: string, updates: any) {
+  async updateProductAdmin(productId: string, updates: any) {
     const { error } = await this.supabase
       .from('products')
       .update({
@@ -469,45 +334,7 @@ export class SupabaseService {
         is_active: updates.is_active
       })
       .eq('id', productId);
-
-    if (error) {
-      console.error('Error actualizando producto:', error);
-      throw error;
-    }
-    return true;
-  }
-
-    /**
-   * Obtiene todas las solicitudes de empresas/distribuidores
-   */
-  async getAllLeads() {
-    const { data, error } = await this.supabase
-      .from('distributor_requests')
-      .select('*')
-      .order('created_at', { ascending: false });
-
-    if (error) {
-      console.error('Error obteniendo solicitudes B2B:', error);
-      throw error;
-    }
-
-    return data;
-  }
-
-  /**
-   * Actualiza el estado de un lead B2B en el CRM
-   */
-  async updateLeadStatus(leadId: string, newStatus: string) {
-    const { error } = await this.supabase
-      .from('distributor_requests')
-      .update({ status: newStatus })
-      .eq('id', leadId);
-
-    if (error) {
-      console.error('Error actualizando el estado del prospecto:', error);
-      throw error;
-    }
-
+    if (error) throw error;
     return true;
   }
 

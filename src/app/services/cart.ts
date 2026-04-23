@@ -38,19 +38,19 @@ export class CartService {
   // === MÉTODOS ===
 
   // Añadir un producto al carrito
-  addToCart(product: Product) {
+  addToCart(product: Product, quantity: number = 1) {
     this.cartItems.update(items => {
       const existingItem = items.find(item => item.id === product.id);
 
       // Si el producto ya está en el carrito, solo sumamos 1 a la cantidad
       if (existingItem) {
         return items.map(item =>
-          item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
+          item.id === product.id ? { ...item, quantity: item.quantity + quantity } : item
         );
       }
 
       // Si no está, lo agregamos como un elemento nuevo con cantidad 1
-      return [...items, { ...product, quantity: 1 }];
+      return [...items, { ...product, quantity: quantity }];
     });
   }
 

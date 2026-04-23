@@ -5,6 +5,7 @@ import { Dashboard } from './dashboard/dashboard';
 import { Pedidos } from './pedidos/pedidos';
 import { Catalogo } from './catalogo/catalogo';
 import { Empresas } from './empresas/empresas';
+import { Reservas } from './reservas/reservas';
 import { authGuard } from '../guards/auth-guard'; // <-- IMPORTAMOS EL GUARD
 
 
@@ -25,6 +26,7 @@ export const ADMIN_ROUTES: Routes = [
       { path: 'pedidos', component: Pedidos },
       { path: 'catalogo', component: Catalogo },
       { path: 'empresas', component: Empresas },
+      { path: 'reservas', component: Reservas },
       // { path: 'ventas', component: VentasComponent },
     ]
   }
