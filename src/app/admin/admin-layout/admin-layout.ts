@@ -1,6 +1,6 @@
 import { Component, signal, OnInit, inject, Injectable } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterOutlet, RouterLink, RouterLinkActive } from "@angular/router";
+import { RouterOutlet, RouterLink, RouterLinkActive, Router } from "@angular/router";
 import { SupabaseService } from '../../services/supabase';
 
 @Component({
@@ -12,6 +12,7 @@ import { SupabaseService } from '../../services/supabase';
 export class AdminLayout implements OnInit {
   // Inyectamos nuestro servicio a base de datos
   supabaseService = inject(SupabaseService);
+  private router = inject(Router, { optional: true });
 
   isSidebarOpen = signal<boolean>(false);
   currentRoute = signal<string>('dashboard');
@@ -61,6 +62,21 @@ export class AdminLayout implements OnInit {
     // En móviles, cerramos el menú automáticamente al seleccionar una opción
     if (window.innerWidth <= 900) {
       this.isSidebarOpen.set(false);
+    }
+  }
+
+  async logout() {
+    try {
+      await this.supabaseService.signOut();
+
+      // Si estamos en el entorno real de Angular, redirigimos al login
+      if (this.router) {
+        this.router.navigate(['/admin/login']);
+      } else {
+        console.log('Simulación: Redirigiendo a /admin/login');
+      }
+    } catch (error) {
+      console.error('Hubo un error al intentar cerrar sesión', error);
     }
   }
 }
