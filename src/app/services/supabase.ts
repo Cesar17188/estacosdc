@@ -338,4 +338,32 @@ export class SupabaseService {
     return true;
   }
 
+  /**
+   * Sube una imagen de producto al Storage de Supabase
+   * y devuelve la URL pública de la imagen.
+   */
+  async uploadProductImage(file: File): Promise<string> {
+    // 1. Generamos un nombre único para evitar que se sobreescriban fotos con el mismo nombre
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
+    const filePath = `${fileName}`;
+
+    // 2. Subimos el archivo físico al bucket 'product-images'
+    const { error: uploadError } = await this.supabase.storage
+      .from('product-images')
+      .upload(filePath, file);
+
+    if (uploadError) {
+      console.error('Error subiendo imagen al Storage:', uploadError);
+      throw uploadError;
+    }
+
+    // 3. Solicitamos a Supabase que nos dé la URL pública para poder mostrarla en la web
+    const { data } = this.supabase.storage
+      .from('product-images')
+      .getPublicUrl(filePath);
+
+    return data.publicUrl;
+  }
+
 }

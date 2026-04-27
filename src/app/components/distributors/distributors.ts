@@ -22,11 +22,13 @@ export class Distributors {
 
   // Definición del Formulario Reactivo con sus validaciones seguras
   distributorForm = this.fb.group({
-    name: ['', Validators.required],
-    company: ['', Validators.required],
-    email: ['', [Validators.required, Validators.email]],
-    region: ['', Validators.required],
-    message: [''] // Campo opcional, no requiere validador
+    // Validaciones más estrictas con Regex y longitudes mínimas
+    name: ['', [Validators.required, Validators.minLength(3), Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$')]],
+    company: ['', [Validators.required, Validators.minLength(3)]],
+    email: ['', [Validators.required, Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$')]],
+    region: ['', [Validators.required, Validators.minLength(4)]],
+    message: ['', [Validators.minLength(15)]],
+    website_url: [''] // Campo Honeypot oculto
   });
 
   // Método auxiliar para limpiar el HTML y comprobar si un campo tiene error y ya fue tocado
@@ -37,7 +39,19 @@ export class Distributors {
 
   // Método que se ejecuta al presionar "Enviar Solicitud"
   async onSubmit() {
-    // Si alguien altera el HTML y logra enviar, esta barrera de TypeScript lo detiene
+    // 1. Verificación del Honeypot (Trampa para Bots)
+    // Si este campo tiene texto, fue llenado por un robot. Cancelamos silenciosamente.
+    if (this.distributorForm.get('website_url')?.value) {
+      console.warn('Bot detectado y bloqueado silenciosamente.');
+      this.isSubmitting = true;
+      setTimeout(() => {
+        this.isSubmitted = true; // Le hacemos creer al bot que tuvo éxito
+        this.isSubmitting = false;
+        this.distributorForm.reset();
+      }, 1000);
+      return;
+    }
+
     if (this.distributorForm.invalid) {
       this.distributorForm.markAllAsTouched();
       return;
@@ -48,9 +62,19 @@ export class Distributors {
     const formData = this.distributorForm.value;
 
     try {
-      // 1. Guardar silenciosamente en Supabase
-      await this.supabaseService.submitDistributorRequest(formData);
-      // Usamos el endpoint de formsubmit que convierte JSON a un correo
+      // Excluimos el campo trampa de la información final
+      const dataToSubmit = {
+        name: formData.name,
+        company: formData.company,
+        email: formData.email,
+        region: formData.region,
+        message: formData.message
+      };
+
+      // 2. Guardar silenciosamente en Supabase
+      await this.supabaseService.submitDistributorRequest(dataToSubmit);
+
+      // 3. Usamos el endpoint de formsubmit para notificar por correo
       const response = await fetch('https://formsubmit.co/ajax/estancos.d.c@outlook.com', {
         method: 'POST',
         headers: {
@@ -58,14 +82,14 @@ export class Distributors {
           'Accept': 'application/json'
         },
         body: JSON.stringify({
-          Nombre: formData.name,
-          Empresa: formData.company,
-          Email: formData.email,
-          Region: formData.region,
-          Mensaje: formData.message || 'Sin mensaje adicional',
+          Nombre: dataToSubmit.name,
+          Empresa: dataToSubmit.company,
+          Email: dataToSubmit.email,
+          Region: dataToSubmit.region,
+          Mensaje: dataToSubmit.message || 'Sin mensaje adicional',
           // Opciones de configuración para FormSubmit
-          _subject: `Nueva solicitud B2B de ${formData.company}`, // Asunto del correo
-          _template: 'box' // Estilo del correo que recibirás
+          _subject: `Nueva solicitud B2B de ${dataToSubmit.company}`,
+          _template: 'box'
         })
       });
 
@@ -76,8 +100,8 @@ export class Distributors {
         throw new Error('La respuesta de red no fue satisfactoria.');
       }
     } catch (error) {
-      console.error('Error enviando el correo:', error);
-      this.submitError = 'Hubo un problema al enviar tu solicitud. Por favor, intenta de nuevo.';
+      console.error('Error procesando la solicitud:', error);
+      this.submitError = 'Hubo un problema al procesar tu solicitud. Por favor, intenta de nuevo.';
     } finally {
       this.isSubmitting = false;
     }

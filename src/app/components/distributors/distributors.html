@@ -66,8 +66,21 @@
               <p>Completa tus datos comerciales a continuación.</p>
             </div>
 
+            <!-- Mostrar mensaje de error si la petición falla -->
+            @if (submitError) {
+              <div class="error-toast">
+                {{ submitError }}
+              </div>
+            }
+
             <!-- [formGroup] enlaza la vista con la lógica de TypeScript -->
             <form [formGroup]="distributorForm" (ngSubmit)="onSubmit()">
+
+               <!-- HONEYPOT (Trampa para bots): Oculto visualmente, los humanos no lo verán -->
+              <div class="form-group" style="display: none;" aria-hidden="true">
+                <label for="website_url">Website URL (No llenar)</label>
+                <input type="text" id="website_url" formControlName="website_url" tabindex="-1">
+              </div>
 
               <div class="form-group">
                 <label for="name">Nombre Completo <span class="required-mark">*</span></label>
@@ -78,9 +91,9 @@
                   placeholder="Ej. Carlos Mendoza"
                   [class.is-invalid]="isFieldInvalid('name')"
                 >
-                @if (isFieldInvalid('name')) {
-                  <span class="error-message">El nombre es obligatorio.</span>
-                }
+                @if (distributorForm.get('name')?.touched && distributorForm.get('name')?.hasError('required')) { <span class="error-message">El nombre es obligatorio.</span> }
+                @if (distributorForm.get('name')?.touched && distributorForm.get('name')?.hasError('pattern')) { <span class="error-message">Solo se permiten letras y espacios.</span> }
+                @if (distributorForm.get('name')?.touched && distributorForm.get('name')?.hasError('minlength')) { <span class="error-message">Mínimo 3 caracteres.</span> }
               </div>
 
               <div class="form-group">
@@ -92,9 +105,8 @@
                   placeholder="Ej. Distribuidora Andina S.A."
                   [class.is-invalid]="isFieldInvalid('company')"
                 >
-                @if (isFieldInvalid('company')) {
-                  <span class="error-message">El nombre de la empresa es obligatorio.</span>
-                }
+                @if (distributorForm.get('company')?.touched && distributorForm.get('company')?.hasError('required')) { <span class="error-message">El nombre de la empresa es obligatorio.</span> }
+                @if (distributorForm.get('company')?.touched && distributorForm.get('company')?.hasError('minlength')) { <span class="error-message">Mínimo 3 caracteres.</span> }
               </div>
 
               <div class="form-group">
@@ -106,12 +118,9 @@
                   placeholder="ejemplo@tuempresa.com"
                   [class.is-invalid]="isFieldInvalid('email')"
                 >
-                @if (distributorForm.get('email')?.touched && distributorForm.get('email')?.hasError('required')) {
-                  <span class="error-message">El correo electrónico es obligatorio.</span>
-                }
-                @if (distributorForm.get('email')?.touched && distributorForm.get('email')?.hasError('email')) {
-                  <span class="error-message">Ingresa un formato de correo válido.</span>
-                }
+                @if (distributorForm.get('email')?.touched && distributorForm.get('email')?.hasError('required')) { <span class="error-message">El correo electrónico es obligatorio.</span> }
+                @if (distributorForm.get('email')?.touched && distributorForm.get('email')?.hasError('email')) { <span class="error-message">Ingresa un formato de correo válido.</span> }
+                @if (distributorForm.get('email')?.touched && distributorForm.get('email')?.hasError('pattern')) { <span class="error-message">Ingresa un formato de correo válido.</span> }
               </div>
 
               <div class="form-group">
@@ -123,9 +132,8 @@
                   placeholder="Ej. Quito, Pichincha"
                   [class.is-invalid]="isFieldInvalid('region')"
                 >
-                @if (isFieldInvalid('region')) {
-                  <span class="error-message">La región o ciudad es obligatoria.</span>
-                }
+                @if (distributorForm.get('region')?.touched && distributorForm.get('region')?.hasError('required')) { <span class="error-message">La región o ciudad es obligatoria.</span> }
+                @if (distributorForm.get('region')?.touched && distributorForm.get('region')?.hasError('minlength')) { <span class="error-message">Mínimo 4 caracteres.</span> }
               </div>
 
               <div class="form-group">
@@ -136,6 +144,7 @@
                   placeholder="Cuéntanos un poco sobre tu red de distribución o experiencia en el sector..."
                   rows="4"
                 ></textarea>
+                @if (distributorForm.get('message')?.touched && distributorForm.get('message')?.hasError('minlength')) { <span class="error-message">Por favor, danos un poco más de detalle (mínimo 15 caracteres).</span> }
               </div>
 
               <button type="submit" class="btn-submit" [disabled]="distributorForm.invalid || isSubmitting">
