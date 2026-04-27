@@ -76,6 +76,7 @@ export class SupabaseService {
       .from('products')
       .select('*')
       .eq('is_active', true)
+      .neq('category', 'experiencia')
       .order('created_at', { ascending: false });
     if (error) throw error;
     return data;
@@ -357,13 +358,34 @@ export class SupabaseService {
       console.error('Error subiendo imagen al Storage:', uploadError);
       throw uploadError;
     }
-
     // 3. Solicitamos a Supabase que nos dé la URL pública para poder mostrarla en la web
     const { data } = this.supabase.storage
       .from('product-images')
       .getPublicUrl(filePath);
 
     return data.publicUrl;
+  }
+
+  /**
+   * Crea un nuevo producto en el catálogo y devuelve los datos insertados.
+   */
+  async createProductAdmin(productData: any) {
+    // 1. Generar un slug a partir del nombre (ej: "Ron Estancos" -> "ron-estancos")
+    const slug = productData.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+
+    // 2. Insertar el nuevo producto y pedir que nos devuelva la fila creada (.select().single())
+    const { data, error } = await this.supabase
+      .from('products')
+      .insert([{ ...productData, slug }])
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Error creando el producto:', error);
+      throw error;
+    }
+
+    return data;
   }
 
 }

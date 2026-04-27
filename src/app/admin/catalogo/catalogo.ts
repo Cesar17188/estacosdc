@@ -105,6 +105,7 @@ export class Catalogo implements OnInit{
     return control ? (control.invalid && (control.dirty || control.touched)) : false;
   }
 
+  // --- Guardar Producto con Imagen ---
   async saveProduct() {
     if (this.productForm.invalid) return;
 
@@ -129,22 +130,20 @@ export class Catalogo implements OnInit{
       };
 
       if (this.selectedProduct()) {
-        // Simular Actualización
+        // ACTUALIZAR EXISTENTE
         await this.crmService.updateProduct(this.selectedProduct().id, productData);
         this.products.update(list => list.map(p => p.id === this.selectedProduct().id ? { ...p, ...productData } : p));
       } else {
-        // Simular Creación
-        const newProduct = {
-          id: Math.random().toString().substring(2, 8),
-          slug: productData.name?.toLowerCase().replace(/ /g, '-'),
-          ...productData
-        };
+        // CREAR NUEVO EN LA BASE DE DATOS
+        const newProduct = await this.crmService.createProductAdmin(productData);
+        // Lo añadimos al inicio de la lista local para verlo de inmediato
         this.products.update(list => [newProduct, ...list]);
       }
 
       this.closeModal();
     } catch (error) {
       console.error('Error guardando el producto:', error);
+      alert('Hubo un error guardando el producto. Por favor, intenta de nuevo.');
     } finally {
       this.isSaving.set(false);
     }

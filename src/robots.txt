@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /carrito/
+
+Sitemap: [https://estancosdistillingcompany.com/sitemap.xml](https://estancosdistillingcompany.com/sitemap.xml)

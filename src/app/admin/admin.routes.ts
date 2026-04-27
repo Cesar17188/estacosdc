@@ -22,11 +22,41 @@ export const ADMIN_ROUTES: Routes = [
     canActivate: [authGuard], // <-- ¡MAGIA! Esto protege esta ruta y TODAS sus hijas
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-      { path: 'dashboard', component: Dashboard },
-      { path: 'pedidos', component: Pedidos },
-      { path: 'catalogo', component: Catalogo },
-      { path: 'empresas', component: Empresas },
-      { path: 'reservas', component: Reservas },
+      { path: 'dashboard',
+        component: Dashboard,
+        title: 'Admin Dashboard | Estancos',
+        data: {
+          description: 'Visión general de ventas, pedidos, clientes y estadísticas clave de Estancos Distilling Co.'
+        }
+      },
+      { path: 'pedidos',
+        component: Pedidos,
+        title: 'Gestión de Pedidos | Estancos',
+        data: {
+          description: 'Consulta y gestiona todos los pedidos realizados por los clientes.'
+        }
+      },
+      { path: 'catalogo',
+        component: Catalogo,
+        title: 'Gestión de Catálogo | Estancos',
+        data: {
+          description: 'Administra los productos disponibles en el catálogo de Estancos Distilling Co.'
+        }
+      },
+      { path: 'empresas',
+        component: Empresas,
+        title: 'Gestión de Empresas | Estancos',
+        data: {
+          description: 'Consulta y gestiona la información de las empresas asociadas a Estancos Distilling Co.'
+        }
+      },
+      { path: 'reservas',
+        component: Reservas,
+        title: 'Gestión de Reservas | Estancos',
+        data: {
+          description: 'Consulta y gestiona todas las reservas realizadas por los clientes.'
+        }
+      },
       // { path: 'ventas', component: VentasComponent },
     ]
   }

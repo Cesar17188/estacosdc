@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="[http://www.sitemaps.org/schemas/sitemap/0.9](http://www.sitemaps.org/schemas/sitemap/0.9)">
+
+  <!-- Página de Inicio (Máxima prioridad) -->
+  <url>
+    <loc>[https://estancosdistillingcompany.com/](https://estancosdistillingcompany.com/)</loc>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- Boutique / Tienda -->
+  <url>
+    <loc>[https://estancosdistillingcompany.com/tienda](https://estancosdistillingcompany.com/tienda)</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Colección de Espíritus -->
+  <url>
+    <loc>[https://estancosdistillingcompany.com/espiritus](https://estancosdistillingcompany.com/espiritus)</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Enoturismo y Reservas -->
+  <url>
+    <loc>[https://estancosdistillingcompany.com/visitas](https://estancosdistillingcompany.com/visitas)</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Universo / Contenidos (Blog, Coctelería) -->
+  <url>
+    <loc>[https://estancosdistillingcompany.com/contenidos](https://estancosdistillingcompany.com/contenidos)</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Fundadores / Rommeliers -->
+  <url>
+    <loc>[https://estancosdistillingcompany.com/rommeliers](https://estancosdistillingcompany.com/rommeliers)</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+</urlset>
