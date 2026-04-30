@@ -7,13 +7,17 @@ import { Footer } from "./shared/footer/footer";
 import { Agegate } from "./shared/agegate/agegate";
 import { isPlatformBrowser } from '@angular/common';
 
+declare let gtag: Function;
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet, Header, Footer, Agegate],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })
+
+
 export class App implements OnInit {
+
     private router = inject(Router);
      private activatedRoute = inject(ActivatedRoute);
     private titleService = inject(Title);
@@ -68,6 +72,26 @@ export class App implements OnInit {
         this.metaService.updateTag({ property: 'og:url', content: 'https://estancosdistillingcompany.com' + this.router.url });
       }
 
+      // SOLUCIÓN SSR: Solo usamos 'window' y 'gtag' si estamos en el navegador
+      if (isPlatformBrowser(this.platformId)) {
+        this.metaService.updateTag({ property: 'og:url', content: window.location.href });
+
+        // --- NUEVO: RASTREO DINÁMICO DE GOOGLE ANALYTICS ---
+        try {
+          gtag('event', 'page_view', {
+            page_path: this.router.url
+          });
+        } catch (e) {
+          console.warn('Google Analytics no está cargado');
+        }
+
+      } else {
+        // En el servidor, construimos la URL manualmente
+        this.metaService.updateTag({ property: 'og:url', content: '[https://estancosdistillingcompany.com](https://estancosdistillingcompany.com)' + this.router.url });
+      }
+
+
     });
   }
 }
+
