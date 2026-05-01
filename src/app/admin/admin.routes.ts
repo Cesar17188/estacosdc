@@ -6,6 +6,8 @@ import { Pedidos } from './pedidos/pedidos';
 import { Catalogo } from './catalogo/catalogo';
 import { Empresas } from './empresas/empresas';
 import { Reservas } from './reservas/reservas';
+import { AdminGaleria } from './admin-galeria/admin-galeria'; // <-- IMPORTAMOS EL COMPONENTE DE GALERÍA, aunque no lo usemos aún en las rutas, lo tendremos listo para cuando lo necesitemos
+import { AdminCocteleria } from './admin-cocteleria/admin-cocteleria'; // <-- IMPORTAMOS EL COMPONENTE DE COCTELERÍA, aunque no lo usemos aún en las rutas, lo tendremos listo para cuando lo necesitemos
 import { authGuard } from '../guards/auth-guard'; // <-- IMPORTAMOS EL GUARD
 
 
@@ -57,6 +59,20 @@ export const ADMIN_ROUTES: Routes = [
           description: 'Consulta y gestiona todas las reservas realizadas por los clientes.'
         }
       },
+      { path: 'galeria',
+        component: AdminGaleria,
+        title: 'Gestión de Galería | Estancos',
+        data: {
+          description: 'Administra las imágenes de la galería de Estancos Distilling Co.'
+        }
+      },
+      { path: 'cocteleria',
+        component: AdminCocteleria,
+        title: 'Gestión de Coctelería | Estancos',
+        data: {
+          description: 'Administra las recetas de cocteles de Estancos Distilling Co.'
+        }
+      }
       // { path: 'ventas', component: VentasComponent },
     ]
   }

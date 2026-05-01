@@ -388,4 +388,148 @@ export class SupabaseService {
     return data;
   }
 
+  /**
+   * Sube una imagen al Storage de Supabase en el bucket 'galleryImages'
+   * @param file Archivo físico seleccionado desde el input file
+   * @returns La URL pública de la imagen recién subida
+   */
+  async uploadGalleryImageFile(file: File): Promise<string> {
+    // 1. Generamos un nombre único para evitar colisiones
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
+    const filePath = `uploads/${fileName}`;
+
+    // 2. Subimos el archivo al bucket
+    const { error: uploadError } = await this.supabase.storage
+      .from('galleryImages')
+      .upload(filePath, file);
+
+    if (uploadError) {
+      console.error('Error subiendo imagen a la galería:', uploadError);
+      throw uploadError;
+    }
+
+    // 3. Obtenemos la URL pública
+    const { data } = this.supabase.storage
+      .from('galleryImages')
+      .getPublicUrl(filePath);
+
+    return data.publicUrl;
+  }
+
+  /**
+   * Inserta el registro de la imagen (con su URL, título y tamaño) en la base de datos
+   * @param imageData Objeto con la url, title, alt y sizeClass
+   */
+  async addGalleryImageRecord(imageData: any) {
+    const { data, error } = await this.supabase
+      .from('gallery_images')
+      .insert([imageData])
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Error guardando el registro de la galería:', error);
+      throw error;
+    }
+    return data;
+  }
+
+  /**
+   * Elimina un registro de imagen de la galería
+   * Nota: En producción, podrías querer borrar también el archivo físico del Storage
+   */
+  async deleteGalleryImage(id: string) {
+    const { error } = await this.supabase
+      .from('gallery_images')
+      .delete()
+      .eq('id', id);
+
+    if (error) {
+      console.error('Error eliminando la imagen:', error);
+      throw error;
+    }
+    return true;
+  }
+
+   // ==========================================================================
+  // GESTIÓN DE COCTELERÍA (ADMIN)
+  // ==========================================================================
+
+  /**
+   * Obtiene TODAS las recetas para el panel de administración (incluyendo borradores)
+   */
+  async getCocktailsAdmin() {
+    const { data, error } = await this.supabase
+      .from('cocktail_recipes')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+    return data;
+  }
+
+  /**
+   * Sube una imagen al Storage de Supabase en el bucket 'cocktails'
+   */
+  async uploadCocktailImage(file: File): Promise<string> {
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
+    const filePath = `uploads/${fileName}`;
+
+    const { error: uploadError } = await this.supabase.storage
+      .from('cocktails')
+      .upload(filePath, file);
+
+    if (uploadError) throw uploadError;
+
+    const { data } = this.supabase.storage
+      .from('cocktails')
+      .getPublicUrl(filePath);
+
+    return data.publicUrl;
+  }
+
+  /**
+   * Crea o Actualiza un registro en la tabla cocktail_recipes
+   * Si le envías el parámetro 'id', Supabase actualizará esa fila. Si no, creará una nueva.
+   */
+  async saveCocktailRecipe(recipeData: any, id?: string) {
+    let query = this.supabase.from('cocktail_recipes');
+
+    if (id) {
+      // Es una actualización (Update)
+      const { data, error } = await query
+        .update(recipeData)
+        .eq('id', id)
+        .select()
+        .single();
+
+      if (error) throw error;
+      return data;
+    } else {
+      // Es una inserción nueva (Insert)
+      const { data, error } = await query
+        .insert([recipeData])
+        .select()
+        .single();
+
+      if (error) throw error;
+      return data;
+    }
+  }
+
+  /**
+   * Elimina permanentemente una receta
+   */
+  async deleteCocktailRecipe(id: string) {
+    const { error } = await this.supabase
+      .from('cocktail_recipes')
+      .delete()
+      .eq('id', id);
+
+    if (error) throw error;
+    return true;
+  }
+
 }

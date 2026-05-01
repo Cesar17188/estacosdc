@@ -1,0 +1,108 @@
+<main class="crm-main">
+      <div class="crm-content-scroll">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Gestión de Galería</h1>
+            <p class="page-subtitle">Sube fotografías y define su tamaño para el mosaico de la página web.</p>
+          </div>
+          <button class="btn-primary" (click)="openUploadModal()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
+            Subir Imagen
+          </button>
+        </div>
+
+        <div class="gallery-grid">
+          @if (isLoading()) {
+            @for (i of [1,2,3,4]; track i) {
+              <div class="skeleton-card"></div>
+            }
+          } @else {
+            @for (img of images(); track img.id) {
+              <div class="gallery-card">
+                <img [src]="img.url" [alt]="img.alt" class="img-preview">
+                <div class="card-info">
+                  <h3 class="card-title" [title]="img.title">{{ img.title }}</h3>
+                  <div class="card-meta">
+                    <span class="size-badge">{{ img.sizeClass }}</span>
+                    <span>{{ formatDate(img.created_at) }}</span>
+                  </div>
+                  <button class="btn-delete" (click)="deleteImage(img.id)">Eliminar</button>
+                </div>
+              </div>
+            }
+          }
+        </div>
+      </div>
+    </main>
+
+    <!-- MODAL PARA SUBIR IMAGEN -->
+    <div class="slide-overlay" [class.open]="isModalOpen()" (click)="closeModal()">
+      <div class="slide-panel" (click)="$event.stopPropagation()">
+
+        <div class="slide-header">
+          <h2>Añadir a Galería</h2>
+          <button class="btn-close" (click)="closeModal()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+          </button>
+        </div>
+
+        <div class="slide-body">
+          <form [formGroup]="uploadForm">
+
+            <div class="form-group">
+              <label>Archivo de Imagen <span style="color:var(--crm-accent);">*</span></label>
+
+              @if (!imagePreview()) {
+                <div class="file-input-wrapper">
+                  <input type="file" (change)="onFileSelected($event)" accept="image/*">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" style="color: var(--crm-accent); margin-bottom: 0.5rem;"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
+                  <span style="font-weight: 500;">Haz clic o arrastra una imagen</span>
+                  <span style="font-size: 0.75rem; color: var(--crm-text-muted); margin-top: 0.3rem;">PNG, JPG, WEBP (Max 2MB)</span>
+                </div>
+              } @else {
+                <div class="preview-container">
+                  <img [src]="imagePreview()" alt="Vista previa">
+                  <div class="btn-change-img">
+                    <input type="file" (change)="onFileSelected($event)" accept="image/*" style="position: absolute; top:0; left:0; width:100%; height:100%; opacity:0; cursor:pointer;">
+                    Cambiar Foto
+                  </div>
+                </div>
+              }
+              @if (submitAttempted() && !selectedFile()) { <span class="error-text" style="color: #ef4444; font-size: 0.75rem;">La imagen es obligatoria.</span> }
+            </div>
+
+            <div class="form-group">
+              <label>Título (Visible al hacer hover)</label>
+              <input type="text" formControlName="title" placeholder="Ej. Barricas de Roble" [class.is-invalid]="isInvalid('title')">
+            </div>
+
+            <div class="form-group">
+              <label>Texto Alternativo / SEO (Atributo Alt)</label>
+              <input type="text" formControlName="alt" placeholder="Ej. Barricas añejando ron en los andes" [class.is-invalid]="isInvalid('alt')">
+            </div>
+
+            <div class="form-group">
+              <label>Tamaño en el Mosaico Web</label>
+              <select formControlName="sizeClass">
+                <option value="normal">Normal (1x1)</option>
+                <option value="tall">Vertical / Alto (1x2)</option>
+                <option value="wide">Horizontal / Ancho (2x1)</option>
+                <option value="large">Grande (2x2)</option>
+              </select>
+              <p style="font-size: 0.75rem; color: var(--crm-text-muted); margin-top: 0.5rem;">
+                Determina cuántos bloques ocupará esta imagen en la cuadrícula de "Universo Estancos".
+              </p>
+            </div>
+
+          </form>
+        </div>
+
+        <div class="slide-footer">
+          <button class="btn-primary" style="background: transparent; border: 1px solid var(--crm-border); color: var(--crm-text-main); flex: 1;" (click)="closeModal()">Cancelar</button>
+          <button class="btn-primary" style="flex: 2; justify-content: center;" [disabled]="isSaving()" (click)="saveImage()">
+            {{ isSaving() ? 'Subiendo...' : 'Guardar y Publicar' }}
+          </button>
+        </div>
+
+      </div>
+    </div>
