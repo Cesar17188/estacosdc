@@ -1,11 +1,44 @@
-<!-- Hero Section de la Página -->
+<main>
+      <!-- HERO -->
       <section class="content-hero">
         <div class="container">
-          <h1>Universo Estancos Distilling Company</h1>
-          <p>Adéntrate en nuestra cultura. Descubre los momentos capturados, aprende a mezclar como un maestro, encuentra el maridaje perfecto y acompáñanos en nuestros próximos eventos exclusivos.</p>
+          <h1>Universo Estancos</h1>
+          <p>Adéntrate en nuestra cultura. Descubre los momentos capturados, aprende a mezclar como un maestro y encuentra el maridaje perfecto para tus destilados.</p>
         </div>
       </section>
 
-      <app-galeria></app-galeria>
-      <app-cocteleria></app-cocteleria>
-      <app-maridaje></app-maridaje>
+      <!-- BOTONES DE PESTAÑAS -->
+      <div class="container">
+        <div class="tabs-container">
+          <button class="tab-btn" [class.active]="activeTab() === 'mixologia'" (click)="setTab('mixologia')">Carta de Cocteles</button>
+          <button class="tab-btn" [class.active]="activeTab() === 'maridaje'" (click)="setTab('maridaje')">Arte del Maridaje</button>
+          <button class="tab-btn" [class.active]="activeTab() === 'galeria'" (click)="setTab('galeria')">Nuestra Experiencia</button>
+        </div>
+      </div>
+
+      <!-- ÁREA DE CONTENIDO DINÁMICO (RENDERIZACIÓN DE COMPONENTES) -->
+      <section style="min-height: 50vh;">
+
+        <!-- COMPONENTE: COCTELERÍA -->
+        @if (activeTab() === 'mixologia') {
+          <div class="tab-wrapper">
+            <app-cocteleria></app-cocteleria>
+          </div>
+        }
+
+        <!-- COMPONENTE: MARIDAJE -->
+        @if (activeTab() === 'maridaje') {
+          <div class="tab-wrapper">
+            <app-maridaje></app-maridaje>
+          </div>
+        }
+
+        <!-- COMPONENTE: GALERÍA -->
+        @if (activeTab() === 'galeria') {
+          <div class="tab-wrapper">
+            <app-galeria></app-galeria>
+          </div>
+        }
+
+      </section>
+    </main>

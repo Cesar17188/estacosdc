@@ -1,26 +1,52 @@
-/* Hero de la Página de Contenidos */
+* { box-sizing: border-box; }
+      .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; }
+      .section-padding { padding: 4rem 0; }
+
+      /* ================= HERO DE CONTENIDOS ================= */
       .content-hero {
         text-align: center;
         padding: 6rem 0 4rem 0;
         background: linear-gradient(to bottom, var(--color-bg-surface), var(--color-bg-base));
         border-bottom: 1px solid var(--color-border);
-        margin-bottom: 4rem;
       }
+      .content-hero h1 { font-family: var(--font-heading); font-size: clamp(2.5rem, 5vw, 4rem); color: var(--color-accent-gold); margin-bottom: 1rem; letter-spacing: 2px; text-transform: uppercase; }
+      .content-hero p { color: var(--color-text-muted); font-size: 1.1rem; max-width: 700px; margin: 0 auto; line-height: 1.6; font-weight: 300; }
 
-      .content-hero h1 {
-        font-family: var(--font-heading);
-        font-size: clamp(2.5rem, 5vw, 4rem);
-        color: var(--color-accent-gold);
-        margin-bottom: 1rem;
-        letter-spacing: 2px;
-        text-transform: uppercase;
+      /* ================= PESTAÑAS (TABS) ================= */
+      .tabs-container {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin-top: -25px; /* Superpuesto al borde del hero */
+        position: relative;
+        z-index: 10;
+        flex-wrap: wrap;
       }
-
-      .content-hero p {
+      .tab-btn {
+        background-color: var(--color-bg-surface);
+        border: 1px solid var(--color-border);
         color: var(--color-text-muted);
-        font-size: 1.1rem;
-        max-width: 700px;
-        margin: 0 auto;
-        line-height: 1.6;
-        font-weight: 300;
+        padding: 1rem 2rem;
+        font-family: var(--font-heading);
+        font-size: 0.95rem;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition-smooth);
+        border-radius: 4px;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.5);
       }
+      .tab-btn:hover { color: var(--color-text-main); border-color: rgba(212, 175, 55, 0.5); }
+      .tab-btn.active {
+        background-color: var(--color-accent-gold);
+        color: #121212;
+        border-color: var(--color-accent-gold);
+      }
+
+      /* Animación de entrada para los componentes inyectados */
+      .tab-wrapper { animation: fadeIn 0.4s ease-out; }
+      @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+      /* Estilo del mock para el canvas */
+      .mock-child { padding: 4rem; text-align: center; border: 2px dashed var(--color-accent-gold); border-radius: 8px; color: var(--color-accent-gold); background-color: rgba(212, 175, 55, 0.05); font-family: var(--font-heading); font-size: 1.2rem; }
