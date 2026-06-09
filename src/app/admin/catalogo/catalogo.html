@@ -35,13 +35,29 @@
                         <div class="product-cell">
                           <img [src]="product.image_url" [alt]="product.name" class="product-img">
                           <div>
-                            <p class="product-name">{{ product.name }}</p>
+                            <p class="product-name">{{ product.name }}
+                              @if (product.discount_price && product.discount_price > 0) {
+                                <span class="discount-badge">Oferta</span>
+                              }
+                            </p>
                             <p class="product-slug">SKU: {{ product.slug }}</p>
                           </div>
                         </div>
                       </td>
                       <td style="text-transform: uppercase; font-size: 0.75rem;">{{ product.category }}</td>
-                      <td style="font-weight: 600;">\${{ product.price | number:'1.2-2' }}</td>
+
+                      <!-- Columna de Precio con lógica de descuento -->
+                      <td>
+                        <div class="price-container">
+                          @if (product.discount_price && product.discount_price > 0) {
+                            <span class="original-price strikethrough">\${{ product.price | number:'1.2-2' }}</span>
+                            <span class="discount-price">\${{ product.discount_price | number:'1.2-2' }}</span>
+                          } @else {
+                            <span class="original-price">\${{ product.price | number:'1.2-2' }}</span>
+                          }
+                        </div>
+                      </td>
+
                       <td>
                         <span class="stock-indicator" [class.stock-out]="product.stock_quantity === 0">
                           {{ product.stock_quantity }} unid.
@@ -82,12 +98,37 @@
 
             <div class="form-row">
               <div class="form-group">
-                <label>Precio ($)</label>
+                <label>Precio Regular ($)</label>
                 <input type="number" step="0.01" formControlName="price" [class.is-invalid]="isInvalid('price')">
               </div>
               <div class="form-group">
                 <label>Stock Disponible</label>
                 <input type="number" formControlName="stock_quantity" [class.is-invalid]="isInvalid('stock_quantity')">
+              </div>
+            </div>
+
+            <!-- SECCIÓN DE DESCUENTOS -->
+            <div class="discount-section">
+              <div class="form-group" style="margin-bottom: 0;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                  <label style="margin: 0; color: var(--status-discount); font-weight: 600;">Habilitar Descuento</label>
+                  <div class="switch-container" style="margin: 0;">
+                    <label class="switch">
+                      <input type="checkbox" formControlName="has_discount">
+                      <span class="slider"></span>
+                    </label>
+                  </div>
+                </div>
+
+                @if (productForm.get('has_discount')?.value) {
+                  <div>
+                    <label>Precio Promocional ($)</label>
+                    <input type="number" step="0.01" formControlName="discount_price" placeholder="Ej. 39.99">
+                    <p style="font-size: 0.75rem; color: var(--crm-text-muted); margin-top: 0.5rem; margin-bottom: 0;">
+                      Este precio tachará el original en la tienda.
+                    </p>
+                  </div>
+                }
               </div>
             </div>
 

@@ -43,17 +43,34 @@
                   <div class="product-image-wrapper">
                     @if (product.badge) {
                       <span class="product-badge">{{ product.badge }}</span>
-                    }
+                    } @else if (product.discount_price && product.discount_price > 0) {
+                        <!-- Si no hay un badge personalizado pero sí hay descuento, mostramos 'Oferta' -->
+                        <span class="product-badge sale">Oferta</span>
+                      }
                     <img [src]="product.image_url" [alt]="product.name" class="product-image" loading="lazy">
                   </div>
 
                   <div class="product-content">
                     <span class="product-category">{{ product.category }}</span>
                     <h3 class="product-title">{{ product.name }}</h3>
-                    <div class="product-price">${{ product.price | number:'1.2-2' }}</div>
 
-                    <button class="btn-primary" [disabled]="product.badge === 'Agotado'" (click)="addToCart(product)">
-                      {{ product.badge === 'Agotado' ? 'Agotado' : 'Añadir al Carrito' }}
+
+                    <!-- LÓGICA DE PRECIOS -->
+                      <div class="price-container">
+                        @if (product.discount_price && product.discount_price > 0) {
+                          <span class="original-price strikethrough">\${{ product.price | number:'1.2-2' }}</span>
+                          <span class="discount-price">\${{ product.discount_price | number:'1.2-2' }}</span>
+                        } @else {
+                          <span class="original-price">\${{ product.price | number:'1.2-2' }}</span>
+                        }
+                      </div>
+
+                    <button class="btn-primary" [disabled]="product.badge === 'Agotado' || product.stock_quantity <= 0 "
+                    (click)="addToCart(product)">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                        </svg>
+                        {{ product.stock_quantity <= 0 ? 'Sin Stock' : 'Añadir' }}
                     </button>
                   </div>
 

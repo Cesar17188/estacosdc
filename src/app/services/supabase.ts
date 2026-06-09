@@ -318,9 +318,14 @@ export class SupabaseService {
   async getAllProducts() {
     const { data, error } = await this.supabase
       .from('products')
-      .select('id, slug, name, category, price, stock_quantity, is_active, image_url')
+      // AÑADIMOS discount_price A LA CONSULTA
+      .select('id, slug, name, category, price, discount_price, stock_quantity, is_active, image_url')
       .order('created_at', { ascending: false });
-    if (error) throw error;
+
+    if (error) {
+      console.error('Error obteniendo inventario:', error);
+      throw error;
+    }
     return data;
   }
 
@@ -330,12 +335,18 @@ export class SupabaseService {
       .update({
         name: updates.name,
         price: updates.price,
+        discount_price: updates.discount_price, // NUEVO
         stock_quantity: updates.stock_quantity,
         category: updates.category,
-        is_active: updates.is_active
+        is_active: updates.is_active,
+        image_url: updates.image_url
       })
       .eq('id', productId);
-    if (error) throw error;
+
+    if (error) {
+      console.error('Error actualizando producto:', error);
+      throw error;
+    }
     return true;
   }
 
@@ -529,6 +540,72 @@ export class SupabaseService {
       .eq('id', id);
 
     if (error) throw error;
+    return true;
+  }
+
+   // ==========================================================================
+  // GESTIÓN DE PROSPECTOS (REDES SOCIALES Y OUTREACH)
+  // ==========================================================================
+
+  /**
+   * Obtiene todos los prospectos de redes sociales
+   */
+  async getSocialProspects() {
+    const { data, error } = await this.supabase
+      .from('social_prospects')
+      .select('*')
+      .order('updated_at', { ascending: false }); // Vemos los movidos recientemente primero
+
+    if (error) {
+      console.error('Error obteniendo prospectos:', error);
+      throw error;
+    }
+
+    return data;
+  }
+
+  /**
+   * Crea o actualiza un prospecto
+   */
+  async saveSocialProspect(prospectData: any, id?: string) {
+    let query = this.supabase.from('social_prospects');
+
+    if (id) {
+      // Actualizar existente
+      const { data, error } = await query
+        .update(prospectData)
+        .eq('id', id)
+        .select()
+        .single();
+
+      if (error) throw error;
+      return data;
+    } else {
+      // Crear nuevo
+      const { data, error } = await query
+        .insert([prospectData])
+        .select()
+        .single();
+
+      if (error) throw error;
+      return data;
+    }
+  }
+
+  /**
+   * Elimina un prospecto definitivamente
+   */
+  async deleteSocialProspect(id: string) {
+    const { error } = await this.supabase
+      .from('social_prospects')
+      .delete()
+      .eq('id', id);
+
+    if (error) {
+      console.error('Error al eliminar el prospecto:', error);
+      throw error;
+    }
+
     return true;
   }
 

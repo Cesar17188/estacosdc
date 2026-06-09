@@ -5,6 +5,7 @@ import { Dashboard } from './dashboard/dashboard';
 import { Pedidos } from './pedidos/pedidos';
 import { Catalogo } from './catalogo/catalogo';
 import { Empresas } from './empresas/empresas';
+import { AdminProspectos } from './admin-prospectos/admin-prospectos';
 import { Reservas } from './reservas/reservas';
 import { AdminGaleria } from './admin-galeria/admin-galeria'; // <-- IMPORTAMOS EL COMPONENTE DE GALERÍA, aunque no lo usemos aún en las rutas, lo tendremos listo para cuando lo necesitemos
 import { AdminCocteleria } from './admin-cocteleria/admin-cocteleria'; // <-- IMPORTAMOS EL COMPONENTE DE COCTELERÍA, aunque no lo usemos aún en las rutas, lo tendremos listo para cuando lo necesitemos
@@ -50,6 +51,13 @@ export const ADMIN_ROUTES: Routes = [
         title: 'Gestión de Empresas | Estancos',
         data: {
           description: 'Consulta y gestiona la información de las empresas asociadas a Estancos Distilling Co.'
+        }
+      },
+      { path: 'prospectos',
+        component: AdminProspectos,
+        title: 'Gestión de Prospectos | Estancos',
+        data: {
+          description: 'Administra los prospectos de redes sociales interesados en Estancos Distilling Co.'
         }
       },
       { path: 'reservas',

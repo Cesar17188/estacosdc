@@ -1,5 +1,5 @@
 import { Component, signal, computed, inject, OnInit  } from '@angular/core';
-import { DecimalPipe } from '@angular/common';
+import { DecimalPipe, CommonModule } from '@angular/common';
 import { CartService, Product as CartProduct } from '../../services/cart';
 import { SupabaseService } from '../../services/supabase';
 
@@ -9,6 +9,7 @@ interface Product {
   name: string;
   category: 'ron' | 'whisky' | 'accesorios';
   price: number;
+  discount_price?: number | null; // Nuevo campo para precio de descuento
   image_url: string;
   badge?: string;
   stock_quantity: number;
@@ -16,7 +17,7 @@ interface Product {
 
 @Component({
   selector: 'app-tienda-page',
-  imports: [ DecimalPipe ],
+  imports: [ DecimalPipe, CommonModule ],
   templateUrl: './tienda-page.html',
   styleUrl: './tienda-page.scss',
 })
@@ -82,18 +83,20 @@ export class TiendaPage implements OnInit{
   }
 
   addToCart(product: Product) {
-    // Mapeamos el objeto local 'Product' (con image_url de DB)
-    // al formato que espera el CartService (con imageUrl)
-    const productToCart: CartProduct = {
-      id: product.id,
-      name: product.name,
-      category: product.category,
-      price: product.price,
-      image_url: product.image_url,
-      badge: product.badge
+    // MAGIA DE DESCUENTO: Enviamos al carrito el precio final
+    // Si tiene un descuento válido, se cobra eso. Si no, se cobra el precio regular.
+    const finalPrice = (product.discount_price && product.discount_price > 0)
+      ? product.discount_price
+      : product.price;
+
+    // Creamos una copia del producto para el carrito inyectando el precio final
+    const cartProduct = {
+      ...product,
+      price: finalPrice
     };
-    this.cartService.addToCart(productToCart);
-    this.showToast(`Se ha añadido "${product.name}" a tu carrito.`);
+
+    this.cartService.addToCart(cartProduct);
+    this.showToast(`Se añadió ${product.name} a tu carrito por $${finalPrice}.`);
   }
 
   showToast(msg: string) {

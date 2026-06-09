@@ -1,0 +1,147 @@
+<main class="crm-main">
+      <div class="crm-content-scroll">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Redes y Aliados Potenciales</h1>
+            <p class="page-subtitle">Gestiona las cuentas de Instagram, Facebook o influencers que deseas contactar.</p>
+          </div>
+          <button class="btn-primary" (click)="openEditModal(null)">
+            <i class="fa-solid fa-plus"></i> Nuevo Prospecto
+          </button>
+        </div>
+
+        <div class="data-panel">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Cuenta / Perfil</th>
+                <th>Estado</th>
+                <th>Notas y Seguimiento</th>
+                <th>Última Actualización</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              @if (isLoading()) {
+                @for (i of [1,2,3]; track i) {
+                  <tr><td colspan="5"><div class="skeleton-row" style="margin: 0;"></div></td></tr>
+                }
+              } @else {
+                @for (lead of leads(); track lead.id) {
+                  <tr>
+                    <td>
+                      <div class="account-cell">
+                        <div class="platform-icon" [ngClass]="getPlatformClass(lead.platform)">
+                          <i [class]="getPlatformIcon(lead.platform)"></i>
+                        </div>
+                        <div>
+                          <p class="account-handle">{{ lead.handle }}</p>
+                          @if (lead.profile_url) {
+                            <a [href]="lead.profile_url" target="_blank" class="account-link">
+                              Ver Perfil <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.65rem;"></i>
+                            </a>
+                          }
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <span class="status-badge" [ngClass]="getStatusClass(lead.status)">
+                        {{ lead.status }}
+                      </span>
+                    </td>
+                    <td><p class="notes-text" [title]="lead.notes">{{ lead.notes || 'Sin notas.' }}</p></td>
+                    <td style="color: var(--crm-text-muted); font-size: 0.85rem;">{{ formatDate(lead.updated_at) }}</td>
+                    <td>
+                      <div class="actions-cell">
+                        <button class="btn-edit" (click)="openEditModal(lead)"><i class="fa-solid fa-pen"></i></button>
+                      </div>
+                    </td>
+                  </tr>
+                }
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+
+    <div class="slide-overlay" [class.open]="isModalOpen()" (click)="closeModal()">
+      <div class="slide-panel" (click)="$event.stopPropagation()">
+
+        <div class="slide-header">
+          <h2>{{ selectedLead() ? 'Editar Prospecto' : 'Añadir Prospecto' }}</h2>
+          <button class="btn-close" (click)="closeModal()">
+            <i class="fa-solid fa-xmark" style="font-size: 1.5rem;"></i>
+          </button>
+        </div>
+
+        <div class="slide-body">
+          <form [formGroup]="leadForm">
+
+            <div class="form-row">
+              <div class="form-group">
+                <label>Plataforma</label>
+                <select formControlName="platform">
+                  <option value="Instagram">Instagram</option>
+                  <option value="Facebook">Facebook</option>
+                  <option value="TikTok">TikTok</option>
+                  <option value="Web">Página Web</option>
+                  <option value="Otro">Otro</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Cuenta / Nombre <span style="color: var(--crm-accent);">*</span></label>
+                <input type="text" formControlName="handle" placeholder="Ej. @restaurante" [class.is-invalid]="isInvalid('handle')">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>URL del Perfil / Enlace</label>
+              <input type="url" formControlName="profile_url" placeholder="https://instagram.com/...">
+            </div>
+
+            <div class="form-group">
+              <label>Estado en el Embudo</label>
+              <select formControlName="status">
+                <option value="Pendiente">Pendiente (Aún no se contacta)</option>
+                <option value="Contactado">Contactado (Esperando respuesta)</option>
+                <option value="En Negociación">En Negociación (En charlas)</option>
+                <option value="Aliado">Aliado (¡Cerrado! Trabaja con nosotros)</option>
+                <option value="Descartado">Descartado / Rechazado</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Notas Estratégicas</label>
+              <textarea formControlName="notes" placeholder="Escribe aquí por qué deberíamos contactarlos, quién es el dueño, qué productos les enviamos, etc..."></textarea>
+            </div>
+
+          </form>
+        </div>
+
+        <div class="slide-footer">
+          @if (selectedLead()) {
+            @if (!isConfirmingDelete()) {
+              <button class="btn-delete" (click)="confirmDelete()"><i class="fa-regular fa-trash-can"></i></button>
+            } @else {
+              <div class="confirm-action">
+                <p class="confirm-text">¿Seguro?</p>
+                <div style="display: flex; gap: 0.5rem;">
+                  <button class="btn-delete" style="background-color: var(--status-rejected); color: #fff;" (click)="executeDelete()">Sí</button>
+                  <button class="btn-edit" (click)="cancelDelete()">No</button>
+                </div>
+              </div>
+            }
+          }
+
+          <div style="flex-grow: 1;"></div>
+
+          @if (!isConfirmingDelete()) {
+            <button class="btn-primary" [disabled]="leadForm.invalid || isSaving()" (click)="saveLead()">
+              {{ isSaving() ? 'Guardando...' : 'Guardar Prospecto' }}
+            </button>
+          }
+        </div>
+
+      </div>
+    </div>

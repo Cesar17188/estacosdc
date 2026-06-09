@@ -30,6 +30,8 @@ export class Catalogo implements OnInit{
   productForm = this.fb.group({
     name: ['', Validators.required],
     price: [0, [Validators.required, Validators.min(0)]],
+    has_discount: [false], // Interruptor virtual (no se guarda directo en BD)
+    discount_price: [null as number | null],
     stock_quantity: [0, [Validators.required, Validators.min(0)]],
     category: ['ron', Validators.required],
     is_active: [true],
@@ -73,10 +75,15 @@ export class Catalogo implements OnInit{
     this.imagePreview.set(product ? product.image_url : null);
 
     if (product) {
+
+      // Configuramos el switch basado en si el producto tiene o no un discount_price
+      const hasDiscount = product.discount_price !== null && product.discount_price > 0;
       // Editar existente
       this.productForm.patchValue({
         name: product.name,
         price: product.price,
+        has_discount: hasDiscount,
+        discount_price: product.discount_price,
         stock_quantity: product.stock_quantity,
         category: product.category,
         is_active: product.is_active,
@@ -87,6 +94,8 @@ export class Catalogo implements OnInit{
       this.productForm.reset({
         category: 'ron',
         price: 0,
+        has_discount: false,
+        discount_price: null,
         stock_quantity: 0,
         is_active: true,
         image_url: ''
@@ -112,7 +121,8 @@ export class Catalogo implements OnInit{
     this.isSaving.set(true);
 
     try {
-      let finalImageUrl = this.productForm.value.image_url;
+      const formValues = this.productForm.value;
+      let finalImageUrl = formValues.image_url;
 
       // 1. Si el usuario seleccionó un archivo físico, lo subimos primero
       if (this.selectedFile()) {
@@ -123,6 +133,7 @@ export class Catalogo implements OnInit{
       const productData = {
         name: this.productForm.value.name,
         price: this.productForm.value.price,
+        discount_price: formValues.has_discount ? formValues.discount_price : null,
         stock_quantity: this.productForm.value.stock_quantity,
         category: this.productForm.value.category,
         is_active: this.productForm.value.is_active,
@@ -134,9 +145,11 @@ export class Catalogo implements OnInit{
         await this.crmService.updateProduct(this.selectedProduct().id, productData);
         this.products.update(list => list.map(p => p.id === this.selectedProduct().id ? { ...p, ...productData } : p));
       } else {
-        // CREAR NUEVO EN LA BASE DE DATOS
-        const newProduct = await this.crmService.createProductAdmin(productData);
-        // Lo añadimos al inicio de la lista local para verlo de inmediato
+       const newProduct = {
+          id: Math.random().toString().substring(2, 8),
+          slug: productData.name?.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+          ...productData
+        };
         this.products.update(list => [newProduct, ...list]);
       }
 
