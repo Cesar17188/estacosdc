@@ -3,9 +3,12 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { SupabaseService } from '../../services/supabase';
 
+import { Dialog } from '../../components/dialog/dialog';
+
 @Component({
   selector: 'app-catalogo',
-  imports: [CommonModule, ReactiveFormsModule],
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule, Dialog],
   templateUrl: './catalogo.html',
   styleUrl: './catalogo.scss',
 })
@@ -25,6 +28,14 @@ export class Catalogo implements OnInit{
   selectedFile = signal<File | null>(null);
   imagePreview = signal<string | null>(null);
   isSaving = signal<boolean>(false);
+
+  // Dialog State
+  dialogMessage = signal<string | null>(null);
+  dialogType = signal<'success' | 'error'>('success');
+  
+  closeDialog() {
+    this.dialogMessage.set(null);
+  }
 
   // Formulario
   productForm = this.fb.group({
@@ -156,7 +167,8 @@ export class Catalogo implements OnInit{
       this.closeModal();
     } catch (error) {
       console.error('Error guardando el producto:', error);
-      alert('Hubo un error guardando el producto. Por favor, intenta de nuevo.');
+      this.dialogType.set('error');
+      this.dialogMessage.set('Hubo un error guardando el producto. Por favor, intenta de nuevo.');
     } finally {
       this.isSaving.set(false);
     }

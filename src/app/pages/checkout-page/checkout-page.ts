@@ -4,24 +4,34 @@ import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { CartService } from '../../services/cart';
 import { SupabaseService } from '../../services/supabase';
 import { Router } from '@angular/router';
+import { Dialog } from '../../components/dialog/dialog';
 
 @Component({
   selector: 'app-checkout-page',
-  imports: [CommonModule, ReactiveFormsModule, ],
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule, Dialog],
   templateUrl: './checkout-page.html',
   styleUrl: './checkout-page.scss',
 })
-export class CheckoutPage implements OnInit{
+export class CheckoutPage implements OnInit {
   cartService = inject(CartService);
   supabaseService = inject(SupabaseService);
   private fb = inject(FormBuilder);
 
-  constructor(private router: Router){}
+  constructor(private router: Router) { }
 
   // Estados
   orderConfirmed = signal<boolean>(false);
   orderTotal = signal<number>(0);
   isSubmitting = signal<boolean>(false);
+
+  // Dialog State
+  dialogMessage = signal<string | null>(null);
+  dialogType = signal<'success' | 'error'>('success');
+
+  closeDialog() {
+    this.dialogMessage.set(null);
+  }
 
   // Número de WhatsApp del vendedor de Estancos (código país + número, sin +, espacios o guiones)
   private sellerPhone = '+593998581721'; // Cambia esto por tu número real
@@ -103,7 +113,8 @@ export class CheckoutPage implements OnInit{
 
     } catch (error) {
       console.error('Error al guardar el pedido en la base de datos:', error);
-      alert('Hubo un problema al procesar tu pedido. Por favor, intenta de nuevo.');
+      this.dialogType.set('error');
+      this.dialogMessage.set('Hubo un problema al procesar tu pedido. Por favor, intenta de nuevo.');
     } finally {
       // Liberamos la interfaz
       this.isSubmitting.set(false);

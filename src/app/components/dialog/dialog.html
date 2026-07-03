@@ -1,0 +1,16 @@
+@if (message) {
+  <div class="dialog-overlay" (click)="onClose()">
+    <div class="dialog-box" (click)="$event.stopPropagation()">
+      <div class="dialog-icon" [ngClass]="type">
+        @if (type === 'success') {
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
+        } @else {
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+        }
+      </div>
+      <h3 class="dialog-title">{{ type === 'success' ? 'Éxito' : 'Error' }}</h3>
+      <p class="dialog-text">{{ message }}</p>
+      <button class="btn-primary dialog-btn" (click)="onClose()">Aceptar</button>
+    </div>
+  </div>
+}

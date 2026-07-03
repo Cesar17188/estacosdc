@@ -3,9 +3,12 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { SupabaseService } from '../../services/supabase'; // IMPORTAR EL SERVICIO REAL DE SUPABASE
 
+import { Dialog } from '../../components/dialog/dialog';
+
 @Component({
   selector: 'app-admin-galeria',
-  imports: [ CommonModule, ReactiveFormsModule ],
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule, Dialog],
   templateUrl: './admin-galeria.html',
   styleUrl: './admin-galeria.scss',
 })
@@ -24,6 +27,14 @@ export class AdminGaleria implements OnInit {
   // Archivo e Imagen
   selectedFile = signal<File | null>(null);
   imagePreview = signal<string | null>(null);
+
+  // Dialog State
+  dialogMessage = signal<string | null>(null);
+  dialogType = signal<'success' | 'error'>('success');
+
+  closeDialog() {
+    this.dialogMessage.set(null);
+  }
 
   uploadForm = this.fb.group({
     title: ['', Validators.required],
@@ -102,9 +113,14 @@ export class AdminGaleria implements OnInit {
       this.images.update(list => [savedData, ...list]);
       this.closeModal();
 
+      // Feedback de éxito (Opcional)
+      this.dialogType.set('success');
+      this.dialogMessage.set('Imagen subida exitosamente');
+
     } catch (error) {
       console.error('Error al subir imagen:', error);
-      alert('Hubo un problema al subir la imagen.');
+      this.dialogType.set('error');
+      this.dialogMessage.set('Hubo un problema al subir la imagen.');
     } finally {
       this.isSaving.set(false);
     }

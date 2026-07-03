@@ -309,8 +309,16 @@ export class SupabaseService {
   }
 
   async updateTourBookingStatus(bookingId: string, newStatus: string) {
-    const { error } = await this.supabase.from('tour_bookings').update({ status: newStatus }).eq('id', bookingId);
-    if (error) throw error;
+    console.log(`Actualizando reserva ${bookingId} a estado ${newStatus}...`);
+    const { data, error } = await this.supabase.from('tour_bookings').update({ status: newStatus }).eq('id', bookingId).select();
+    if (error) {
+      console.error('Error de Supabase al actualizar:', error);
+      throw error;
+    }
+    if (!data || data.length === 0) {
+      throw new Error("No se pudo guardar en Supabase. Verifica que el ID sea correcto y que las políticas de seguridad (RLS) permitan actualizar (UPDATE) la tabla 'tour_bookings'.");
+    }
+    console.log('Reserva actualizada correctamente en DB:', data);
     return true;
   }
 

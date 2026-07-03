@@ -1,11 +1,13 @@
-import { Component, signal, OnInit, inject, Injectable } from '@angular/core';
+import { Component, signal, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SupabaseService } from '../../services/supabase';
+import { Dialog } from '../../components/dialog/dialog';
 
 
 @Component({
   selector: 'app-reservas',
-  imports: [CommonModule],
+  standalone: true,
+  imports: [CommonModule, Dialog],
   templateUrl: './reservas.html',
   styleUrl: './reservas.scss',
 })
@@ -19,7 +21,12 @@ export class Reservas implements OnInit{
   // Panel State
   isPanelOpen = signal<boolean>(false);
   selectedBooking = signal<any>(null);
+  selectedStatus = signal<string>('');
   isUpdating = signal<boolean>(false);
+
+  // Dialog State
+  dialogMessage = signal<string | null>(null);
+  dialogType = signal<'success' | 'error'>('success');
 
   ngOnInit() {
     this.loadBookings();
@@ -39,6 +46,7 @@ export class Reservas implements OnInit{
 
   openBookingDetails(booking: any) {
     this.selectedBooking.set(booking);
+    this.selectedStatus.set(booking.status);
     this.isPanelOpen.set(true);
   }
 
@@ -49,19 +57,30 @@ export class Reservas implements OnInit{
     }, 400); // Esperar a que acabe la animación CSS
   }
 
-  async updateStatus(newStatus: string) {
+  closeDialog() {
+    this.dialogMessage.set(null);
+  }
+
+  async updateStatus() {
+    const newStatus = this.selectedStatus();
     if (!this.selectedBooking() || this.selectedBooking().status === newStatus) return;
 
     this.isUpdating.set(true);
     try {
-      await this.crmService.updateTourBookingStatus(this.selectedBooking().id, newStatus);
+      const targetId = this.selectedBooking().id;
+      await this.crmService.updateTourBookingStatus(targetId, newStatus);
 
       // Actualización local para la UI
       this.selectedBooking.update((b: any) => ({ ...b, status: newStatus }));
-      this.bookings.update(list => list.map(b => b.id === this.selectedBooking().id ? { ...b, status: newStatus } : b));
+      this.bookings.update(list => list.map(b => b.id === targetId ? { ...b, status: newStatus } : b));
 
-    } catch (error) {
+      // Feedback visual para confirmar el cambio
+      this.dialogType.set('success');
+      this.dialogMessage.set('Estado de reserva actualizado exitosamente');
+    } catch (error: any) {
       console.error('Error actualizando el estado', error);
+      this.dialogType.set('error');
+      this.dialogMessage.set('Error al actualizar: ' + (error.message || 'Error desconocido'));
     } finally {
       this.isUpdating.set(false);
     }

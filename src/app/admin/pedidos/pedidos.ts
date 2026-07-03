@@ -2,9 +2,12 @@ import { Component, signal, OnInit, inject, Injectable } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SupabaseService } from '../../services/supabase';
 
+import { Dialog } from '../../components/dialog/dialog';
+
 @Component({
   selector: 'app-pedidos',
-  imports: [CommonModule],
+  standalone: true,
+  imports: [CommonModule, Dialog],
   templateUrl: './pedidos.html',
   styleUrl: './pedidos.scss',
 })
@@ -20,6 +23,14 @@ export class Pedidos implements OnInit{
   orderItems = signal<any[]>([]);
   isLoadingDetails = signal<boolean>(false);
   isUpdating = signal<boolean>(false);
+
+  // Dialog State
+  dialogMessage = signal<string | null>(null);
+  dialogType = signal<'success' | 'error'>('success');
+  
+  closeDialog() {
+    this.dialogMessage.set(null);
+  }
 
   ngOnInit() {
     this.loadOrders();
@@ -74,10 +85,12 @@ export class Pedidos implements OnInit{
       this.orders.update((list: any[]) => list.map(o => o.id === this.selectedOrder().id ? { ...o, status: newStatus } : o));
 
       // Feedback visual (opcional)
-      alert('Estado actualizado exitosamente');
+      this.dialogType.set('success');
+      this.dialogMessage.set('Estado actualizado exitosamente');
     } catch (error) {
       console.error('Error', error);
-      alert('Hubo un error al actualizar el estado');
+      this.dialogType.set('error');
+      this.dialogMessage.set('Hubo un error al actualizar el estado');
     } finally {
       this.isUpdating.set(false);
     }
