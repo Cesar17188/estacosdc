@@ -37,7 +37,7 @@ export class CheckoutPage implements OnInit {
   private sellerPhone = '593998581721'; // Cambia esto por tu número real
 
   // Link dinámico generado para WhatsApp
-  whatsappLink = signal<string>('https://api.whatsapp.com/message/24YUXEDTXLLSK1?autoload=1&app_absent=0');
+  whatsappLink = signal<string>('https://wa.me/593998581721');
 
   // Formulario reactivo
   checkoutForm = this.fb.group({
