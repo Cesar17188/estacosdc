@@ -8,6 +8,11 @@
             <h1 class="page-title">Resumen General</h1>
             <p class="page-subtitle">Bienvenido de vuelta. Aquí está la actividad reciente de Estancos.</p>
           </div>
+          <div class="header-actions date-filter-group">
+            <input type="date" class="crm-date-input" [value]="startDate()" (change)="onStartDateChange($event)">
+            <span class="date-separator">hasta</span>
+            <input type="date" class="crm-date-input" [value]="endDate()" (change)="onEndDateChange($event)">
+          </div>
         </div>
 
         <!-- KPIs GRID -->
@@ -15,7 +20,7 @@
 
           <div class="kpi-card">
             <div class="kpi-info">
-              <h3>Ventas del Mes</h3>
+              <h3>Ventas</h3>
               @if (isLoading()) { <div style="width: 80px; height: 30px; background: var(--crm-border); border-radius: 4px; margin-top: 5px;"></div> }
               @else { <p class="kpi-value">\${{ stats()?.totalSales | number:'1.2-2' }}</p> }
             </div>
@@ -24,7 +29,7 @@
             </div>
           </div>
 
-          <div class="kpi-card">
+          <div class="kpi-card" routerLink="/admin/pedidos" style="cursor: pointer;">
             <div class="kpi-info">
               <h3>Pedidos Pendientes</h3>
               @if (isLoading()) { <div style="width: 40px; height: 30px; background: var(--crm-border); border-radius: 4px; margin-top: 5px;"></div> }
@@ -35,7 +40,7 @@
             </div>
           </div>
 
-          <div class="kpi-card">
+          <div class="kpi-card" routerLink="/admin/empresas" style="cursor: pointer;">
             <div class="kpi-info">
               <h3>Nuevos Leads B2B</h3>
               @if (isLoading()) { <div style="width: 40px; height: 30px; background: var(--crm-border); border-radius: 4px; margin-top: 5px;"></div> }
@@ -46,7 +51,7 @@
             </div>
           </div>
 
-          <div class="kpi-card">
+          <div class="kpi-card" routerLink="/admin/reservas" style="cursor: pointer;">
             <div class="kpi-info">
               <h3>Tours Activos</h3>
               @if (isLoading()) { <div style="width: 40px; height: 30px; background: var(--crm-border); border-radius: 4px; margin-top: 5px;"></div> }

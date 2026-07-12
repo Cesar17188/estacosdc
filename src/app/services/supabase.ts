@@ -196,22 +196,42 @@ export class SupabaseService {
   // ==========================================================================
 
   // --- DASHBOARD (KPIs) ---
-  async getDashboardStats() {
-    const { data: salesData } = await this.supabase
+  async getDashboardStats(startDate?: string, endDate?: string) {
+    let salesQuery = this.supabase
       .from('orders')
-      .select('total_amount')
+      .select('total_amount, created_at')
       .in('status', ['pagado', 'enviado', 'entregado']);
 
-    const totalSales = salesData ? salesData.reduce((sum, order) => sum + Number(order.total_amount), 0) : 0;
-
-    const { count: pendingOrders } = await this.supabase
+    let ordersQuery = this.supabase
       .from('orders').select('*', { count: 'exact', head: true }).eq('status', 'pendiente');
 
-    const { count: newLeads } = await this.supabase
+    let leadsQuery = this.supabase
       .from('distributor_requests').select('*', { count: 'exact', head: true }).eq('status', 'nuevo');
 
-    const { count: activeTours } = await this.supabase
+    let toursQuery = this.supabase
       .from('tour_bookings').select('*', { count: 'exact', head: true }).in('status', ['pendiente', 'confirmado']);
+
+    if (startDate) {
+      salesQuery = salesQuery.gte('created_at', startDate);
+      ordersQuery = ordersQuery.gte('created_at', startDate);
+      leadsQuery = leadsQuery.gte('created_at', startDate);
+      toursQuery = toursQuery.gte('created_at', startDate);
+    }
+
+    if (endDate) {
+      const endDateTime = `${endDate}T23:59:59.999Z`;
+      salesQuery = salesQuery.lte('created_at', endDateTime);
+      ordersQuery = ordersQuery.lte('created_at', endDateTime);
+      leadsQuery = leadsQuery.lte('created_at', endDateTime);
+      toursQuery = toursQuery.lte('created_at', endDateTime);
+    }
+
+    const { data: salesData } = await salesQuery;
+    const totalSales = salesData ? salesData.reduce((sum, order) => sum + Number(order.total_amount), 0) : 0;
+
+    const { count: pendingOrders } = await ordersQuery;
+    const { count: newLeads } = await leadsQuery;
+    const { count: activeTours } = await toursQuery;
 
     return {
       totalSales: totalSales,
@@ -229,9 +249,19 @@ export class SupabaseService {
     return this.mapOrdersForUI(data);
   }
 
-  async getAllOrders() {
-    const { data, error } = await this.supabase
+  async getAllOrders(startDate?: string, endDate?: string) {
+    let query = this.supabase
       .from('orders').select('*').order('created_at', { ascending: false });
+
+    if (startDate) {
+      query = query.gte('created_at', startDate);
+    }
+    if (endDate) {
+      const endDateTime = `${endDate}T23:59:59.999Z`;
+      query = query.lte('created_at', endDateTime);
+    }
+
+    const { data, error } = await query;
     if (error) throw error;
     return this.mapOrdersForUI(data);
   }
@@ -301,9 +331,19 @@ export class SupabaseService {
   }
 
   // --- GESTIÓN DE RESERVAS DE TOURS ---
-  async getAllTourBookings() {
-    const { data, error } = await this.supabase
+  async getAllTourBookings(startDate?: string, endDate?: string) {
+    let query = this.supabase
       .from('tour_bookings').select('*').order('booking_date', { ascending: false });
+
+    if (startDate) {
+      query = query.gte('booking_date', startDate);
+    }
+    if (endDate) {
+      const endDateTime = `${endDate}T23:59:59.999Z`;
+      query = query.lte('booking_date', endDateTime);
+    }
+
+    const { data, error } = await query;
     if (error) throw error;
     return data;
   }

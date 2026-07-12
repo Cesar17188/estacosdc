@@ -17,6 +17,19 @@ export class Pedidos implements OnInit{
   orders = signal<any[]>([]);
   isLoading = signal<boolean>(true);
 
+  startDate = signal<string>(this.getDefaultStartDate());
+  endDate = signal<string>(this.getDefaultEndDate());
+
+  getDefaultStartDate(): string {
+    const d = new Date();
+    d.setMonth(d.getMonth() - 1);
+    return d.toISOString().split('T')[0];
+  }
+
+  getDefaultEndDate(): string {
+    return new Date().toISOString().split('T')[0];
+  }
+
   // Estados del Modal
   isModalOpen = signal<boolean>(false);
   selectedOrder = signal<any>(null);
@@ -40,7 +53,7 @@ export class Pedidos implements OnInit{
   async loadOrders() {
     this.isLoading.set(true);
     try {
-      const data = await this.crmService.getAllOrders();
+      const data = await this.crmService.getAllOrders(this.startDate(), this.endDate());
       this.orders.set(data);
     } catch (error) {
       console.error('Error', error);
@@ -99,5 +112,17 @@ export class Pedidos implements OnInit{
   formatDate(dateString: string): string {
     const options: Intl.DateTimeFormatOptions = { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' };
     return new Date(dateString).toLocaleDateString('es-ES', options);
+  }
+
+  onStartDateChange(event: Event) {
+    const input = event.target as HTMLInputElement;
+    this.startDate.set(input.value);
+    this.loadOrders();
+  }
+
+  onEndDateChange(event: Event) {
+    const input = event.target as HTMLInputElement;
+    this.endDate.set(input.value);
+    this.loadOrders();
   }
 }

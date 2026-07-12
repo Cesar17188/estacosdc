@@ -18,6 +18,19 @@ export class Reservas implements OnInit{
   bookings = signal<any[]>([]);
   isLoading = signal<boolean>(true);
 
+  startDate = signal<string>(this.getDefaultStartDate());
+  endDate = signal<string>(this.getDefaultEndDate());
+
+  getDefaultStartDate(): string {
+    const d = new Date();
+    d.setMonth(d.getMonth() - 1);
+    return d.toISOString().split('T')[0];
+  }
+
+  getDefaultEndDate(): string {
+    return new Date().toISOString().split('T')[0];
+  }
+
   // Panel State
   isPanelOpen = signal<boolean>(false);
   selectedBooking = signal<any>(null);
@@ -35,7 +48,7 @@ export class Reservas implements OnInit{
   async loadBookings() {
     this.isLoading.set(true);
     try {
-      const data = await this.crmService.getAllTourBookings();
+      const data = await this.crmService.getAllTourBookings(this.startDate(), this.endDate());
       this.bookings.set(data);
     } catch (error) {
       console.error('Error cargando reservas', error);
@@ -95,5 +108,17 @@ export class Reservas implements OnInit{
     // Capitalizar la primera letra del resultado
     let formatted = date.toLocaleDateString('es-ES', options);
     return formatted.charAt(0).toUpperCase() + formatted.slice(1);
+  }
+
+  onStartDateChange(event: Event) {
+    const input = event.target as HTMLInputElement;
+    this.startDate.set(input.value);
+    this.loadBookings();
+  }
+
+  onEndDateChange(event: Event) {
+    const input = event.target as HTMLInputElement;
+    this.endDate.set(input.value);
+    this.loadBookings();
   }
 }
