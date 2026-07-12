@@ -1,59 +1,40 @@
-# Estacosdc
+# 🛒 EstancosDC
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.6.
+Una aplicación web moderna desarrollada con Angular.
 
-## Development server
+## ✨ Características Principales
 
-To start a local development server, run:
+- **Server-Side Rendering (SSR):** Optimizado para SEO y cargas iniciales rápidas mediante Angular SSR con Express.
+- **Backend & Base de Datos:** Integración con Supabase para almacenamiento y autenticación.
+- **PWA (Progressive Web App):** Soporte para Service Workers (`@angular/service-worker`).
+- **Testing:** Configurado con Vitest.
 
-```bash
-ng serve
-```
+## 🛠️ Stack Tecnológico
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+- **Frontend:** Angular 21 (Componentes Standalone)
+- **Backend / BaaS:** Supabase
+- **SSR:** Angular Universal / Express
+- **Testing:** Vitest
 
-## Code scaffolding
+## 📋 Requisitos Previos
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+Asegúrate de tener instalado:
+- [Node.js](https://nodejs.org/) (Versión 20 o superior recomendada)
+- [npm](https://www.npmjs.com/)
 
-```bash
-ng generate component component-name
-```
+## 🚀 Instalación y Ejecución Local
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+1. **Instala las dependencias:**
+   ```bash
+   npm install
+   ```
 
-```bash
-ng generate --help
-```
+2. **Inicia el servidor de desarrollo:**
+   ```bash
+   npm start
+   ```
+   Abre tu navegador y navega a `http://localhost:4200/`.
 
-## Building
+## 🤖 Agentes de IA
 
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Si estás utilizando asistentes de código basados en IA, consulta el archivo [`agents.md`](./agents.md) en la raíz del proyecto para conocer las reglas de arquitectura y convenciones de código.
