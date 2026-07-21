@@ -657,4 +657,91 @@ export class SupabaseService {
     return true;
   }
 
+
+  // ==========================================================================
+  // 5. INTEGRACIÓN CON GOOGLE CALENDAR (VÍA EDGE FUNCTIONS)
+  // ==========================================================================
+
+  /**
+   * Obtiene eventos de un calendario específico llamando a una Edge Function
+   */
+  async getCalendarEvents(calendarName: string = 'Estancos-operaciones') {
+    const { data, error } = await this.supabase.functions.invoke('google-calendar', {
+      body: { action: 'listEvents', calendarName }
+    });
+
+    if (error) {
+      console.error('Error fetching calendar events (Http):', error);
+      return [];
+    }
+    if (data?.error) {
+      console.error('Error fetching calendar events (Function):', data.error, data.stack);
+      return [];
+    }
+    return data?.events || [];
+  }
+
+  /**
+   * Crea un nuevo evento en Google Calendar
+   */
+  async createCalendarEvent(calendarName: string, eventData: any) {
+    const { data, error } = await this.supabase.functions.invoke('google-calendar', {
+      body: { action: 'createEvent', calendarName, eventData }
+    });
+
+    if (error) {
+      console.error('Error creating calendar event (Http):', error);
+      throw error;
+    }
+    
+    if (data?.error) {
+      console.error('Error creating calendar event (Function):', data.error);
+      throw new Error(data.error);
+    }
+    
+    return data;
+  }
+
+  /**
+   * Actualiza un evento en Google Calendar
+   */
+  async updateCalendarEvent(calendarName: string, eventId: string, eventData: any) {
+    const { data, error } = await this.supabase.functions.invoke('google-calendar', {
+      body: { action: 'updateEvent', calendarName, eventId, eventData }
+    });
+
+    if (error) {
+      console.error('Error updating calendar event (Http):', error);
+      throw error;
+    }
+    
+    if (data?.error) {
+      console.error('Error updating calendar event (Function):', data.error);
+      throw new Error(data.error);
+    }
+    
+    return data;
+  }
+
+  /**
+   * Elimina un evento de Google Calendar
+   */
+  async deleteCalendarEvent(calendarName: string, eventId: string) {
+    const { data, error } = await this.supabase.functions.invoke('google-calendar', {
+      body: { action: 'deleteEvent', calendarName, eventId }
+    });
+
+    if (error) {
+      console.error('Error deleting calendar event (Http):', error);
+      throw error;
+    }
+    
+    if (data?.error) {
+      console.error('Error deleting calendar event (Function):', data.error);
+      throw new Error(data.error);
+    }
+    
+    return data;
+  }
+
 }

@@ -1,0 +1,79 @@
+.calendar-container {
+  padding: 1.5rem;
+  background-color: var(--color-surface, #1e1e1e);
+  border-radius: 12px;
+  border: 1px solid var(--color-border, #333);
+  margin-top: 1.5rem;
+  min-height: 700px;
+}
+
+/* Ajustes para FullCalendar en tema oscuro */
+::ng-deep .fc {
+  color: var(--color-text-main, #fff);
+  --fc-border-color: var(--color-border, #444);
+  --fc-button-bg-color: var(--color-surface-hover, #333);
+  --fc-button-border-color: var(--color-border, #444);
+  --fc-button-hover-bg-color: var(--color-accent-gold, #cda75a);
+  --fc-button-hover-border-color: var(--color-accent-gold, #cda75a);
+  --fc-button-active-bg-color: var(--color-accent-gold, #cda75a);
+  --fc-button-active-border-color: var(--color-accent-gold, #cda75a);
+  --fc-today-bg-color: rgba(205, 167, 90, 0.1); /* Subtle gold background for today */
+}
+
+::ng-deep .fc-theme-standard td, ::ng-deep .fc-theme-standard th {
+  border-color: var(--color-border, #444);
+}
+
+::ng-deep .fc-toolbar-title {
+  font-size: 1.5rem !important;
+  font-weight: 500;
+  color: var(--color-accent-gold, #cda75a);
+}
+
+/* ================= PANEL LATERAL (SLIDE OVER) ================= */
+.slide-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0,0,0,0.6); backdrop-filter: blur(2px); z-index: 1000; display: flex; justify-content: flex-end; opacity: 0; visibility: hidden; transition: all 0.3s; }
+.slide-overlay.open { opacity: 1; visibility: visible; }
+
+.slide-panel { background-color: var(--crm-bg-surface, #1a1b23); border-left: 1px solid var(--crm-border, #323546); width: 100%; max-width: 450px; height: 100vh; display: flex; flex-direction: column; transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1); box-shadow: -20px 0 50px rgba(0,0,0,0.5); }
+.slide-overlay.open .slide-panel { transform: translateX(0); }
+
+.slide-header { padding: 2rem; border-bottom: 1px solid var(--crm-border, #323546); display: flex; justify-content: space-between; align-items: flex-start; }
+.slide-header h2 { margin: 0 0 0.5rem 0; font-family: 'Cinzel', serif; font-size: 1.4rem; color: var(--crm-text-main, #f3f4f6); }
+.slide-header p { margin: 0; color: var(--crm-text-muted, #9ca3af); font-size: 0.9rem; font-family: monospace; }
+.btn-close { background: transparent; border: none; color: var(--crm-text-muted, #9ca3af); cursor: pointer; transition: color 0.2s; padding: 0; }
+.btn-close:hover { color: var(--color-accent-gold, #cda75a); }
+
+.slide-body { padding: 2rem; overflow-y: auto; flex-grow: 1; }
+
+.info-group { margin-bottom: 2rem; }
+.info-label { display: block; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--crm-text-muted, #9ca3af); margin-bottom: 0.5rem; }
+.info-value { font-size: 1rem; color: var(--color-text-main, #fff); font-weight: 500; display: flex; align-items: center; gap: 0.8rem; }
+
+.slide-footer { padding: 2rem; border-top: 1px solid var(--crm-border, #323546); background-color: var(--color-bg-card, #232530); display: flex; gap: 1rem; justify-content: flex-end; }
+
+/* ================= MODAL ================= */
+.modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0,0,0,0.7); backdrop-filter: blur(3px); z-index: 2000; display: flex; align-items: center; justify-content: center; }
+.modal-content { background-color: var(--crm-bg-surface, #1a1b23); border: 1px solid var(--crm-border, #323546); padding: 2.5rem; border-radius: 12px; width: 90%; max-width: 400px; box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+
+/* ================= INPUTS & BUTTONS ================= */
+.form-group { margin-bottom: 1.5rem; }
+.crm-input {
+  background-color: var(--color-bg-base, #0f1014);
+  border: 1px solid var(--crm-border, #323546);
+  color: var(--color-text-main, #fff);
+  padding: 0.8rem 1rem;
+  border-radius: 6px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.crm-input:focus { border-color: var(--color-accent-gold, #cda75a); }
+.crm-input:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.btn-primary { background-color: var(--color-accent-gold, #cda75a); color: #121212; border: none; padding: 0.8rem 1.5rem; border-radius: 6px; font-weight: 600; cursor: pointer; transition: background-color 0.2s; }
+.btn-primary:hover { background-color: #b5952f; }
+.btn-outline { background: transparent; border: 1px solid var(--crm-border, #323546); color: var(--crm-text-main, #f3f4f6); padding: 0.8rem 1.5rem; border-radius: 6px; cursor: pointer; transition: all 0.2s; }
+.btn-outline:hover { border-color: var(--color-accent-gold, #cda75a); color: var(--color-accent-gold, #cda75a); }
+.btn-danger { background-color: transparent; border: 1px solid #e74c3c; color: #e74c3c; padding: 0.8rem 1.5rem; border-radius: 6px; cursor: pointer; transition: all 0.2s; }
+.btn-danger:hover { background-color: #e74c3c; color: #fff; }

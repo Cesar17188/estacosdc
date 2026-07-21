@@ -9,6 +9,7 @@ import { AdminProspectos } from './admin-prospectos/admin-prospectos';
 import { Reservas } from './reservas/reservas';
 import { AdminGaleria } from './admin-galeria/admin-galeria'; // <-- IMPORTAMOS EL COMPONENTE DE GALERÍA, aunque no lo usemos aún en las rutas, lo tendremos listo para cuando lo necesitemos
 import { AdminCocteleria } from './admin-cocteleria/admin-cocteleria'; // <-- IMPORTAMOS EL COMPONENTE DE COCTELERÍA, aunque no lo usemos aún en las rutas, lo tendremos listo para cuando lo necesitemos
+import { Calendario } from './calendario/calendario';
 import { authGuard } from '../guards/auth-guard'; // <-- IMPORTAMOS EL GUARD
 
 
@@ -79,6 +80,13 @@ export const ADMIN_ROUTES: Routes = [
         title: 'Gestión de Coctelería | Estancos',
         data: {
           description: 'Administra las recetas de cocteles de Estancos Distilling Co.'
+        }
+      },
+      { path: 'calendario',
+        component: Calendario,
+        title: 'Calendario de Operaciones | Estancos',
+        data: {
+          description: 'Calendario de Operaciones de Estancos Distilling Co.'
         }
       }
       // { path: 'ventas', component: VentasComponent },
