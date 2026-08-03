@@ -1,41 +1,67 @@
-<header class="estancos-header" [class.menu-open]="isMenuOpen">
-  <!-- Add the overlay element here -->
-  <div class="mobile-overlay" (click)="closeMenu()"></div>
-  <div class="logo-container" routerLink="/">
-    <!-- <img src="assets/logo-estancos.svg" alt="Estancos Distilling Company" class="logo"> -->
-     <!-- Logotipo simulado con texto tipográfico -->
-        <div class="logo">ESTANCOS</div>
-        <div class="logo-sub">Distilling Company</div>
-  </div>
+<header class="estancos-header" [class.menu-open]="isMenuOpen" role="banner"
+  aria-label="Cabecera principal de Estancos Distilling Company">
 
-  <!-- Add this hamburger toggle button -->
-  <button class="mobile-toggle" (click)="toggleMenu()">
-    <span></span><span></span><span></span>
+  <!-- AEO: Ocultamos elementos visuales puramente estéticos a los lectores de pantalla y bots -->
+  <div class="mobile-overlay" (click)="closeMenu()" aria-hidden="true"></div>
+
+  <!-- AEO: El logotipo debe ser una etiqueta <a> semántica, no un <div>. Esto indica la ruta principal de la entidad. -->
+  <a class="logo-container" routerLink="/" title="Estancos Distilling Company - Volver al Inicio"
+    aria-label="Estancos Distilling Company - Inicio">
+    <span class="logo">ESTANCOS</span>
+    <span class="logo-sub">Distilling Company</span>
+  </a>
+
+  <!-- AEO: Conectamos el botón con el menú a través de aria-controls y [attr.aria-expanded] para que los bots entiendan la estructura del árbol DOM -->
+  <button class="mobile-toggle" (click)="toggleMenu()" [attr.aria-expanded]="isMenuOpen" aria-controls="main-navigation"
+    aria-label="Alternar menú de navegación">
+    <span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span>
   </button>
 
-  <nav class="main-nav">
+  <!-- AEO: Se añade el ID para vincularlo al botón y títulos ricos en palabras clave -->
+  <nav id="main-navigation" class="main-nav" aria-label="Navegación principal del sitio">
     <ul>
-      <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Inicio</a></li>
-      <li><a routerLink="/espiritus" routerLinkActive="active">Espíritus</a></li>
-      <li><a routerLink="/rommeliers" routerLinkActive="active">Rommeliers</a></li>
-      <li><a routerLink="/contenidos" routerLinkActive="active">Contenidos</a></li>
-      <li><a routerLink="/visitas" routerLinkActive="active">Visitas</a></li>
+      <li>
+        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
+          title="Inicio de la Destilería">Inicio</a>
+      </li>
+      <li>
+        <a routerLink="/espiritus" routerLinkActive="active"
+          title="Catálogo de Espíritus, Ron y Whisky de Altura">Espíritus</a>
+      </li>
+      <li>
+        <a routerLink="/rommeliers" routerLinkActive="active"
+          title="Nuestros Rommeliers y Expertos en Destilados">Rommeliers</a>
+      </li>
+      <li>
+        <a routerLink="/contenidos" routerLinkActive="active"
+          title="Blog y Contenidos sobre Destilación Artesanal">Contenidos</a>
+      </li>
+      <li>
+        <a routerLink="/visitas" routerLinkActive="active"
+          title="Reserva de Visitas y Catas en la Destilería">Visitas</a>
+      </li>
     </ul>
   </nav>
 
+  <!-- AEO: El botón de la tienda debe tener una intención transaccional clara en su título -->
   <div class="header-actions">
-    <button class="btn-tienda" (click)="closeMenu()" routerLink="/tienda">Tienda</button>
+    <button class="btn-tienda" (click)="closeMenu()" routerLink="/tienda"
+      title="Comprar destilados y licores premium online">Tienda</button>
   </div>
 
- <!-- ENLACE AL CARRITO CON CONTADOR DINÁMICO -->
-  <a routerLink="/cart" class="cart-trigger" aria-label="Ir al carrito de compras">
-    <svg xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)" width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-      <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+  <!-- AEO: El carrito de Angular recibe un aria-label dinámico que los asistentes de voz pueden leer en tiempo real -->
+  <a routerLink="/cart" class="cart-trigger"
+    [attr.aria-label]="cartService.cartCount() > 0 ? 'Ver ' + cartService.cartCount() + ' artículos en el carrito' : 'El carrito de compras está vacío'">
+
+    <!-- Ocultamos el SVG a los motores de búsqueda para evitar ruido en la lectura -->
+    <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" viewBox="0 0 24 24"
+      stroke="currentColor" stroke-width="1.5">
+      <path stroke-linecap="round" stroke-linejoin="round"
+        d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
     </svg>
 
-    <!-- Evaluamos si hay productos usando el servicio -->
     @if (cartService.cartCount() > 0) {
-      <span class="cart-badge">{{ cartService.cartCount() }}</span>
+    <span class="cart-badge" aria-hidden="true">{{ cartService.cartCount() }}</span>
     }
   </a>
 </header>

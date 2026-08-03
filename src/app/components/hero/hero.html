@@ -1,18 +1,89 @@
-<section class="hero-section">
-  <div class="hero-overlay"></div>
+<header class="hero-section" aria-label="Introducción a Estancos Distilling Company">
+  <div class="hero-overlay" aria-hidden="true"></div>
+
   <div class="container hero-content">
-    <h1>El Arte en cada Gota</h1>
-    <h2>Ron y Whisky Ecuatoriano de Altura</h2>
-    <p>
-      Madurados a 2500 metros sobre el nivel del mar en el corazón de los Andes.
-      Proveedores de licores ecuatorianos de calidad excepcional, elaborados con pasión y tradición.
-      Distribución de destilados artesanales a nivel nacional e internacional.
-      Descubre la esencia pura, la tradición y la elegancia de Estancos Distilling Company.
+
+    <!-- AEO: El subtítulo visual o lema (Mantiene la mística sin diluir el SEO) -->
+    <span class="hero-subtitle">El Arte en cada Gota</span>
+
+    <!-- AEO: El H1 asocia directamente tu MARCA con tu PRODUCTO principal. 
+         La etiqueta <br> o la clase CSS aseguran que visualmente se vean como líneas distintas -->
+    <h1 class="hero-title">
+      <span class="brand-name">ESTANCOS DISTILLING COMPANY</span>
+      <span class="visually-hidden"> - </span>
+      <span class="product-category">Ron y Whisky Ecuatoriano de Altura</span>
+    </h1>
+
+    <!-- AEO: Párrafo estructurado para ser extraído como un "Featured Snippet" -->
+    <p class="hero-description">
+      Elaboramos destilados artesanales de calidad excepcional.
+      Nuestro ron y whisky son madurados a <strong>2500 metros sobre el nivel del mar</strong> en el corazón de los
+      Andes.
+      Descubre la esencia pura y la tradición de nuestros licores ecuatorianos, disponibles para distribución nacional e
+      internacional y desarrollo de fórmulas B2B.
     </p>
 
-    <div class="hero-actions">
-      <button class="btn btn-primary" routerLink="/espiritus">Explorar Espíritus</button>
-      <button class="btn btn-outline" routerLink="/visitas">Reserva una Cata</button>
-    </div>
+    <!-- AEO: Navegación de acciones principales -->
+    <nav class="hero-actions" aria-label="Acciones principales de la destilería">
+      <button class="btn btn-primary" routerLink="/espiritus" title="Explorar catálogo de espíritus y destilados">
+        <svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>
+        </svg>
+        <span>Explorar Espíritus</span>
+      </button>
+      <button class="btn btn-outline" routerLink="/visitas" title="Reservar cata de destilados en la destilería">
+        <svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M8 22h8M12 15v7M12 15a7 7 0 0 0 7-7V3H5v5a7 7 0 0 0 7 7z"/>
+        </svg>
+        <span>Reserva una Cata</span>
+      </button>
+    </nav>
+
   </div>
-</section>
+  <section class="services-section maquila-service" aria-labelledby="maquila-title">
+    <div class="container">
+
+      <!-- AEO: Título con intención de búsqueda transaccional y B2B -->
+      <h2 id="maquila-title" class="section-title">Maquila de Licores y Destilados Personalizados</h2>
+
+      <!-- AEO: Párrafo de respuesta directa (Target para Featured Snippet) -->
+      <p class="service-description">
+        En <strong>Estancos Distilling Company</strong> desarrollamos tu <strong>fórmula propia</strong> desde cero.
+        Ofrecemos el servicio de maquila de licores adaptándonos a tus requerimientos de <strong>cantidad</strong>,
+        diseñando perfiles de sabor exclusivos para marcas privadas y emprendedores.
+      </p>
+
+      <!-- AEO: Las IAs y motores de respuesta priorizan las listas <ul> para extraer capacidades técnicas -->
+      <ul class="service-features-list" aria-label="Capacidades técnicas de nuestra maquila de licores">
+        <li>
+          <strong>Graduación Alcohólica (ABV):</strong> Control y ajuste preciso del porcentaje de alcohol por volumen
+          para cumplir con tu normativa y perfil deseado.
+        </li>
+        <li>
+          <strong>Maceraciones e Infusiones:</strong> Extracción de sabores botánicos, frutales o herbales a la medida
+          de
+          tu receta.
+        </li>
+        <li>
+          <strong>Añejamiento a Medida:</strong> Si el proyecto lo requiere, ofrecemos maduración en nuestras
+          instalaciones para desarrollar complejidad y carácter.
+        </li>
+      </ul>
+
+      <!-- AEO: Call to Action con contexto semántico para rastreadores -->
+      <div class="service-actions">
+        <a class="btn btn-secondary"
+          href="https://wa.me/593998581721?text=Buen%20d%C3%ADa,%20Quisiera%20cotizar%20el%20desarrollo%20y%20maquila%20de%20un%20licor"
+          target="_blank" rel="noopener noreferrer"
+          title="Solicitar cotización para desarrollo de licores y maquila vía WhatsApp">
+          <svg class="whatsapp-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+          </svg>
+          <span>Cotizar tu Proyecto</span>
+        </a>
+      </div>
+
+    </div>
+  </section>
+</header>

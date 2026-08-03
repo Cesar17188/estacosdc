@@ -1,171 +1,367 @@
+/* ==========================================================================
+   HEADER PRINCIPAL - ARQUITECTURA MOBILE-FIRST
+   ========================================================================== */
+
+/* --- 1. ESTILOS BASE (MOBILE FIRST: < 900px) --- */
 .estancos-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1.2rem 5%;
-  background-color: #121212; /* Tono oscuro elegante */
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
   position: sticky;
   top: 0;
   z-index: 1000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.8rem 4%;
+  background-color: rgba(18, 18, 18, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(212, 175, 55, 0.18);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 
+  /* Logotipo */
   .logo-container {
+    order: 1;
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
     cursor: pointer;
+    user-select: none;
 
-     .logo {
-      font-family: 'Cinzel', serif;
-      font-size: 2rem;
+    .logo {
+      font-family: var(--font-heading, 'Cinzel', serif);
+      font-size: 1.6rem;
       font-weight: 700;
-      color: #d4af37; /* Dorado cálido */
-      letter-spacing: 3px;
+      color: var(--color-accent-gold, #d4af37);
+      letter-spacing: 2.5px;
       line-height: 1;
-      transition: transform 0.3s ease;
+      transition: transform 0.3s ease, text-shadow 0.3s ease;
     }
 
     .logo-sub {
-      font-family: 'Montserrat', sans-serif;
-      font-size: 0.65rem;
+      font-family: var(--font-body, 'Montserrat', sans-serif);
+      font-size: 0.55rem;
       text-transform: uppercase;
-      letter-spacing: 4px;
-      color: #888;
-      margin-top: 4px;
-    }
-  }
-  .logo-container:hover .logo {
-      transform: scale(1.03);
+      letter-spacing: 3px;
+      color: var(--color-text-muted, #9ca3af);
+      margin-top: 3px;
+      transition: color 0.3s ease;
     }
 
-  .main-nav {
-    ul {
-      list-style: none;
-      display: flex;
-      gap: 2.5rem;
-      margin: 0;
-      padding: 0;
-
-      li a {
-        color: #f4f4f4;
-        text-decoration: none;
-        font-family: 'Cinzel', serif; /* Sugerencia de tipografía clásica */
-        font-size: 0.95rem;
-        text-transform: uppercase;
-        letter-spacing: 1.5px;
-        transition: color 0.3s ease;
-        padding-bottom: 4px;
-        border-bottom: 2px solid transparent;
-
-        &:hover, &.active {
-          color: #d4af37; /* Acento dorado/ámbar tipo whisky */
-          border-bottom: 2px solid #d4af37;
-        }
+    &:hover {
+      .logo {
+        transform: scale(1.02);
+        text-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
+      }
+      .logo-sub {
+        color: var(--color-text-main, #f4f4f4);
       }
     }
   }
 
-  .header-actions {
-    .btn-tienda {
-      background-color: transparent;
-      color: #d4af37;
-      border: 1px solid #d4af37;
-      padding: 0.7rem 2rem;
-      font-family: 'Cinzel', serif;
+  /* Carrito de compras (Ubicado a la derecha en móvil) */
+  .cart-trigger {
+    order: 2;
+    margin-left: auto;
+    margin-right: 0.5rem;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-text-main, #f4f4f4);
+    transition: color 0.3s ease, transform 0.3s ease;
+    text-decoration: none;
+    padding: 0.4rem;
+
+    svg {
+      transition: stroke 0.3s ease;
+    }
+
+    &:hover {
+      color: var(--color-accent-gold, #d4af37);
+      transform: scale(1.08);
+
+      svg {
+        stroke: var(--color-accent-gold, #d4af37);
+      }
+    }
+
+    .cart-badge {
+      position: absolute;
+      top: -2px;
+      right: -4px;
+      background: linear-gradient(135deg, #d4af37 0%, #b5952f 100%);
+      color: #0a0a0a;
+      font-size: 0.7rem;
       font-weight: 700;
-      font-size: 0.9rem;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-
-      &:hover {
-      background-color: #d4af37;
-      color: #121212;
-      box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
-      }
+      width: 19px;
+      height: 19px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+      animation: pulseBadge 2.5s infinite;
     }
   }
 
-  /* --- Estilos Responsivos --- */
+  /* Botón Hamburguesa */
   .mobile-toggle {
-    display: none;
+    order: 3;
+    display: flex;
     flex-direction: column;
-    gap: 5px;
+    justify-content: center;
+    gap: 6px;
     cursor: pointer;
     background: none;
     border: none;
-    padding: 0;
+    padding: 0.5rem;
+    z-index: 1001;
 
     span {
       display: block;
       width: 25px;
-      height: 3px;
-      background-color: #d4af37;
-      transition: all 0.3s ease;
+      height: 2px;
+      background-color: var(--color-accent-gold, #d4af37);
+      border-radius: 2px;
+      transition: transform 0.3s ease, opacity 0.3s ease;
     }
   }
 
-  @media (max-width: 768px) {
-    flex-wrap: wrap;
-    padding: 1rem 5%;
+  /* Capa Oscura Traslúcida para el Menú Móvil */
+  .mobile-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    z-index: 998;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+  }
 
-    .mobile-toggle {
+  /* Drawer del Menú Móvil */
+  .main-nav {
+    position: fixed;
+    top: 64px;
+    left: 0;
+    width: 100%;
+    background-color: rgba(18, 18, 18, 0.98);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+    padding: 1.5rem 0;
+    z-index: 999;
+    transform: translateY(-120%);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+
+    ul {
+      list-style: none;
       display: flex;
-    }
-
-    /* --- Overlay del Menú Móvil --- */
-    .mobile-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100vh;
-      background-color: rgba(0, 0, 0, 0.6);
-      z-index: -1;
-      opacity: 0;
-      visibility: hidden;
-      transition: all 0.3s ease-in-out;
-    }
-
-    .main-nav, .header-actions {
-      width: 100%;
-      max-height: 0;
-      opacity: 0;
-      overflow: hidden;
+      flex-direction: column;
+      gap: 1.25rem;
+      align-items: center;
       margin: 0;
       padding: 0;
-      transition: all 0.4s ease-in-out;
+
+      li a {
+        color: var(--color-text-main, #f4f4f4);
+        text-decoration: none;
+        font-family: var(--font-heading, 'Cinzel', serif);
+        font-size: 1.05rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        transition: all 0.3s ease;
+        padding: 0.4rem 1rem;
+        position: relative;
+
+        &::after {
+          content: '';
+          position: absolute;
+          bottom: 0;
+          left: 50%;
+          width: 0;
+          height: 2px;
+          background-color: var(--color-accent-gold, #d4af37);
+          transition: width 0.3s ease, left 0.3s ease;
+          border-radius: 2px;
+        }
+
+        &:hover, &.active {
+          color: var(--color-accent-gold, #d4af37);
+
+          &::after {
+            width: 100%;
+            left: 0;
+          }
+        }
+      }
+    }
+  }
+
+  /* Botón Tienda en Móvil */
+  .header-actions {
+    position: fixed;
+    top: 310px;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    z-index: 999;
+    transform: translateY(-120%);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    padding-bottom: 1.5rem;
+
+    .btn-tienda {
+      width: 80%;
+      max-width: 280px;
+      padding: 0.8rem;
+      text-align: center;
+      background-color: transparent;
+      color: var(--color-accent-gold, #d4af37);
+      border: 1px solid var(--color-accent-gold, #d4af37);
+      font-family: var(--font-heading, 'Cinzel', serif);
+      font-weight: 600;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+
+      &:hover {
+        background-color: var(--color-accent-gold, #d4af37);
+        color: var(--color-bg-base, #0a0a0a);
+        box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+      }
+    }
+  }
+
+  /* Estado del Menú Abierto en Móvil */
+  &.menu-open {
+    .mobile-toggle {
+      span:nth-child(1) {
+        transform: translateY(8px) rotate(45deg);
+      }
+      span:nth-child(2) {
+        opacity: 0;
+      }
+      span:nth-child(3) {
+        transform: translateY(-8px) rotate(-45deg);
+      }
+    }
+
+    .mobile-overlay {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .main-nav {
+      transform: translateY(0);
+      opacity: 1;
+      visibility: visible;
     }
 
     .header-actions {
-      display: flex;
-      justify-content: center;
-    }
-
-    &.menu-open {
-      .mobile-overlay {
-        opacity: 1;
-        visibility: visible;
-      }
-
-      .main-nav {
-        max-height: 350px; /* Adjust this value if you add/remove links */
-        opacity: 1;
-        margin-top: 1rem;
-        padding-top: 1rem;
-        border-top: 1px solid rgba(212, 175, 55, 0.2);
-
-        ul {
-          flex-direction: column;
-          gap: 1.5rem;
-          align-items: center;
-        }
-      }
-
-      .header-actions {
-        max-height: 100px;
-        opacity: 1;
-        margin-top: 1.5rem;
-        padding-bottom: 1rem;
-      }
+      transform: translateY(0);
+      opacity: 1;
+      visibility: visible;
     }
   }
 }
+
+/* --- 2. MEDIA QUERIES MOBILE-FIRST (PANTALLAS MEDIANAS Y DESKTOPS: >= 900px) --- */
+@media (min-width: 900px) {
+  .estancos-header {
+    padding: 0.9rem 5%;
+
+    .logo-container {
+      order: 1;
+
+      .logo {
+        font-size: 1.8rem;
+      }
+
+      .logo-sub {
+        font-size: 0.6rem;
+      }
+    }
+
+    .main-nav {
+      order: 2;
+      position: static;
+      transform: none;
+      opacity: 1;
+      visibility: visible;
+      background-color: transparent;
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      border-bottom: none;
+      padding: 0;
+      box-shadow: none;
+      width: auto;
+
+      ul {
+        flex-direction: row;
+        gap: 2.2rem;
+
+        li a {
+          font-size: 0.9rem;
+          padding: 0 0 4px 0;
+        }
+      }
+    }
+
+    .header-actions {
+      order: 3;
+      position: static;
+      transform: none;
+      opacity: 1;
+      visibility: visible;
+      width: auto;
+      padding: 0;
+
+      .btn-tienda {
+        width: auto;
+        max-width: none;
+        padding: 0.6rem 1.6rem;
+        font-size: 0.85rem;
+
+        &:hover {
+          transform: translateY(-2px);
+        }
+      }
+    }
+
+    .cart-trigger {
+      order: 4;
+      margin-left: 0;
+      margin-right: 0;
+    }
+
+    .mobile-toggle {
+      display: none;
+    }
+
+    .mobile-overlay {
+      display: none;
+    }
+  }
+}
+
+/* Animación del contador de ítems del carrito */
+@keyframes pulseBadge {
+  0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.7); }
+  70% { transform: scale(1.1); box-shadow: 0 0 0 5px rgba(212, 175, 55, 0); }
+  100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); }
+}
+
+
