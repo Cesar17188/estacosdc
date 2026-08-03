@@ -1,203 +1,316 @@
-/* === LAYOUT DISTRIBUIDORES === */
-      .distributors-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 5rem;
-        align-items: flex-start;
-      }
+/* ==========================================================================
+   SECCIÓN SOCIOS COMERCIALES / DISTRIBUIDORES B2B - ARQUITECTURA MOBILE-FIRST
+   ========================================================================== */
 
-      @media (max-width: 900px) {
-        .distributors-grid {
-          grid-template-columns: 1fr;
-          gap: 3rem;
-        }
-      }
+/* --- 1. ESTILOS BASE (MOBILE FIRST: < 900px) --- */
+.distributors-grid {
+  display: grid;
+  grid-template-columns: 1fr; /* 1 Columna en móviles */
+  gap: 2.5rem;
+  align-items: flex-start;
+}
 
-      /* --- COLUMNA DE INFORMACIÓN --- */
-      .info-column h2 {
-        font-family: var(--font-heading);
-        font-size: clamp(2rem, 3vw, 2.5rem);
+/* --- COLUMNA DE INFORMACIÓN --- */
+.info-column {
+  width: 100%;
+
+  h2 {
+    font-family: var(--font-heading);
+    font-size: clamp(1.6rem, 5.5vw, 2.5rem);
+    color: var(--color-accent-gold);
+    margin-bottom: 1.25rem;
+    line-height: 1.25;
+  }
+
+  .intro-text {
+    font-size: 0.98rem;
+    color: var(--color-text-main);
+    line-height: 1.7;
+    margin-bottom: 2rem;
+    font-weight: 300;
+
+    strong {
+      color: var(--color-accent-gold);
+      font-weight: 600;
+    }
+  }
+
+  /* Lista de Beneficios */
+  .benefits-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .benefit-item {
+    display: flex;
+    gap: 1.1rem;
+    align-items: flex-start;
+    background: rgba(18, 18, 18, 0.4);
+    padding: 1rem;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: border-color 0.3s ease, transform 0.3s ease, background-color 0.3s ease;
+
+    &:hover {
+      border-color: rgba(212, 175, 55, 0.35);
+      transform: translateY(-2px);
+      background-color: rgba(26, 26, 26, 0.6);
+    }
+  }
+
+  .benefit-icon {
+    flex-shrink: 0;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background-color: rgba(212, 175, 55, 0.1);
+    color: var(--color-accent-gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(212, 175, 55, 0.25);
+    transition: transform 0.3s ease, background-color 0.3s ease;
+
+    svg {
+      transition: transform 0.3s ease;
+    }
+  }
+
+  .benefit-item:hover .benefit-icon {
+    transform: scale(1.08);
+    background-color: rgba(212, 175, 55, 0.2);
+  }
+
+  .benefit-text {
+    h4 {
+      font-family: var(--font-heading);
+      font-size: 1rem;
+      color: var(--color-text-main);
+      margin: 0 0 0.35rem 0;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+    }
+
+    p {
+      margin: 0;
+      color: var(--color-text-muted);
+      font-size: 0.9rem;
+      line-height: 1.55;
+
+      strong {
         color: var(--color-accent-gold);
-        margin-bottom: 1.5rem;
-        line-height: 1.2;
+        font-weight: 600;
       }
+    }
+  }
+}
 
-      .intro-text {
-        font-size: 1.05rem;
-        color: var(--color-text-main);
-        line-height: 1.7;
-        margin-bottom: 3rem;
-        font-weight: 300;
-      }
+/* --- COLUMNA DEL FORMULARIO REACTIVO --- */
+.form-column {
+  background-color: var(--color-bg-surface, #121212);
+  padding: 2rem 1.25rem;
+  border-radius: 14px;
+  border: 1px solid var(--color-border, #2a2a2a);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  width: 100%;
+  box-sizing: border-box;
 
-      .benefits-list {
-        display: flex;
-        flex-direction: column;
-        gap: 2rem;
-      }
+  .form-header {
+    margin-bottom: 1.75rem;
 
-      .benefit-item {
-        display: flex;
-        gap: 1.5rem;
-        align-items: flex-start;
-      }
+    h3 {
+      font-family: var(--font-heading);
+      font-size: 1.35rem;
+      color: var(--color-text-main);
+      margin-bottom: 0.4rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
 
-      .benefit-icon {
-        flex-shrink: 0;
-        width: 48px;
-        height: 48px;
-        border-radius: 50%;
-        background-color: rgba(212, 175, 55, 0.1);
-        color: var(--color-accent-gold);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border: 1px solid rgba(212, 175, 55, 0.3);
-      }
+    p {
+      color: var(--color-text-muted);
+      font-size: 0.9rem;
+      margin: 0;
+    }
+  }
 
-      .benefit-text h4 {
-        font-family: var(--font-heading);
-        font-size: 1.1rem;
-        color: var(--color-text-main);
-        margin: 0 0 0.5rem 0;
-        letter-spacing: 1px;
-      }
+  /* Estilos de Controles de Formulario */
+  .form-group {
+    margin-bottom: 1.25rem;
+    position: relative;
 
-      .benefit-text p {
-        margin: 0;
-        color: var(--color-text-muted);
-        font-size: 0.9rem;
-        line-height: 1.6;
-      }
+    label {
+      display: block;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 0.4rem;
+      color: var(--color-text-muted);
+      font-weight: 600;
+    }
 
-      /* --- COLUMNA DEL FORMULARIO --- */
-      .form-column {
-        background-color: var(--color-bg-surface);
-        padding: 3rem;
-        border-radius: 4px;
-        border: 1px solid var(--color-border);
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-      }
+    .required-mark {
+      color: var(--color-accent-gold);
+      margin-left: 2px;
+    }
 
-      .form-header {
-        margin-bottom: 2rem;
-      }
+    input, textarea {
+      width: 100%;
+      background-color: rgba(10, 10, 10, 0.6);
+      border: 1px solid var(--color-border, #2a2a2a);
+      color: var(--color-text-main);
+      padding: 0.85rem 1rem;
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      outline: none;
+      box-sizing: border-box;
 
-      .form-header h3 {
-        font-family: var(--font-heading);
-        font-size: 1.5rem;
-        margin-bottom: 0.5rem;
-      }
-
-      .form-header p {
-        color: var(--color-text-muted);
-        font-size: 0.9rem;
-      }
-
-      /* Estilos de Controles de Formulario */
-      .form-group {
-        margin-bottom: 1.5rem;
-        position: relative;
-      }
-
-      label {
-        display: block;
-        font-size: 0.85rem;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        margin-bottom: 0.5rem;
-        color: var(--color-text-muted);
-      }
-
-      .required-mark {
-        color: var(--color-accent-gold);
-      }
-
-      input, textarea {
-        width: 100%;
-        background-color: var(--color-bg-input);
-        border: 1px solid var(--color-border);
-        color: var(--color-text-main);
-        padding: 1rem;
-        font-family: var(--font-body);
-        font-size: 1rem;
-        border-radius: 2px;
-        transition: var(--transition-smooth);
-        outline: none;
-      }
-
-      textarea {
-        resize: vertical;
-        min-height: 100px;
-      }
-
-      /* Estados del Input */
-      input:focus, textarea:focus {
+      &:focus {
         border-color: var(--color-accent-gold);
-        box-shadow: 0 0 0 1px var(--color-accent-gold);
+        box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.2);
+        background-color: rgba(10, 10, 10, 0.85);
       }
 
-      /* Estados de Error */
-      .is-invalid {
-        border-color: var(--color-error) !important;
+      &.is-invalid {
+        border-color: #ef4444 !important;
+        box-shadow: 0 0 0 1px #ef4444 !important;
       }
+    }
 
-      .error-message {
-        color: var(--color-error);
-        font-size: 0.8rem;
-        margin-top: 0.5rem;
-        display: block;
-        animation: fadeIn 0.3s ease;
-      }
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
 
-      /* Botón de Enviar */
-      .btn-submit {
-        width: 100%;
-        background-color: var(--color-accent-gold);
-        color: #121212;
-        border: none;
-        padding: 1.2rem;
-        font-family: var(--font-heading);
-        font-weight: 700;
-        font-size: 1rem;
-        text-transform: uppercase;
-        letter-spacing: 2px;
-        cursor: pointer;
-        border-radius: 2px;
-        transition: var(--transition-smooth);
-        margin-top: 1rem;
-      }
+    .error-message {
+      color: #ef4444;
+      font-size: 0.78rem;
+      margin-top: 0.35rem;
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+  }
 
-      .btn-submit:hover:not(:disabled) {
-        background-color: var(--color-accent-hover);
-        transform: translateY(-2px);
-      }
+  /* Toast de Error */
+  .error-toast {
+    background-color: rgba(239, 68, 68, 0.12);
+    border: 1px solid #ef4444;
+    color: #fca5a5;
+    padding: 0.9rem 1rem;
+    border-radius: 8px;
+    font-size: 0.88rem;
+    margin-bottom: 1.25rem;
+    text-align: center;
+    animation: fadeIn 0.4s ease;
+  }
 
-      .btn-submit:disabled {
-        background-color: var(--color-border);
-        color: var(--color-text-muted);
-        cursor: not-allowed;
-        transform: none;
-      }
+  /* Botón de Enviar */
+  .btn-submit {
+    width: 100%;
+    min-height: 48px;
+    background: linear-gradient(135deg, #e6c555 0%, #b5952f 100%);
+    color: #0a0a0a;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 0.9rem 1.5rem;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    cursor: pointer;
+    border-radius: 50px;
+    transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    margin-top: 1rem;
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.35);
+    box-sizing: border-box;
 
-      /* Mensaje de Éxito */
-      .success-message {
-        background-color: rgba(16, 185, 129, 0.1);
-        border: 1px solid var(--color-success);
-        color: var(--color-success);
-        padding: 1.5rem;
-        border-radius: 4px;
-        text-align: center;
-        animation: fadeIn 0.5s ease;
-      }
+    &:hover:not(:disabled) {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(212, 175, 55, 0.55);
+    }
 
-      .success-message h4 {
-        margin: 0 0 0.5rem 0;
-        font-family: var(--font-heading);
-        font-size: 1.2rem;
-      }
+    &:disabled {
+      background: var(--color-border, #2a2a2a);
+      color: var(--color-text-muted, #9ca3af);
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+      border-color: transparent;
+    }
+  }
 
-      @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(-5px); }
-        to { opacity: 1; transform: translateY(0); }
-      }
+  /* Mensaje de Éxito */
+  .success-message {
+    background-color: rgba(16, 185, 129, 0.12);
+    border: 1px solid #10b981;
+    color: #6ee7b7;
+    padding: 2rem 1.5rem;
+    border-radius: 12px;
+    text-align: center;
+    animation: fadeIn 0.5s ease;
+
+    h4 {
+      margin: 0 0 0.5rem 0;
+      font-family: var(--font-heading);
+      font-size: 1.3rem;
+      color: #10b981;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    p {
+      margin: 0;
+      font-size: 0.95rem;
+      line-height: 1.55;
+      color: var(--color-text-main);
+    }
+  }
+}
+
+/* --- 2. MEDIA QUERIES MOBILE-FIRST (PANTALLAS MEDIANAS Y DESKTOPS) --- */
+
+/* Tablets (>= 640px) */
+@media (min-width: 640px) {
+  .form-column {
+    padding: 2.5rem 2rem;
+    border-radius: 16px;
+  }
+
+  .info-column .benefits-list {
+    gap: 1.5rem;
+  }
+}
+
+/* Desktops (>= 900px) */
+@media (min-width: 900px) {
+  .distributors-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+  }
+
+  .info-column {
+    .intro-text {
+      font-size: 1.05rem;
+      margin-bottom: 2.5rem;
+    }
+  }
+
+  .form-column {
+    padding: 3rem 2.5rem;
+    border-radius: 18px;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+

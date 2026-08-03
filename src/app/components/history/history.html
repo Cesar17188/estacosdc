@@ -1,36 +1,45 @@
-<section class="history-section section-padding">
-      <div class="history-bg-accent"></div>
+<section class="history-section section-padding" aria-labelledby="history-title" itemscope
+  itemtype="https://schema.org/Organization">
+  <div class="history-bg-accent" aria-hidden="true"></div>
 
-      <div class="container history-grid">
+  <div class="container history-grid">
 
-        <!-- Bloque de Texto -->
-        <div class="history-content">
-          <span class="section-subtitle">Nuestras Raíces</span>
-          <h2>Forjados en las Alturas de los Andes</h2>
+    <!-- Bloque de Texto -->
+    <div class="history-content">
+      <span class="section-subtitle">Nuestras Raíces</span>
 
-          <p>
-            En Estancos Distilling Company, creemos que las condiciones extremas forjan caracteres excepcionales. Nacimos con la visión de desafiar las convenciones de la destilación tradicional.
-          </p>
-          <p>
-            A 2500 metros sobre el nivel del mar, en el corazón geográfico de nuestro país, el aire tenue y los drásticos cambios de temperatura entre el día y la noche interactúan con nuestras barricas de roble de una manera única. Este proceso de "envejecimiento dinámico" acelera la extracción de sabores profundos, notas a madera tostada y sutiles toques especiados, creando un perfil inconfundible.
-          </p>
+      <h2 id="history-title">
+        <span itemprop="name" class="visually-hidden">Estancos Distilling Company</span>
+        Forjados en las Alturas de los Andes
+      </h2>
 
-          <div class="quote-box">
-            <div class="quote-text">"No solo hacemos destilados; destilamos la esencia de nuestra cordillera."</div>
-            <div class="quote-author">— Richard Armendariz, Maestro Destilador</div>
-          </div>
-        </div>
+      <!-- AEO: Párrafos redactados en formato de Tripletas Semánticas puras -->
+      <p itemprop="description">
+        <strong>Estancos Distilling Company</strong> desafía las convenciones de la destilación tradicional. Nuestra
+        marca forja caracteres excepcionales utilizando las condiciones extremas de los Andes.
+      </p>
+      <p>
+        <strong>Nuestra destilería</strong> madura sus licores a <strong>2500 metros sobre el nivel del mar</strong>. En
+        esta altitud, <strong>el clima extremo</strong> acelera la extracción de sabores dentro de nuestras barricas de
+        roble. Este <strong>envejecimiento dinámico</strong> crea un perfil inconfundible con notas a madera tostada y
+        sutiles toques especiados.
+      </p>
 
-        <!-- Bloque Visual -->
-        <div class="history-visuals">
-          <div class="visual-accent"></div>
-          <!-- Imagen representativa (reemplazar con toma real de barricas en altura) -->
-          <img
-            src="https://qgbwjkjgnyaynctlqxvq.supabase.co/storage/v1/object/sign/views/barricasecommerce.jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9jYzUxOTk5OS02OTZhLTRlZDItYWYyYy03MzE0MTYzZjdlMDMiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJ2aWV3cy9iYXJyaWNhc2Vjb21tZXJjZS5qcGVnIiwiaWF0IjoxNzc2MTg4Mzk3LCJleHAiOjE4MDc3MjQzOTd9.u_vLck5DGDcw5LJNS3dp2ohCBfBxVCsb96uFSlpt5Rg"
-            alt="Barricas de roble añejando destilados de Estancos"
-            class="image-main"
-          >
-        </div>
+      <blockquote class="quote-box" aria-label="Filosofía de destilación">
+        <p class="quote-text">"No solo hacemos destilados; destilamos la esencia de nuestra cordillera."</p>
+        <footer class="quote-author">
+          — <cite itemprop="founder">Richard Armendariz</cite>, Maestro Destilador de Estancos Distilling Company
+        </footer>
+      </blockquote>
+    </div>
 
-      </div>
-    </section>
+    <!-- Bloque Visual -->
+    <div class="history-visuals">
+      <div class="visual-accent" aria-hidden="true"></div>
+      <img src="https://qgbwjkjgnyaynctlqxvq.supabase.co/storage/v1/object/public/views/RichardMaster.jpeg"
+        alt="Richard Armendariz, Maestro Destilador de Estancos Distilling Company a 2500 metros de altura"
+        class="image-main" itemprop="image" loading="lazy" width="480" height="640" ngSkipOversizedImageWarning>
+    </div>
+
+  </div>
+</section>

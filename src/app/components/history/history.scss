@@ -1,138 +1,206 @@
-/* === ESTILOS DE LA SECCIÓN HISTORIA === */
-      .history-section {
-        position: relative;
-        background-color: var(--color-bg-base);
-      }
+/* ==========================================================================
+   SECCIÓN NUESTRAS RAÍCES / HISTORIA - ARQUITECTURA MOBILE-FIRST
+   ========================================================================== */
 
-      /* Elemento decorativo de fondo */
-      .history-bg-accent {
-        position: absolute;
-        top: 0;
-        right: 0;
-        width: 50%;
-        height: 100%;
-        background: radial-gradient(circle at top right, rgba(212, 175, 55, 0.05), transparent 60%);
-        pointer-events: none;
-      }
+/* --- 1. ESTILOS BASE (MOBILE FIRST: < 900px) --- */
+.history-section {
+  position: relative;
+  background-color: var(--color-bg-base);
+  overflow: hidden;
+}
 
-      .history-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 4rem;
-        align-items: center;
-        position: relative;
-        z-index: 2;
-      }
+/* Elemento decorativo de fondo */
+.history-bg-accent {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at top right, rgba(212, 175, 55, 0.07), transparent 70%);
+  pointer-events: none;
+}
 
-      /* Contenido Textual */
-      .history-content {
-        max-width: 500px;
-      }
+.history-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2.5rem;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+}
 
-      .section-subtitle {
-        font-family: var(--font-body);
-        color: var(--color-accent-gold);
-        font-size: 0.9rem;
-        text-transform: uppercase;
-        letter-spacing: 3px;
-        margin-bottom: 1rem;
-        display: block;
-        font-weight: 500;
-      }
+/* Bloque Visual (En móvil se muestra primero para captar atención) */
+.history-visuals {
+  order: 1;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
 
-      .history-content h2 {
-        font-family: var(--font-heading);
-        font-size: clamp(2rem, 3vw, 2.8rem);
+  .image-main {
+    width: 100%;
+    max-width: 480px;
+    height: auto;
+    border-radius: 12px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+    border: 1px solid var(--color-border);
+    transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+  }
+
+  /* Recuadro decorativo detrás de la imagen */
+  .visual-accent {
+    position: absolute;
+    bottom: -10px;
+    right: 5%;
+    width: 70%;
+    height: 70%;
+    border: 1.5px solid var(--color-accent-gold);
+    z-index: -1;
+    opacity: 0.4;
+    border-radius: 10px;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+
+  &:hover {
+    .image-main {
+      transform: translateY(-4px) scale(1.02);
+      border-color: rgba(212, 175, 55, 0.4);
+      box-shadow: 0 16px 35px rgba(0, 0, 0, 0.7), 0 0 15px rgba(212, 175, 55, 0.15);
+    }
+
+    .visual-accent {
+      opacity: 0.7;
+      transform: translate(4px, 4px);
+    }
+  }
+}
+
+/* Contenido Textual */
+.history-content {
+  order: 2;
+  width: 100%;
+  text-align: left;
+
+  .section-subtitle {
+    font-family: var(--font-body);
+    color: var(--color-accent-gold);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 0.75rem;
+    display: block;
+    font-weight: 600;
+  }
+
+  h2 {
+    font-family: var(--font-heading);
+    font-size: clamp(1.75rem, 5.5vw, 2.8rem);
+    color: var(--color-text-main);
+    margin-bottom: 1.25rem;
+    line-height: 1.2;
+    letter-spacing: 0.5px;
+
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+  }
+
+  p {
+    color: var(--color-text-muted);
+    line-height: 1.75;
+    margin-bottom: 1.25rem;
+    font-size: 1rem;
+    font-weight: 300;
+
+    strong {
+      color: var(--color-accent-gold);
+      font-weight: 600;
+    }
+  }
+
+  /* Cita Destacada (Blockquote) */
+  .quote-box {
+    margin-top: 2rem;
+    padding: 1.25rem 1.25rem 1.25rem 1.5rem;
+    background: rgba(18, 18, 18, 0.6);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-left: 3px solid var(--color-accent-gold);
+    border-radius: 0 12px 12px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    border-right: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+
+    .quote-text {
+      font-family: var(--font-heading);
+      font-size: 1.1rem;
+      color: var(--color-text-main);
+      font-style: italic;
+      margin-bottom: 0.6rem;
+      line-height: 1.45;
+    }
+
+    .quote-author {
+      font-size: 0.82rem;
+      color: var(--color-accent-gold);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-style: normal;
+      display: block;
+
+      cite {
+        font-style: normal;
+        font-weight: 600;
         color: var(--color-text-main);
-        margin-bottom: 1.5rem;
-        line-height: 1.2;
       }
+    }
+  }
+}
 
-      .history-content p {
-        color: var(--color-text-muted);
-        line-height: 1.8;
-        margin-bottom: 1.5rem;
-        font-weight: 300;
-      }
+/* --- 2. MEDIA QUERIES MOBILE-FIRST (PANTALLAS MEDIANAS Y DESKTOPS: >= 900px) --- */
+@media (min-width: 900px) {
+  .history-bg-accent {
+    width: 50%;
+  }
 
-      /* Diseño de Imágenes */
-      .history-visuals {
-        position: relative;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
+  .history-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+  }
 
-      .image-main {
-        width: 80%;
-        height: auto;
-        border-radius: 4px;
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
-        border: 1px solid var(--color-border);
-        transition: var(--transition-smooth);
-      }
+  .history-content {
+    order: 1;
+    max-width: 520px;
 
-      .history-visuals:hover .image-main {
-        transform: scale(1.02);
-        border-color: rgba(212, 175, 55, 0.3);
-      }
+    .section-subtitle {
+      font-size: 0.9rem;
+    }
+  }
 
-      /* Recuadro decorativo detrás de la imagen */
-      .visual-accent {
-        position: absolute;
-        bottom: -20px;
-        right: 5%;
-        width: 60%;
-        height: 60%;
-        border: 2px solid var(--color-accent-gold);
-        z-index: -1;
-        opacity: 0.5;
-        border-radius: 2px;
-      }
+  .history-visuals {
+    order: 2;
 
-      /* Cita Destacada */
-      .quote-box {
-        margin-top: 3rem;
-        padding: 1.5rem 0 1.5rem 1.5rem;
-        border-left: 3px solid var(--color-accent-gold);
-      }
+    .image-main {
+      width: 85%;
+      max-width: none;
+    }
 
-      .quote-text {
-        font-family: var(--font-heading);
-        font-size: 1.2rem;
-        color: var(--color-text-main);
-        font-style: italic;
-        margin-bottom: 0.5rem;
-      }
+    .visual-accent {
+      bottom: -18px;
+      right: 4%;
+      width: 65%;
+      height: 65%;
+      opacity: 0.5;
+    }
+  }
+}
 
-      .quote-author {
-        font-size: 0.85rem;
-        color: var(--color-accent-gold);
-        text-transform: uppercase;
-        letter-spacing: 1px;
-      }
-
-      /* Responsivo */
-      @media (max-width: 900px) {
-        .history-grid {
-          grid-template-columns: 1fr;
-          gap: 3rem;
-        }
-
-        .history-content {
-          order: 2; /* Texto abajo en móviles */
-          max-width: 100%;
-          text-align: center;
-        }
-
-        .history-visuals {
-          order: 1; /* Imagen arriba en móviles */
-        }
-
-        .quote-box {
-          text-align: left; /* Mantener la cita alineada a la izquierda incluso si el texto principal está centrado */
-          margin-left: auto;
-          margin-right: auto;
-          max-width: 90%;
-        }
-      }

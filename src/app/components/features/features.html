@@ -1,32 +1,47 @@
-<section class="features-section section-padding">
-      <div class="features-bg-pattern"></div>
+<section class="features-section section-padding" aria-labelledby="philosophy-title">
+  <!-- AEO: Ocultamos el patrón de fondo decorativo para evitar ruido -->
+  <div class="features-bg-pattern" aria-hidden="true"></div>
 
-      <div class="container">
-        <div class="section-header">
-          <span class="section-subtitle">Nuestra Filosofía</span>
-          <h2>El Arte de la Destilación</h2>
+  <div class="container">
+    <div class="section-header">
+      <span class="section-subtitle">Nuestra Filosofía</span>
+
+      <!-- AEO: Conectamos la filosofía explícitamente con la marca -->
+      <h2 id="philosophy-title">La Filosofía de Destilación de Estancos</h2>
+    </div>
+
+    <!-- AEO: Convertimos el contenedor en una Lista Estructurada (ItemList) para Schema.org -->
+    <ul class="features-grid" itemscope itemtype="https://schema.org/ItemList">
+
+      <!-- Angular 21 Control Flow: Añadimos let i = $index para la jerarquía de Schema -->
+      @for (feature of features; track feature.title; let i = $index) {
+
+      <!-- AEO: Cada tarjeta es un elemento de lista (ListItem) -->
+      <li class="feature-item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+
+        <!-- AEO: Posición oculta obligatoria para validar el Schema de lista -->
+        <meta itemprop="position" [content]="i + 1" />
+
+        <!-- Número decorativo -->
+        <span class="feature-number" aria-hidden="true">{{ feature.number }}</span>
+
+        <!-- Ícono SVG -->
+        <div class="feature-icon" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor" stroke-width="1.5">
+            <path [attr.d]="feature.iconPath" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
         </div>
 
-        <div class="features-grid">
-          <!-- Angular 21 Control Flow: @for -->
-          @for (feature of features; track feature.title) {
-            <div class="feature-item">
-              <!-- Número decorativo de fondo -->
-              <span class="feature-number">{{ feature.number }}</span>
+        <div class="feature-content">
+          <!-- AEO: El título se marca como el nombre del hecho/entidad -->
+          <h3 itemprop="name">{{ feature.title }}</h3>
 
-              <!-- Ícono SVG inyectado dinámicamente -->
-              <div class="feature-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                  <path [attr.d]="feature.iconPath" stroke-linecap="round" stroke-linejoin="round" />
-                </svg>
-              </div>
-
-              <div class="feature-content">
-                <h3>{{ feature.title }}</h3>
-                <p>{{ feature.description }}</p>
-              </div>
-            </div>
-          }
+          <!-- AEO: Usamos innerHTML para permitir que desde TypeScript inyectes etiquetas <strong> en las tripletas -->
+          <p itemprop="description" [innerHTML]="feature.description"></p>
         </div>
-      </div>
-    </section>
+      </li>
+      }
+    </ul>
+  </div>
+</section>

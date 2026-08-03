@@ -1,136 +1,227 @@
-/* === ESTILOS DE LA SECCIÓN DE CARACTERÍSTICAS === */
-      .features-section {
-        background-color: var(--color-bg-base);
-        position: relative;
-        overflow: hidden;
-      }
+/* ==========================================================================
+   SECCIÓN NUESTRA FILOSOFÍA / CARACTERÍSTICAS - ARQUITECTURA MOBILE-FIRST
+   ========================================================================== */
 
-      /* Decoración de fondo sutil */
-      .features-bg-pattern {
-        position: absolute;
-        top: 0; left: 0; right: 0; bottom: 0;
-        background-image: radial-gradient(var(--color-border) 1px, transparent 1px);
-        background-size: 40px 40px;
-        opacity: 0.15;
-        z-index: 0;
-      }
+/* --- 1. ESTILOS BASE (MOBILE FIRST: < 640px) --- */
+.features-section {
+  background-color: var(--color-bg-base);
+  position: relative;
+  overflow: hidden;
+  padding: 3.5rem 1rem;
+}
 
-      .section-header {
-        text-align: center;
-        margin-bottom: 4rem;
-        position: relative;
-        z-index: 1;
-      }
+/* Decoración de fondo sutil */
+.features-bg-pattern {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-image: radial-gradient(var(--color-border) 1px, transparent 1px);
+  background-size: 32px 32px;
+  opacity: 0.12;
+  z-index: 0;
+  pointer-events: none;
+}
 
-      .section-subtitle {
+.section-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+  position: relative;
+  z-index: 1;
+
+  .section-subtitle {
+    color: var(--color-accent-gold);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    margin-bottom: 0.75rem;
+    display: block;
+    font-weight: 600;
+  }
+
+  h2 {
+    font-family: var(--font-heading);
+    font-size: clamp(1.5rem, 5.5vw, 2.6rem);
+    color: var(--color-text-main);
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    line-height: 1.25;
+  }
+}
+
+/* Grid de Características (Lista ul para Schema.org) */
+.features-grid {
+  display: grid;
+  grid-template-columns: 1fr; /* 1 Columna en móviles */
+  gap: 1.75rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  z-index: 1;
+}
+
+/* Tarjeta de Característica Individual (li.feature-item) */
+.feature-item {
+  background-color: rgba(18, 18, 18, 0.75);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding: 2rem 1.5rem;
+  border: 1px solid rgba(212, 175, 55, 0.18);
+  border-radius: 14px;
+  text-align: center;
+  transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.35s ease, background-color 0.35s ease, box-shadow 0.35s ease;
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+
+  /* Línea decorativa superior en dorados */
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--color-accent-gold), transparent);
+    opacity: 0.3;
+    transition: opacity 0.35s ease;
+  }
+
+  /* Número decorativo de fondo */
+  .feature-number {
+    position: absolute;
+    top: -15px;
+    right: -5px;
+    font-family: var(--font-heading);
+    font-size: 6.5rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.03);
+    line-height: 1;
+    transition: transform 0.35s ease, color 0.35s ease;
+    z-index: 0;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  /* Icono */
+  .feature-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background-color: rgba(212, 175, 55, 0.1);
+    border: 1px solid rgba(212, 175, 55, 0.25);
+    color: var(--color-accent-gold);
+    margin-bottom: 1.25rem;
+    transition: transform 0.35s ease, background-color 0.35s ease, color 0.35s ease, box-shadow 0.35s ease;
+    position: relative;
+    z-index: 1;
+
+    svg {
+      transition: transform 0.3s ease;
+    }
+  }
+
+  /* Contenido Textual */
+  .feature-content {
+    position: relative;
+    z-index: 1;
+
+    h3 {
+      font-family: var(--font-heading);
+      font-size: 1.2rem;
+      color: var(--color-text-main);
+      margin-bottom: 0.85rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    p {
+      color: var(--color-text-muted);
+      font-size: 0.95rem;
+      line-height: 1.65;
+      margin: 0;
+      font-weight: 300;
+
+      strong {
         color: var(--color-accent-gold);
-        font-size: 0.9rem;
-        text-transform: uppercase;
-        letter-spacing: 3px;
-        margin-bottom: 1rem;
-        display: block;
-        font-weight: 500;
+        font-weight: 600;
       }
+    }
+  }
 
-      .section-header h2 {
-        font-family: var(--font-heading);
-        font-size: clamp(2rem, 3vw, 2.8rem);
-        color: var(--color-text-main);
-        margin: 0;
-        text-transform: uppercase;
-        letter-spacing: 2px;
-      }
+  /* Efecto hover: elevación y brillo dorado */
+  &:hover {
+    transform: translateY(-6px);
+    border-color: rgba(212, 175, 55, 0.5);
+    background-color: rgba(26, 26, 26, 0.85);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5), 0 0 15px rgba(212, 175, 55, 0.15);
 
-      /* Grid de Características */
-      .features-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 3rem;
-        position: relative;
-        z-index: 1;
-      }
+    &::before {
+      opacity: 1;
+    }
 
-      /* Tarjeta de Característica Individual */
-      .feature-item {
-        background-color: transparent;
-        padding: 2.5rem 2rem;
-        border: 1px solid var(--color-border);
-        border-radius: 4px;
-        text-align: center;
-        transition: var(--transition-smooth);
-        position: relative;
-        overflow: hidden;
-      }
+    .feature-number {
+      color: rgba(212, 175, 55, 0.08);
+      transform: scale(1.08);
+    }
 
-      /* Efecto hover: borde dorado y leve levantamiento */
-      .feature-item:hover {
-        transform: translateY(-8px);
-        border-color: var(--color-accent-gold);
-        background-color: rgba(26, 26, 26, 0.5); /* Ligeramente más claro que el fondo base */
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-      }
+    .feature-icon {
+      background-color: var(--color-accent-gold);
+      color: #0a0a0a;
+      transform: scale(1.08);
+      box-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
 
-      /* Número decorativo de fondo */
-      .feature-number {
-        position: absolute;
-        top: -10px;
-        right: -10px;
-        font-family: var(--font-heading);
-        font-size: 8rem;
-        font-weight: 700;
-        color: rgba(255, 255, 255, 0.02);
-        line-height: 1;
-        transition: var(--transition-smooth);
-        z-index: 0;
-        pointer-events: none;
-      }
-
-      .feature-item:hover .feature-number {
-        color: rgba(212, 175, 55, 0.05); /* Se vuelve dorado muy sutil al hover */
+      svg {
         transform: scale(1.1);
       }
+    }
+  }
+}
 
-      /* Icono */
-      .feature-icon {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 70px;
-        height: 70px;
-        border-radius: 50%;
-        background-color: rgba(212, 175, 55, 0.1);
-        color: var(--color-accent-gold);
-        margin-bottom: 1.5rem;
-        transition: var(--transition-smooth);
-        position: relative;
-        z-index: 1;
-      }
+/* --- 2. MEDIA QUERIES MOBILE-FIRST (PANTALLAS MEDIANAS Y DESKTOPS) --- */
 
-      .feature-item:hover .feature-icon {
-        background-color: var(--color-accent-gold);
-        color: var(--color-bg-surface);
-        transform: scale(1.1);
-      }
+/* Tablets en adelante (>= 640px) */
+@media (min-width: 640px) {
+  .features-section {
+    padding: 4.5rem 1.5rem;
+  }
 
-      /* Contenido Textual */
-      .feature-content {
-        position: relative;
-        z-index: 1;
-      }
+  .features-grid {
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 2rem;
+  }
 
-      .feature-content h3 {
-        font-family: var(--font-heading);
-        font-size: 1.3rem;
-        color: var(--color-text-main);
-        margin-bottom: 1rem;
-        letter-spacing: 1px;
-        text-transform: uppercase;
-      }
+  .feature-item {
+    padding: 2.25rem 1.75rem;
+  }
+}
 
-      .feature-content p {
-        color: var(--color-text-muted);
-        font-size: 0.95rem;
-        line-height: 1.7;
-        margin: 0;
-        font-weight: 300;
-      }
+/* Desktops (>= 900px) */
+@media (min-width: 900px) {
+  .features-section {
+    padding: 5rem 2rem;
+  }
+
+  .section-header {
+    margin-bottom: 4rem;
+  }
+
+  .features-grid {
+    gap: 2.5rem;
+  }
+
+  .feature-item {
+    padding: 2.5rem 2rem;
+
+    .feature-number {
+      font-size: 8rem;
+      top: -20px;
+      right: -10px;
+    }
+  }
+}
+
+

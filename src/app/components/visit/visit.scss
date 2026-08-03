@@ -1,171 +1,245 @@
-/* === LAYOUT VISITAS === */
-      .visit-section {
-        background-color: var(--color-bg-surface);
-        border-top: 1px solid var(--color-border);
-        border-bottom: 1px solid var(--color-border);
-        position: relative;
-        overflow: hidden;
-      }
+/* ==========================================================================
+   SECCIÓN ENOTURISMO / VISITAS - ARQUITECTURA MOBILE-FIRST
+   ========================================================================== */
 
-      .visit-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 0;
-        background-color: var(--color-bg-base);
-        border: 1px solid var(--color-border);
-        border-radius: 4px;
-        overflow: hidden;
-        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
-      }
+/* --- 1. ESTILOS BASE (MOBILE FIRST: < 900px) --- */
+.visit-section {
+  background-color: var(--color-bg-surface);
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+  position: relative;
+  overflow: hidden;
+}
 
-      @media (max-width: 900px) {
-        .visit-grid {
-          grid-template-columns: 1fr;
-        }
-      }
+.visit-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  background-color: var(--color-bg-base);
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+}
 
-      /* --- IMAGEN --- */
-      .visit-image-wrapper {
-        position: relative;
-        min-height: 400px;
-        overflow: hidden;
-      }
+/* Imagen de la Destilería */
+.visit-image-wrapper {
+  position: relative;
+  min-height: 280px;
+  max-height: 380px;
+  overflow: hidden;
 
-      .visit-image {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        position: absolute;
-        top: 0;
-        left: 0;
-        transition: transform 10s ease; /* Zoom muy lento para dar vida */
-      }
+  .visit-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 8s ease;
+  }
 
-      .visit-image-wrapper:hover .visit-image {
-        transform: scale(1.05);
-      }
+  .visit-image-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(to bottom, transparent 30%, rgba(10, 10, 10, 0.95) 100%);
+  }
 
-      /* Capa oscura para mezclar mejor la imagen con la interfaz */
-      .visit-image-overlay {
-        position: absolute;
-        top: 0; left: 0; right: 0; bottom: 0;
-        background: linear-gradient(to right, transparent, rgba(10,10,10, 0.8));
-      }
+  &:hover .visit-image {
+    transform: scale(1.06);
+  }
+}
 
-      @media (max-width: 900px) {
-        .visit-image-overlay {
-          background: linear-gradient(to bottom, transparent, rgba(10,10,10, 0.9));
-        }
-      }
+/* Contenido Textual */
+.visit-content {
+  padding: 2.25rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
 
-      /* --- CONTENIDO --- */
-      .visit-content {
-        padding: 4rem 3rem;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        position: relative;
-        z-index: 2;
-      }
+  .section-subtitle {
+    color: var(--color-accent-gold);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    margin-bottom: 0.75rem;
+    display: block;
+    font-weight: 600;
+  }
 
-      .section-subtitle {
-        color: var(--color-accent-gold);
-        font-size: 0.9rem;
-        text-transform: uppercase;
-        letter-spacing: 3px;
-        margin-bottom: 1rem;
-        display: block;
-        font-weight: 500;
-      }
+  h2 {
+    font-family: var(--font-heading);
+    font-size: clamp(1.6rem, 5.5vw, 2.5rem);
+    color: var(--color-text-main);
+    margin-bottom: 1.25rem;
+    line-height: 1.25;
+  }
 
-      .visit-content h2 {
-        font-family: var(--font-heading);
-        font-size: clamp(2rem, 2.5vw, 2.5rem);
-        color: var(--color-text-main);
-        margin-bottom: 1.5rem;
-        line-height: 1.2;
-      }
+  .visit-desc {
+    color: var(--color-text-muted);
+    line-height: 1.7;
+    margin-bottom: 2rem;
+    font-size: 0.98rem;
+    font-weight: 300;
 
-      .visit-desc {
-        color: var(--color-text-muted);
-        line-height: 1.7;
-        margin-bottom: 2.5rem;
-        font-size: 1.05rem;
-        font-weight: 300;
-      }
+    strong {
+      color: var(--color-accent-gold);
+      font-weight: 600;
+    }
+  }
+}
 
-      /* --- INFO BLOCKS (Ubicación y Horarios) --- */
-      .info-container {
-        display: flex;
-        flex-direction: column;
-        gap: 1.5rem;
-        margin-bottom: 3rem;
-      }
+/* Bloques de Información (Ubicación y Horarios con Schema) */
+.info-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  margin-bottom: 2.25rem;
+}
 
-      .info-block {
-        display: flex;
-        align-items: flex-start;
-        gap: 1.2rem;
-      }
+.info-block {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
 
-      .info-icon {
-        color: var(--color-accent-gold);
-        background-color: rgba(212, 175, 55, 0.1);
-        padding: 0.8rem;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
+  .info-icon {
+    color: var(--color-accent-gold);
+    background-color: rgba(212, 175, 55, 0.1);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    padding: 0.75rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+  }
 
-      .info-text h4 {
-        font-family: var(--font-heading);
-        font-size: 1rem;
-        color: var(--color-text-main);
-        margin: 0 0 0.4rem 0;
-        letter-spacing: 1px;
-      }
+  .info-text {
+    h4 {
+      font-family: var(--font-heading);
+      font-size: 0.95rem;
+      color: var(--color-text-main);
+      margin: 0 0 0.35rem 0;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
 
-      .info-text p {
-        margin: 0;
-        color: var(--color-text-muted);
-        font-size: 0.95rem;
-        line-height: 1.5;
-      }
+    p {
+      margin: 0;
+      color: var(--color-text-muted);
+      font-size: 0.92rem;
+      line-height: 1.55;
 
-      /* --- BOTÓN --- */
-      .btn-primary {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.5rem;
-        background-color: var(--color-accent-gold);
-        color: #121212;
-        border: none;
-        padding: 1rem 2rem;
-        font-family: var(--font-heading);
-        font-weight: 700;
-        font-size: 0.95rem;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        cursor: pointer;
-        border-radius: 2px;
-        transition: var(--transition-smooth);
-        text-decoration: none;
-        width: fit-content;
+      time {
+        display: inline-block;
       }
+    }
+  }
 
-      .btn-primary:hover {
-        background-color: var(--color-accent-hover);
-        transform: translateY(-2px);
-        box-shadow: 0 10px 20px rgba(212, 175, 55, 0.3);
-      }
+  &:hover .info-icon {
+    transform: scale(1.08);
+    background-color: rgba(212, 175, 55, 0.2);
+  }
+}
 
-      @media (max-width: 600px) {
-        .visit-content {
-          padding: 3rem 1.5rem;
-        }
-        .btn-primary {
-          width: 100%;
-        }
-      }
+/* Botón Agendar Visita */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  width: 100%;
+  min-height: 48px;
+  background: linear-gradient(135deg, #e6c555 0%, #b5952f 100%);
+  color: #0a0a0a;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 0.9rem 1.8rem;
+  border-radius: 50px;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  text-decoration: none;
+  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.35);
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+
+  svg {
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.4),
+      transparent
+    );
+    transition: left 0.6s ease;
+  }
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(212, 175, 55, 0.55);
+
+    svg {
+      transform: translateX(4px);
+    }
+
+    &::before {
+      left: 100%;
+    }
+  }
+
+  &:active {
+    transform: translateY(-1px);
+  }
+}
+
+/* --- 2. MEDIA QUERIES MOBILE-FIRST (PANTALLAS MEDIANAS Y DESKTOPS) --- */
+
+/* Tablets (>= 640px) */
+@media (min-width: 640px) {
+  .visit-content {
+    padding: 3rem 2.25rem;
+  }
+
+  .btn-primary {
+    width: fit-content;
+    padding: 0.95rem 2.2rem;
+    font-size: 0.95rem;
+  }
+}
+
+/* Desktops (>= 900px) */
+@media (min-width: 900px) {
+  .visit-grid {
+    grid-template-columns: 1fr 1fr;
+    border-radius: 18px;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+  }
+
+  .visit-image-wrapper {
+    min-height: 100%;
+    max-height: none;
+
+    .visit-image-overlay {
+      background: linear-gradient(to right, transparent 30%, rgba(10, 10, 10, 0.95) 100%);
+    }
+  }
+
+  .visit-content {
+    padding: 4rem 3.5rem;
+  }
+}
+
