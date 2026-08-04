@@ -1,160 +1,274 @@
-/* === ESTILOS DEL FOOTER === */
-      .estancos-footer {
-        background-color: var(--color-bg-surface);
-        border-top: 1px solid var(--color-border);
-        padding-top: 4rem;
-        padding-bottom: 2rem;
-      }
+/* ==========================================================================
+   FOOTER PRINCIPAL - ARQUITECTURA MOBILE-FIRST
+   ========================================================================== */
 
-      .footer-grid {
-        display: grid;
-        grid-template-columns: 2fr 1fr 1fr;
-        gap: 4rem;
-        margin-bottom: 3rem;
-      }
+/* --- 1. ESTILOS BASE (MOBILE FIRST: < 768px) --- */
+.estancos-footer {
+  background-color: var(--color-bg-surface, #121212);
+  border-top: 1px solid var(--color-border, #2a2a2a);
+  padding: 3.5rem 1rem 2rem 1rem;
+  color: var(--color-text-main, #f4f4f4);
+  position: relative;
+  overflow: hidden;
+}
 
-      @media (max-width: 768px) {
-        .footer-grid {
-          grid-template-columns: 1fr;
-          gap: 2.5rem;
-          text-align: center;
-        }
-      }
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1fr; /* 1 Columna por defecto en móviles */
+  gap: 2.25rem;
+  margin-bottom: 2.5rem;
+  text-align: center;
+}
 
-      /* Columna de Marca */
-      .brand-col .logo-text {
-        font-family: var(--font-heading);
-        font-size: 1.5rem;
-        color: var(--color-text-main);
-        font-weight: 700;
-        letter-spacing: 2px;
-        text-transform: uppercase;
-        margin: 0 0 0.5rem 0;
-      }
+/* Columna 1: Marca y Descripción */
+.brand-col {
+  width: 100%;
 
-      .brand-col .slogan {
-        color: var(--color-accent-gold);
-        font-size: 1.1rem;
-        font-style: italic;
-        margin-bottom: 1.5rem;
-        font-family: var(--font-heading);
-      }
+  .logo-text {
+    font-family: var(--font-heading, 'Cinzel', serif);
+    font-size: 1.4rem;
+    color: var(--color-accent-gold, #d4af37);
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin: 0 0 0.4rem 0;
+  }
 
-      .brand-col .desc {
-        color: var(--color-text-muted);
-        font-size: 0.9rem;
-        line-height: 1.6;
-        max-width: 350px;
-      }
+  .slogan {
+    color: var(--color-text-main, #f4f4f4);
+    font-size: 0.95rem;
+    font-style: italic;
+    margin-bottom: 1.25rem;
+    font-family: var(--font-heading, 'Cinzel', serif);
+    letter-spacing: 1px;
+    opacity: 0.9;
+  }
 
-      @media (max-width: 768px) {
-        .brand-col .desc {
-          margin: 0 auto;
-        }
-      }
+  .desc {
+    color: var(--color-text-muted, #9ca3af);
+    font-size: 0.9rem;
+    line-height: 1.65;
+    max-width: 480px;
+    margin: 0 auto;
 
-      /* Títulos de Columnas */
-      .footer-heading {
-        font-family: var(--font-heading);
-        font-size: 1.1rem;
-        color: var(--color-text-main);
-        margin-bottom: 1.5rem;
-        letter-spacing: 1px;
-        text-transform: uppercase;
-      }
+    strong {
+      color: var(--color-accent-gold, #d4af37);
+      font-weight: 600;
+    }
+  }
+}
 
-      /* Columna Menú */
-      .footer-nav ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-        display: flex;
-        flex-direction: column;
-        gap: 0.8rem;
-      }
+/* Encabezados Generales de Columnas */
+.footer-heading {
+  font-family: var(--font-heading, 'Cinzel', serif);
+  font-size: 1.05rem;
+  color: var(--color-accent-gold, #d4af37);
+  margin-bottom: 1.25rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  font-weight: 600;
+}
 
-      .footer-nav a {
-        color: var(--color-text-muted);
+/* Columna 2: Menú de Navegación */
+.footer-nav {
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    align-items: center;
+
+    li {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+
+      a {
+        color: var(--color-text-muted, #9ca3af);
         text-decoration: none;
-        font-size: 0.95rem;
-        transition: var(--transition-smooth);
+        font-size: 0.9rem;
         text-transform: uppercase;
-        letter-spacing: 1px;
-        font-size: 0.85rem;
-      }
+        letter-spacing: 1.5px;
+        font-family: var(--font-heading, 'Cinzel', serif);
+        transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        display: inline-flex;
+        align-items: center;
+        gap: 0.6rem;
+        padding: 0.4rem 0.8rem;
+        border-radius: 6px;
+        position: relative;
 
-      .footer-nav a:hover {
-        color: var(--color-accent-gold);
-        padding-left: 5px; /* Pequeño movimiento al hacer hover */
-      }
+        /* Indicador de viñeta dorada animada */
+        &::before {
+          content: '◆';
+          font-size: 0.55rem;
+          color: var(--color-accent-gold, #d4af37);
+          opacity: 0;
+          transform: scale(0) translateX(-6px);
+          transition: transform 0.3s ease, opacity 0.3s ease;
+        }
 
-      @media (max-width: 768px) {
-        .footer-nav a:hover {
+        /* Línea inferior animada (Underline glow) */
+        &::after {
+          content: '';
+          position: absolute;
+          bottom: 2px;
+          left: 50%;
+          width: 0;
+          height: 1px;
+          background: linear-gradient(90deg, transparent, var(--color-accent-gold, #d4af37), transparent);
+          transition: width 0.35s ease, left 0.35s ease;
+        }
+
+        &:hover {
+          color: var(--color-accent-gold, #d4af37);
+          text-shadow: 0 0 12px rgba(212, 175, 55, 0.4);
+          background-color: rgba(212, 175, 55, 0.06);
+
+          &::before {
+            opacity: 1;
+            transform: scale(1) translateX(0);
+          }
+
+          &::after {
+            width: 80%;
+            left: 10%;
+          }
+        }
+      }
+    }
+  }
+}
+
+/* Columna 3: Redes Sociales */
+.social-col {
+  .social-links {
+    display: flex;
+    gap: 0.85rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .social-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background-color: rgba(10, 10, 10, 0.6);
+    color: var(--color-text-main, #f4f4f4);
+    border: 1px solid rgba(212, 175, 55, 0.25);
+    transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    text-decoration: none;
+
+    svg {
+      transition: transform 0.3s ease, stroke 0.3s ease;
+    }
+
+    &:hover {
+      background-color: var(--color-accent-gold, #d4af37);
+      color: #0a0a0a;
+      border-color: var(--color-accent-gold, #d4af37);
+      transform: translateY(-3px) scale(1.08);
+      box-shadow: 0 6px 18px rgba(212, 175, 55, 0.4);
+
+      svg {
+        stroke: #0a0a0a;
+        transform: scale(1.1);
+      }
+    }
+
+    &:active {
+      transform: translateY(-1px) scale(1);
+    }
+  }
+}
+
+/* Sección Inferior (Disclaimer Legal & Copyright) */
+.footer-bottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 2rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+
+  .disclaimer {
+    color: var(--color-accent-gold, #d4af37);
+    font-family: var(--font-heading, 'Cinzel', serif);
+    font-size: 0.82rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    max-width: 750px;
+    line-height: 1.6;
+    padding: 0.9rem 1.25rem;
+    border: 1px solid rgba(212, 175, 55, 0.25);
+    background-color: rgba(212, 175, 55, 0.05);
+    border-radius: 10px;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+
+  .copyright {
+    color: var(--color-text-muted, #9ca3af);
+    font-size: 0.8rem;
+    margin: 0;
+    letter-spacing: 0.8px;
+  }
+}
+
+/* --- 2. MEDIA QUERIES MOBILE-FIRST (DESKTOPS: >= 768px) --- */
+@media (min-width: 768px) {
+  .estancos-footer {
+    padding: 4.5rem 1.5rem 2.5rem 1.5rem;
+  }
+
+  .footer-grid {
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 3.5rem;
+    text-align: left;
+    margin-bottom: 3.5rem;
+  }
+
+  .brand-col {
+    .desc {
+      margin: 0;
+      max-width: 380px;
+    }
+  }
+
+  .footer-nav {
+    ul {
+      align-items: flex-start;
+
+      li {
+        justify-content: flex-start;
+
+        a {
           padding-left: 0;
+
+          &:hover {
+            padding-left: 0.6rem;
+
+            &::after {
+              width: 100%;
+              left: 0;
+            }
+          }
         }
       }
+    }
+  }
 
-      /* Columna Redes Sociales */
-      .social-links {
-        display: flex;
-        gap: 1.2rem;
-        flex-wrap: wrap;
-      }
+  .social-col {
+    .social-links {
+      justify-content: flex-start;
+    }
+  }
+}
 
-      @media (max-width: 768px) {
-        .social-links {
-          justify-content: center;
-        }
-      }
-
-      .social-icon {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        background-color: var(--color-bg-base);
-        color: var(--color-text-main);
-        border: 1px solid var(--color-border);
-        transition: var(--transition-smooth);
-      }
-
-      .social-icon:hover {
-        background-color: var(--color-accent-gold);
-        color: var(--color-bg-surface);
-        border-color: var(--color-accent-gold);
-        transform: translateY(-3px);
-      }
-
-      /* Bottom Footer (Disclaimer y Copyright) */
-      .footer-bottom {
-        border-top: 1px solid var(--color-border);
-        padding-top: 2rem;
-        text-align: center;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 1rem;
-      }
-
-      .disclaimer {
-        color: var(--color-accent-gold);
-        font-family: var(--font-heading);
-        font-size: 0.85rem;
-        letter-spacing: 2px;
-        text-transform: uppercase;
-        max-width: 800px;
-        line-height: 1.6;
-        padding: 1rem;
-        border: 1px solid rgba(212, 175, 55, 0.3);
-        background-color: rgba(212, 175, 55, 0.05);
-        border-radius: 2px;
-      }
-
-      .copyright {
-        color: var(--color-text-muted);
-        font-size: 0.8rem;
-        margin: 0;
-        letter-spacing: 1px;
-      }
