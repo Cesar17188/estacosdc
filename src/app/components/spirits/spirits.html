@@ -1,49 +1,98 @@
 <main style="flex-grow: 1;">
-      <section class="spirits-section section-padding">
-        <div class="container">
+  <section 
+    class="spirits-section section-padding" 
+    aria-labelledby="spirits-heading"
+    itemscope 
+    itemtype="https://schema.org/ItemList"
+  >
+    <meta itemprop="name" content="Colección de Licores Artesanales Estancos Distilling Co." />
+    <meta itemprop="description" content="Licores y destilados artesanales de alta gama madurados a 2500 msnm en los Andes ecuatorianos." />
+    <meta itemprop="numberOfItems" [content]="spirits().length" />
 
-          <div class="section-header">
-            <span class="section-subtitle">Nuestra Colección</span>
-            <h2>Espíritus de Altura</h2>
-          </div>
+    <div class="container">
 
-          <!-- ESTADO DE CARGA -->
-          @if (isLoading()) {
-            <div class="loader-container">
-              <div class="spinner"></div>
-              <div class="loader-text">Obteniendo Colección...</div>
-            </div>
-          } @else {
-            <!-- GRID DE PRODUCTOS -->
-            <div class="spirits-grid">
-              @for (spirit of spirits(); track spirit.id) {
-                <div class="spirit-card">
+      <header class="section-header">
+        <span class="section-subtitle">Nuestra Colección de Destilados</span>
+        <h2 id="spirits-heading">Espíritus de Altura</h2>
+        <p class="section-description-aeo">
+          Licores artesanales premium elaborados en los Andes a 2500 msnm: Ron Añejo y Whiskey Single Malt de edición limitada.
+        </p>
+      </header>
 
-                  <div class="card-image-wrapper">
-                    <img
-                      [src]="spirit.image_url"
-                      [alt]="spirit.name"
-                      class="card-image"
-                      (error)="onImageError($event)"
-                    >
-                  </div>
-
-                  <div class="card-content">
-                    <span class="spirit-category">{{ spirit.category }}</span>
-                    <h3>{{ spirit.name }}</h3>
-                    <p>{{ spirit.description }}</p>
-
-                    <div class="card-actions">
-                      <!-- Link para ir a ver el detalle (spirits-page) -->
-                      <a routerLink="/espiritus" class="btn-outline" style="width: 100%;">Descubrir</a>
-                    </div>
-                  </div>
-
-                </div>
-              }
-            </div>
-          }
-
+      <!-- ESTADO DE CARGA -->
+      @if (isLoading()) {
+        <div class="loader-container" role="status" aria-live="polite">
+          <div class="spinner" aria-hidden="true"></div>
+          <div class="loader-text">Obteniendo Colección de Licores...</div>
         </div>
-      </section>
-    </main>
+      } @else {
+        <!-- GRID DE PRODUCTOS (OPTIMIZADO AEO) -->
+        <div class="spirits-grid">
+          @for (spirit of spirits(); track spirit.id; let i = $index) {
+            <article 
+              class="spirit-card"
+              itemprop="itemListElement" 
+              itemscope 
+              itemtype="https://schema.org/Product"
+            >
+              <meta itemprop="position" [content]="i + 1" />
+              <link itemprop="url" [href]="getSpiritRoute(spirit.name)" />
+
+              <div class="card-image-wrapper">
+                <img
+                  [src]="spirit.image_url"
+                  [alt]="'Botella de ' + spirit.name + ' - Licor artesanal de altura'"
+                  class="card-image"
+                  loading="lazy"
+                  decoding="async"
+                  itemprop="image"
+                  (error)="onImageError($event)"
+                >
+              </div>
+
+              <div class="card-content">
+                <span class="spirit-category" itemprop="category">{{ spirit.category }}</span>
+                <h3 itemprop="name">{{ spirit.name }}</h3>
+
+                <!-- DESCRIPCIÓN CORTA DEL LICOR -->
+                <p class="spirit-short-description" itemprop="description">
+                  {{ getShortDescription(spirit) }}
+                </p>
+
+                <!-- MICRODATOS OCULTOS PARA BUSCADORES Y MOTORES DE RESPUESTA AEO -->
+                <div itemprop="brand" itemscope itemtype="https://schema.org/Brand" style="display:none;">
+                  <meta itemprop="name" content="Estancos Distilling Co." />
+                </div>
+                @if (spirit.price) {
+                  <div itemprop="offers" itemscope itemtype="https://schema.org/Offer" style="display:none;">
+                    <meta itemprop="price" [content]="spirit.price" />
+                    <meta itemprop="priceCurrency" content="USD" />
+                    <meta itemprop="availability" content="https://schema.org/InStock" />
+                  </div>
+                }
+
+                <div class="card-actions">
+                  <!-- BOTÓN QUE REDIRIGE A LA PÁGINA ESPECÍFICA DE CATA DEL LICOR -->
+                  <a 
+                    [routerLink]="getSpiritRoute(spirit.name)" 
+                    class="btn-outline btn-spirit-redirect"
+                    [attr.aria-label]="'Ver notas de cata completas de ' + spirit.name"
+                    [title]="'Explorar notas de cata completas de ' + spirit.name"
+                  >
+                    <span>Ver Notas de Cata</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="arrow-icon" aria-hidden="true">
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                      <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                  </a>
+                </div>
+              </div>
+
+            </article>
+          }
+        </div>
+      }
+
+    </div>
+  </section>
+</main>

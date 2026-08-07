@@ -1,5 +1,6 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { CartService } from '../../services/cart';
 import { SupabaseService } from '../../services/supabase';
 
@@ -19,8 +20,9 @@ interface Product {
   age: string;
   price: number;
   description: string;
+  short_description?: string;
   long_description: string;
-  tasting_notes: TastingNotes;
+  tasting_notes?: TastingNotes;
   image_url: string;
   reverseLayout?: boolean;
   badge?: string;
@@ -29,7 +31,7 @@ interface Product {
 @Component({
   selector: 'app-spirits-page',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './spirits-page.html',
   styleUrl: './spirits-page.scss',
 })
@@ -77,6 +79,28 @@ export class SpiritsPage implements OnInit {
     setTimeout(() => {
       this.toastMessage.set(null);
     }, 3000);
+  }
+
+  /**
+   * Obtiene la descripción corta enriquecida con tripletas semánticas para AEO
+   */
+  getShortDescription(product: Product): string {
+    if (!product) return '';
+    if (product.short_description && product.short_description.trim().length > 0) {
+      return product.short_description.trim();
+    }
+    const clean = product.description || product.long_description || '';
+    if (clean.trim().length > 0 && clean.trim().length <= 130) {
+      return clean.trim();
+    }
+    const name = product.name || 'Destilado Artesanal';
+    const baseSemanticSubject = `${name} es producido artesanalmente a 2500 msnm en los Andes ecuatorianos.`;
+    if (!clean) return baseSemanticSubject;
+
+    const truncated = clean.trim().substring(0, 90);
+    const lastSpace = truncated.lastIndexOf(' ');
+    const shortDesc = lastSpace > 45 ? truncated.substring(0, lastSpace) : truncated;
+    return `${baseSemanticSubject} ${shortDesc}...`;
   }
 
   // Manejador de imágenes rotas

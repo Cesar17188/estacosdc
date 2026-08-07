@@ -104,6 +104,78 @@ export class SupabaseService {
     return data;
   }
 
+  /**
+   * Obtiene la información detallada de Ron Estancos Legarda desde la base de datos de Supabase
+   */
+  async getRonLegarda() {
+    try {
+      const { data, error } = await this.supabase
+        .from('products')
+        .select('*')
+        .ilike('name', '%legarda%')
+        .eq('is_active', true)
+        .limit(1)
+        .maybeSingle();
+
+      if (error) {
+        console.warn('Advertencia al consultar Ron Legarda en Supabase:', error.message);
+        return null;
+      }
+      return data;
+    } catch (err) {
+      console.error('Error al conectar con Supabase para Ron Legarda:', err);
+      return null;
+    }
+  }
+
+  /**
+   * Obtiene la información detallada de Whisky Real Audiencia desde la base de datos de Supabase
+   */
+  async getWhiskyRealAudiencia() {
+    try {
+      const { data, error } = await this.supabase
+        .from('products')
+        .select('*')
+        .or('name.ilike.%audiencia%,slug.ilike.%audiencia%')
+        .eq('is_active', true)
+        .limit(1)
+        .maybeSingle();
+
+      if (error) {
+        console.warn('Advertencia al consultar Whisky Real Audiencia en Supabase:', error.message);
+        return null;
+      }
+      return data;
+    } catch (err) {
+      console.error('Error al conectar con Supabase para Whisky Real Audiencia:', err);
+      return null;
+    }
+  }
+
+  /**
+   * Obtiene la información detallada de Whiskey Chillos Valley Grain desde la base de datos de Supabase
+   */
+  async getWhiskeyChillosValley() {
+    try {
+      const { data, error } = await this.supabase
+        .from('products')
+        .select('*')
+        .or('name.ilike.%chillos%,slug.ilike.%chillos%')
+        .eq('is_active', true)
+        .limit(1)
+        .maybeSingle();
+
+      if (error) {
+        console.warn('Advertencia al consultar Whiskey Chillos Valley en Supabase:', error.message);
+        return null;
+      }
+      return data;
+    } catch (err) {
+      console.error('Error al conectar con Supabase para Whiskey Chillos Valley:', err);
+      return null;
+    }
+  }
+
   async getTours() {
     const { data, error } = await this.supabase
       .from('products')

@@ -7,6 +7,9 @@ import { VisitasPage } from './pages/visitas-page/visitas-page';
 import { TiendaPage } from './pages/tienda-page/tienda-page';
 import { CartPage } from './pages/cart-page/cart-page';
 import { CheckoutPage } from './pages/checkout-page/checkout-page';
+import { RonLegardaPage } from './pages/ron-legarda-page/ron-legarda-page';
+import { WhiskyRealAudienciaPage } from './pages/whisky-real-audiencia-page/whisky-real-audiencia-page';
+import { WhiskeyChillosValleyPage } from './pages/whiskey-chillos-valley-page/whiskey-chillos-valley-page';
 
 
 export const routes: Routes = [
@@ -22,7 +25,7 @@ export const routes: Routes = [
         title: 'Ron y Whisky Artesanal de los Andes | Estancos Distilling Co.',
         data: {
           description: 'Descubre nuestros destilados premium madurados a 2500 msnm. Ron añejo y whisky andino elaborados con pasión y tradición en Ecuador.',
-          ogImage: '[https://qgbwjkjgnyaynctlqxvq.supabase.co/storage/v1/object/public/views/hero.jpeg](https://qgbwjkjgnyaynctlqxvq.supabase.co/storage/v1/object/public/views/hero.jpeg)'
+          ogImage: 'https://qgbwjkjgnyaynctlqxvq.supabase.co/storage/v1/object/public/views/hero.jpeg'
         }
     },
     {
@@ -31,8 +34,55 @@ export const routes: Routes = [
         title: 'Nuestra Colección de Espíritus | Estancos',
         data: {
           description: 'Explora las notas de cata y la historia detrás de nuestro ron y whisky. Destilados de clase mundial, moldeados por la altura.',
-          ogImage: '[https://qgbwjkjgnyaynctlqxvq.supabase.co/storage/v1/object/public/espiritus/whiskey-60-ecommerce.jpeg](https://qgbwjkjgnyaynctlqxvq.supabase.co/storage/v1/object/public/espiritus/whiskey-60-ecommerce.jpeg)'
+          ogImage: 'https://qgbwjkjgnyaynctlqxvq.supabase.co/storage/v1/object/public/espiritus/whiskey-60-ecommerce.jpeg'
       }
+    },
+    {
+        path: 'espiritus/ron-legarda',
+        component: RonLegardaPage,
+        title: 'Ron Estancos Legarda | Estancos Distilling Co.',
+        data: {
+          description: 'Descubre el Ron Estancos Legarda. Añejado a 2500 msnm en barricas de roble americano ex-bourbon. Notas de cata, historia y compra directa.',
+          ogImage: 'https://images.unsplash.com/photo-1527281400683-1aae777175f8?q=80&w=1000&auto=format&fit=crop'
+        }
+    },
+    {
+        path: 'ron-estancos-legarda',
+        redirectTo: 'espiritus/ron-legarda',
+        pathMatch: 'full'
+    },
+    {
+        path: 'espiritus/whisky-real-audiencia',
+        component: WhiskyRealAudienciaPage,
+        title: 'Whisky Real Audiencia Single Malt | Estancos Distilling Co.',
+        data: {
+          description: 'Descubre el Whisky Real Audiencia Single Malt. El primer whisky andino destilado a 2500 msnm con malta seleccionada y agua de glaciar.',
+          ogImage: 'https://qgbwjkjgnyaynctlqxvq.supabase.co/storage/v1/object/public/espiritus/whiskey-60-ecommerce.jpeg'
+        }
+    },
+    {
+        path: 'whisky-real-audiencia',
+        redirectTo: 'espiritus/whisky-real-audiencia',
+        pathMatch: 'full'
+    },
+    {
+        path: 'espiritus/whiskey-chillos-valley',
+        component: WhiskeyChillosValleyPage,
+        title: 'Whiskey Chillos Valley Grain | Estancos Distilling Co.',
+        data: {
+          description: 'Descubre el Whiskey Chillos Valley Grain. Destilado artesanal de granos andinos madurado a 2500 msnm.',
+          ogImage: 'https://images.unsplash.com/photo-1527281400683-1aae777175f8?q=80&w=1000&auto=format&fit=crop'
+        }
+    },
+    {
+        path: 'whiskey-chillos-valley',
+        redirectTo: 'espiritus/whiskey-chillos-valley',
+        pathMatch: 'full'
+    },
+    {
+        path: 'whisky-chillos-valley',
+        redirectTo: 'espiritus/whiskey-chillos-valley',
+        pathMatch: 'full'
     },
     {
         path: 'rommeliers',
