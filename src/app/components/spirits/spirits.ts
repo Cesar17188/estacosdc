@@ -1,6 +1,6 @@
-import { Component, signal, OnInit, inject } from '@angular/core';
+import { Component, signal, OnInit, inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser, CommonModule } from '@angular/common';
 import { SupabaseService } from '../../services/supabase';
-import { CommonModule } from '@angular/common';
 import { RouterLink } from "@angular/router";
 
 export interface FeaturedSpirit {
@@ -25,12 +25,9 @@ export interface FeaturedSpirit {
 export class Spirits implements OnInit {
   // === INYECCIÓN DE SERVICIOS ===
   supabaseService = inject(SupabaseService);
+  platformId = inject(PLATFORM_ID);
 
-  // === ESTADO REACTIVO ===
-  spirits = signal<FeaturedSpirit[]>([]);
-  isLoading = signal<boolean>(true);
-
-  // Fallback / Datos por defecto para las vitrinas principales de espirituosos con URLs verificadas
+  // Fallback / Datos por defecto precargados para renders INSTANTÁNEOS (0ms de espera)
   defaultSpirits: FeaturedSpirit[] = [
     {
       id: 'ron-legarda',
@@ -67,10 +64,22 @@ export class Spirits implements OnInit {
     }
   ];
 
-  // Ciclo de vida
-  async ngOnInit(): Promise<void> {
+  // === ESTADO REACTIVO INICIALIZADO DE FORMA INSTANTÁNEA ===
+  spirits = signal<FeaturedSpirit[]>(this.defaultSpirits);
+  isLoading = signal<boolean>(false);
+
+  // Ciclo de vida: Render inmediato + Sincronización asíncrona no bloqueante
+  ngOnInit(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      this.refreshFromDatabase();
+    }
+  }
+
+  /**
+   * Sincroniza datos con la base de datos de Supabase en segundo plano sin pausar el render de UI
+   */
+  private async refreshFromDatabase(): Promise<void> {
     try {
-      this.isLoading.set(true);
       const dbSpirits = await this.supabaseService.getFeaturedSpirits();
       if (dbSpirits && dbSpirits.length > 0) {
         const formattedSpirits = dbSpirits.map((spirit: FeaturedSpirit) => ({
@@ -80,14 +89,9 @@ export class Spirits implements OnInit {
           age: this.getSpiritAge(spirit)
         }));
         this.spirits.set(formattedSpirits);
-      } else {
-        this.spirits.set(this.defaultSpirits);
       }
     } catch (error) {
-      console.error('Error cargando el resumen de espíritus:', error);
-      this.spirits.set(this.defaultSpirits);
-    } finally {
-      this.isLoading.set(false);
+      console.warn('Manteniendo vitrinas precargadas por rendimiento:', error);
     }
   }
 
@@ -184,5 +188,6 @@ export class Spirits implements OnInit {
     }
   }
 }
+
 
 

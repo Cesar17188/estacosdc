@@ -104,8 +104,23 @@ export class SpiritsPage implements OnInit {
   }
 
   // Manejador de imágenes rotas
-  onImageError(event: Event) {
+  onImageError(event: Event, productName?: string) {
     const target = event.target as HTMLImageElement;
-    target.src = 'https://images.unsplash.com/photo-1527281400683-1aae777175f8?q=80&w=1000&auto=format&fit=crop';
+    if (target.getAttribute('data-failed')) {
+      return;
+    }
+    target.setAttribute('data-failed', 'true');
+    target.onerror = null;
+
+    const nameLower = (productName || '').toLowerCase();
+    if (nameLower.includes('legarda')) {
+      target.src = 'https://qgbwjkjgnyaynctlqxvq.supabase.co/storage/v1/object/public/views/RonEcommerce.jpeg';
+    } else if (nameLower.includes('audiencia')) {
+      target.src = 'https://qgbwjkjgnyaynctlqxvq.supabase.co/storage/v1/object/public/views/whiskyEcommerce.jpeg';
+    } else if (nameLower.includes('chillos') || nameLower.includes('valley')) {
+      target.src = 'https://qgbwjkjgnyaynctlqxvq.supabase.co/storage/v1/object/public/espiritus/whiskey-60-ecommerce.jpeg';
+    } else {
+      target.src = 'https://images.unsplash.com/photo-1527281400683-1aae777175f8?q=80&w=800&auto=format&fit=crop';
+    }
   }
 }
