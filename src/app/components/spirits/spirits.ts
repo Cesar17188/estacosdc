@@ -1,4 +1,4 @@
-import { Component, signal, computed, OnInit, inject } from '@angular/core';
+import { Component, signal, OnInit, inject } from '@angular/core';
 import { SupabaseService } from '../../services/supabase';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from "@angular/router";
@@ -11,6 +11,8 @@ export interface FeaturedSpirit {
   description: string;
   short_description?: string;
   image_url: string;
+  abv?: string;
+  age?: string;
 }
 
 @Component({
@@ -28,17 +30,97 @@ export class Spirits implements OnInit {
   spirits = signal<FeaturedSpirit[]>([]);
   isLoading = signal<boolean>(true);
 
+  // Fallback / Datos por defecto para las vitrinas principales de espirituosos con URLs verificadas
+  defaultSpirits: FeaturedSpirit[] = [
+    {
+      id: 'ron-legarda',
+      name: 'Ron Estancos Legarda',
+      category: 'Ron Añejo de Altura',
+      price: 45.00,
+      abv: '40% Vol.',
+      age: '8 Años Roble Ex-Bourbon',
+      description: 'Añejado pacientemente a 2500 msnm en barricas de roble americano ex-bourbon. Notas complejas de miel, vainilla y roble ahumado.',
+      short_description: 'Ron premium madurado a 2500 msnm en barricas de roble ex-bourbon. Sabor cálido, profundo y aromático.',
+      image_url: 'https://qgbwjkjgnyaynctlqxvq.supabase.co/storage/v1/object/public/product-images/1785974515924-kfh4xh0x93.jpeg'
+    },
+    {
+      id: 'whisky-real-audiencia',
+      name: 'Whisky Real Audiencia',
+      category: 'Single Malt Andino',
+      price: 65.00,
+      abv: '40% Vol.',
+      age: 'Single Malt Seleccionado',
+      description: 'El primer whisky single malt destilado en los Andes ecuatorianos a 2500 msnm. Perfil noble, aromático y especiado.',
+      short_description: 'Single Malt andino de pura malta destilado a gran altura. Gran cuerpo, notas ahumadas suaves y roble tostado.',
+      image_url: 'https://qgbwjkjgnyaynctlqxvq.supabase.co/storage/v1/object/public/product-images/1785974549778-45u18oado8b.jpeg'
+    },
+    {
+      id: 'whiskey-chillos-valley',
+      name: 'Whiskey Chillos Valley Grain',
+      category: 'Whiskey de Granos Andinos',
+      price: 50.00,
+      abv: '50% Vol.',
+      age: 'Crianza en Roble Tostado',
+      description: 'Destilado artesanal elaborado a partir de granos andinos seleccionados del valle de Los Chillos. Suave, maltoso y fluido.',
+      short_description: 'Whiskey de granos andinos de altitud. Dulzura maltosa, mantequilla de almendras y fondo cálido especiado.',
+      image_url: 'https://qgbwjkjgnyaynctlqxvq.supabase.co/storage/v1/object/public/product-images/1785974601243-c91k221iz0g.jpeg'
+    }
+  ];
+
   // Ciclo de vida
   async ngOnInit(): Promise<void> {
     try {
       this.isLoading.set(true);
       const dbSpirits = await this.supabaseService.getFeaturedSpirits();
-      this.spirits.set(dbSpirits || []);
+      if (dbSpirits && dbSpirits.length > 0) {
+        const formattedSpirits = dbSpirits.map((spirit: FeaturedSpirit) => ({
+          ...spirit,
+          image_url: this.getSpiritImage(spirit),
+          abv: this.getSpiritAbv(spirit),
+          age: this.getSpiritAge(spirit)
+        }));
+        this.spirits.set(formattedSpirits);
+      } else {
+        this.spirits.set(this.defaultSpirits);
+      }
     } catch (error) {
       console.error('Error cargando el resumen de espíritus:', error);
+      this.spirits.set(this.defaultSpirits);
     } finally {
       this.isLoading.set(false);
     }
+  }
+
+  getSpiritAbv(spirit: FeaturedSpirit): string {
+    if (spirit.abv) return spirit.abv;
+    return '40% Vol.';
+  }
+
+  getSpiritAge(spirit: FeaturedSpirit): string {
+    if (spirit.age) return spirit.age;
+    const nameLower = (spirit.name || '').toLowerCase();
+    if (nameLower.includes('legarda')) return '8 Años Roble';
+    if (nameLower.includes('audiencia')) return 'Single Malt';
+    if (nameLower.includes('chillos')) return 'Granos Andinos';
+    return 'Crianza en Roble';
+  }
+
+  getSpiritImage(spirit: FeaturedSpirit): string {
+    const img = spirit?.image_url;
+    if (img && img.trim().length > 0 && !img.includes('unsplash.com')) {
+      return img.trim();
+    }
+    const nameLower = (spirit?.name || '').toLowerCase();
+    if (nameLower.includes('legarda')) {
+      return 'https://qgbwjkjgnyaynctlqxvq.supabase.co/storage/v1/object/public/product-images/1785974515924-kfh4xh0x93.jpeg';
+    }
+    if (nameLower.includes('audiencia') || nameLower.includes('real')) {
+      return 'https://qgbwjkjgnyaynctlqxvq.supabase.co/storage/v1/object/public/product-images/1785974549778-45u18oado8b.jpeg';
+    }
+    if (nameLower.includes('chillos') || nameLower.includes('valley')) {
+      return 'https://qgbwjkjgnyaynctlqxvq.supabase.co/storage/v1/object/public/product-images/1785974601243-c91k221iz0g.jpeg';
+    }
+    return img || 'https://qgbwjkjgnyaynctlqxvq.supabase.co/storage/v1/object/public/product-images/1785974515924-kfh4xh0x93.jpeg';
   }
 
   /**
@@ -82,8 +164,25 @@ export class Spirits implements OnInit {
     return '/espiritus';
   }
 
-  onImageError(event: Event) {
+  onImageError(event: Event, spiritName?: string) {
     const target = event.target as HTMLImageElement;
-    target.src = 'https://images.unsplash.com/photo-1527281400683-1aae777175f8?q=80&w=1000&auto=format&fit=crop';
+    if (target.getAttribute('data-failed')) {
+      return;
+    }
+    target.setAttribute('data-failed', 'true');
+    target.onerror = null;
+
+    const nameLower = (spiritName || '').toLowerCase();
+    if (nameLower.includes('legarda')) {
+      target.src = 'https://qgbwjkjgnyaynctlqxvq.supabase.co/storage/v1/object/public/views/RonEcommerce.jpeg';
+    } else if (nameLower.includes('audiencia')) {
+      target.src = 'https://qgbwjkjgnyaynctlqxvq.supabase.co/storage/v1/object/public/views/whiskyEcommerce.jpeg';
+    } else if (nameLower.includes('chillos') || nameLower.includes('valley')) {
+      target.src = 'https://qgbwjkjgnyaynctlqxvq.supabase.co/storage/v1/object/public/espiritus/whiskey-60-ecommerce.jpeg';
+    } else {
+      target.src = 'https://images.unsplash.com/photo-1527281400683-1aae777175f8?q=80&w=800&auto=format&fit=crop';
+    }
   }
 }
+
+

@@ -5,17 +5,22 @@
     itemscope 
     itemtype="https://schema.org/ItemList"
   >
-    <meta itemprop="name" content="Colección de Licores Artesanales Estancos Distilling Co." />
-    <meta itemprop="description" content="Licores y destilados artesanales de alta gama madurados a 2500 msnm en los Andes ecuatorianos." />
+    <meta itemprop="name" content="Vitrinas de Espíritus Artesanales Estancos Distilling Co." />
+    <meta itemprop="description" content="Vitrinas exclusivas de destilados de alta gama madurados a 2500 msnm en los Andes ecuatorianos." />
     <meta itemprop="numberOfItems" [content]="spirits().length" />
 
     <div class="container">
 
       <header class="section-header">
-        <span class="section-subtitle">Nuestra Colección de Destilados</span>
-        <h2 id="spirits-heading">Espíritus de Altura</h2>
+        <span class="section-subtitle">Vitrinas de Selección Privada</span>
+        <h2 id="spirits-heading">Vitrinas de Espíritus de Altura</h2>
+        <div class="header-divider" aria-hidden="true">
+          <span class="divider-line"></span>
+          <span class="divider-diamond">◆</span>
+          <span class="divider-line"></span>
+        </div>
         <p class="section-description-aeo">
-          Licores artesanales premium elaborados en los Andes a 2500 msnm: Ron Añejo y Whiskey Single Malt de edición limitada.
+          Explora directamente nuestras vitrinas de licores artesanales. Entra a la experiencia dedicada de cada destilado para conocer su historia, notas de cata y origen a 2500 msnm.
         </p>
       </header>
 
@@ -23,43 +28,69 @@
       @if (isLoading()) {
         <div class="loader-container" role="status" aria-live="polite">
           <div class="spinner" aria-hidden="true"></div>
-          <div class="loader-text">Obteniendo Colección de Licores...</div>
+          <div class="loader-text">Abriendo Vitrinas de Espíritus...</div>
         </div>
       } @else {
-        <!-- GRID DE PRODUCTOS (OPTIMIZADO AEO) -->
-        <div class="spirits-grid">
+        <!-- GRID DE VITRINAS -->
+        <div class="vitrinas-grid">
           @for (spirit of spirits(); track spirit.id; let i = $index) {
-            <article 
-              class="spirit-card"
+            <a 
+              [routerLink]="getSpiritRoute(spirit.name)"
+              class="vitrina-card"
               itemprop="itemListElement" 
               itemscope 
               itemtype="https://schema.org/Product"
+              [attr.aria-label]="'Entrar a la vitrina de ' + spirit.name"
             >
               <meta itemprop="position" [content]="i + 1" />
               <link itemprop="url" [href]="getSpiritRoute(spirit.name)" />
 
-              <div class="card-image-wrapper">
-                <img
-                  [src]="spirit.image_url"
-                  [alt]="'Botella de ' + spirit.name + ' - Licor artesanal de altura'"
-                  class="card-image"
-                  loading="lazy"
-                  decoding="async"
-                  itemprop="image"
-                  (error)="onImageError($event)"
-                >
+              <!-- ESTRUCTURA DE LA VITRINA DE CRISTAL E ILUMINACIÓN -->
+              <div class="vitrina-showcase-box">
+                <div class="vitrina-top-badge">
+                  <span class="vitrina-num">Vitrina N° {{ i === 0 ? 'I' : i === 1 ? 'II' : 'III' }}</span>
+                  <span class="vitrina-direct-tag">Entrar Directo</span>
+                </div>
+
+                <!-- LUZ RADIAL DEL PEDESTAL -->
+                <div class="vitrina-light-halo"></div>
+
+                <!-- OVERLAY FLOTANTE EN VITRINA -->
+                <div class="vitrina-glass-overlay">
+                  <span class="glass-click-hint">Ver Notas de Cata &rarr;</span>
+                </div>
+
+                <div class="vitrina-image-container">
+                  <img
+                    [src]="spirit.image_url"
+                    [alt]="'Vitrina de ' + spirit.name + ' - Licor artesanal de altura'"
+                    class="vitrina-bottle-img"
+                    loading="eager"
+                    decoding="async"
+                    itemprop="image"
+                    (error)="onImageError($event, spirit.name)"
+                  >
+                </div>
               </div>
 
-              <div class="card-content">
-                <span class="spirit-category" itemprop="category">{{ spirit.category }}</span>
-                <h3 itemprop="name">{{ spirit.name }}</h3>
+              <!-- DATOS Y ESPECIFICACIONES EN LA VITRINA -->
+              <div class="vitrina-info">
+                <span class="vitrina-category" itemprop="category">{{ spirit.category }}</span>
+                <h3 class="vitrina-title" itemprop="name">{{ spirit.name }}</h3>
 
-                <!-- DESCRIPCIÓN CORTA DEL LICOR -->
-                <p class="spirit-short-description" itemprop="description">
+                <!-- MINI ESPECIFICACIONES DE CATA -->
+                <div class="vitrina-specs-row">
+                  <span class="vitrina-spec-pill">{{ getSpiritAbv(spirit) }}</span>
+                  <span class="vitrina-spec-pill">{{ getSpiritAge(spirit) }}</span>
+                  <span class="vitrina-spec-pill">2500 MSNM</span>
+                </div>
+
+                <!-- DESCRIPCIÓN CORTA -->
+                <p class="vitrina-short-desc" itemprop="description">
                   {{ getShortDescription(spirit) }}
                 </p>
 
-                <!-- MICRODATOS OCULTOS PARA BUSCADORES Y MOTORES DE RESPUESTA AEO -->
+                <!-- MICRODATOS OCULTOS SCHEMA.ORG -->
                 <div itemprop="brand" itemscope itemtype="https://schema.org/Brand" style="display:none;">
                   <meta itemprop="name" content="Estancos Distilling Co." />
                 </div>
@@ -71,28 +102,34 @@
                   </div>
                 }
 
-                <div class="card-actions">
-                  <!-- BOTÓN QUE REDIRIGE A LA PÁGINA ESPECÍFICA DE CATA DEL LICOR -->
-                  <a 
-                    [routerLink]="getSpiritRoute(spirit.name)" 
-                    class="btn-outline btn-spirit-redirect"
-                    [attr.aria-label]="'Ver notas de cata completas de ' + spirit.name"
-                    [title]="'Explorar notas de cata completas de ' + spirit.name"
-                  >
-                    <span>Ver Notas de Cata</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="arrow-icon" aria-hidden="true">
-                      <line x1="5" y1="12" x2="19" y2="12"></line>
-                      <polyline points="12 5 19 12 12 19"></polyline>
-                    </svg>
-                  </a>
+                <!-- BOTÓN PRINCIPAL DE ENTRADA A LA VITRINA -->
+                <div class="vitrina-action-btn">
+                  <span>Entrar a la Vitrina</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="arrow-icon" aria-hidden="true">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                  </svg>
                 </div>
+
               </div>
 
-            </article>
+            </a>
           }
+        </div>
+
+        <!-- BOTÓN FOOTER PARA VER EL CATÁLOGO COMPLETO -->
+        <div class="spirits-catalog-footer">
+          <a routerLink="/espiritus" class="btn-catalog-view-all">
+            <span>Ver Catálogo Completo de Espíritus</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </a>
         </div>
       }
 
     </div>
   </section>
 </main>
+

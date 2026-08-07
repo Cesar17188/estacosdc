@@ -65,7 +65,7 @@ export class WhiskeyChillosValleyPage implements OnInit {
       palate: 'Sedoso, fluido y cremoso en paladar. Destacan notas a frutos amarillos, mantequilla salada, caramelo blando y vainilla andina.',
       finish: 'Final suave, amigable y refrescante con toques sutiles de avellana, pimienta blanca y toque amaderado.'
     },
-    image_url: 'https://images.unsplash.com/photo-1527281400683-1aae777175f8?q=80&w=1000&auto=format&fit=crop'
+    image_url: 'https://qgbwjkjgnyaynctlqxvq.supabase.co/storage/v1/object/public/product-images/1785974601243-c91k221iz0g.jpeg'
   };
 
   async ngOnInit(): Promise<void> {
