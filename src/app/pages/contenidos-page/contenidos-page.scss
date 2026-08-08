@@ -1,52 +1,265 @@
-* { box-sizing: border-box; }
-      .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; }
-      .section-padding { padding: 4rem 0; }
+/* ================= ESTILOS PÁGINA UNIVERSO ESTANCOS (MOBILE FIRST) ================= */
 
-      /* ================= HERO DE CONTENIDOS ================= */
-      .content-hero {
-        text-align: center;
-        padding: 6rem 0 4rem 0;
-        background: linear-gradient(to bottom, var(--color-bg-surface), var(--color-bg-base));
-        border-bottom: 1px solid var(--color-border);
-      }
-      .content-hero h1 { font-family: var(--font-heading); font-size: clamp(2.5rem, 5vw, 4rem); color: var(--color-accent-gold); margin-bottom: 1rem; letter-spacing: 2px; text-transform: uppercase; }
-      .content-hero p { color: var(--color-text-muted); font-size: 1.1rem; max-width: 700px; margin: 0 auto; line-height: 1.6; font-weight: 300; }
+main {
+  min-height: 100vh;
+  background-color: var(--color-bg-base, #0a0a0a);
+  color: var(--color-text-main, #ffffff);
+}
 
-      /* ================= PESTAÑAS (TABS) ================= */
-      .tabs-container {
-        display: flex;
-        justify-content: center;
-        gap: 1rem;
-        margin-top: -25px; /* Superpuesto al borde del hero */
-        position: relative;
-        z-index: 10;
-        flex-wrap: wrap;
-      }
-      .tab-btn {
-        background-color: var(--color-bg-surface);
-        border: 1px solid var(--color-border);
-        color: var(--color-text-muted);
-        padding: 1rem 2rem;
-        font-family: var(--font-heading);
-        font-size: 0.95rem;
-        text-transform: uppercase;
-        letter-spacing: 2px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: var(--transition-smooth);
-        border-radius: 4px;
-        box-shadow: 0 10px 20px rgba(0,0,0,0.5);
-      }
-      .tab-btn:hover { color: var(--color-text-main); border-color: rgba(212, 175, 55, 0.5); }
-      .tab-btn.active {
-        background-color: var(--color-accent-gold);
-        color: #121212;
-        border-color: var(--color-accent-gold);
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+
+  @media (min-width: 768px) {
+    padding: 0 1.5rem;
+  }
+}
+
+/* ================= BREADCRUMBS SCHEMA.ORG ================= */
+.breadcrumb-container {
+  padding-top: 1.5rem;
+  padding-bottom: 0.5rem;
+
+  .breadcrumb-list {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 0.8rem;
+    font-family: var(--font-heading, serif);
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+
+    li {
+      display: flex;
+      align-items: center;
+
+      &::after {
+        content: '/';
+        margin-left: 0.5rem;
+        color: rgba(255, 255, 255, 0.3);
       }
 
-      /* Animación de entrada para los componentes inyectados */
-      .tab-wrapper { animation: fadeIn 0.4s ease-out; }
-      @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+      &:last-child::after {
+        content: '';
+      }
 
-      /* Estilo del mock para el canvas */
-      .mock-child { padding: 4rem; text-align: center; border: 2px dashed var(--color-accent-gold); border-radius: 8px; color: var(--color-accent-gold); background-color: rgba(212, 175, 55, 0.05); font-family: var(--font-heading); font-size: 1.2rem; }
+      a {
+        color: var(--color-accent-gold, #d4af37);
+        text-decoration: none;
+        transition: color 0.3s ease;
+
+        &:hover {
+          color: #ffffff;
+        }
+      }
+
+      span {
+        color: var(--color-text-muted, #a0a0a0);
+      }
+    }
+  }
+}
+
+/* ================= HERO DE CONTENIDOS (MOBILE FIRST) ================= */
+.content-hero {
+  text-align: center;
+  padding: 3.5rem 1rem 3rem 1rem;
+  background: radial-gradient(circle at top center, rgba(35, 28, 15, 0.65) 0%, rgba(10, 10, 10, 0.95) 100%);
+  position: relative;
+
+  @media (min-width: 768px) {
+    padding: 5.5rem 0 4rem 0;
+  }
+
+  .hero-crest {
+    margin-bottom: 0.6rem;
+
+    .crest-symbol {
+      font-size: 1.8rem;
+      color: var(--color-accent-gold, #d4af37);
+      opacity: 0.9;
+    }
+  }
+
+  .hero-subtitle {
+    display: block;
+    font-family: var(--font-heading, serif);
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: var(--color-accent-gold, #d4af37);
+    margin-bottom: 0.6rem;
+    font-weight: 600;
+
+    @media (min-width: 768px) {
+      font-size: 0.85rem;
+      letter-spacing: 4px;
+    }
+  }
+
+  h1 {
+    font-family: var(--font-heading, serif);
+    font-size: clamp(2.2rem, 5.5vw, 3.8rem);
+    color: #ffffff;
+    margin: 0 0 1rem 0;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
+    line-height: 1.15;
+  }
+
+  /* Divisor Neoclásico */
+  .classic-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin: 1rem auto 1.4rem;
+    max-width: 280px;
+
+    .divider-line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.5), transparent);
+    }
+
+    .divider-diamond {
+      color: var(--color-accent-gold, #d4af37);
+      font-size: 0.7rem;
+    }
+  }
+
+  p {
+    color: var(--color-text-muted, #bbbbbb);
+    font-size: 0.98rem;
+    max-width: 680px;
+    margin: 0 auto;
+    line-height: 1.7;
+    font-weight: 300;
+
+    @media (min-width: 768px) {
+      font-size: 1.08rem;
+    }
+  }
+}
+
+/* ================= PESTAÑAS (TABS) MOBILE FIRST ================= */
+.tabs-container {
+  display: flex;
+  justify-content: flex-start;
+  gap: 0.75rem;
+  margin-top: -22px;
+  position: relative;
+  z-index: 15;
+  overflow-x: auto;
+  padding-bottom: 0.6rem;
+  -webkit-overflow-scrolling: touch;
+
+  @media (min-width: 700px) {
+    justify-content: center;
+    gap: 1rem;
+    margin-top: -28px;
+    overflow-x: visible;
+    flex-wrap: wrap;
+  }
+
+  &::-webkit-scrollbar {
+    height: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(212, 175, 55, 0.3);
+    border-radius: 4px;
+  }
+}
+
+.tab-btn {
+  flex-shrink: 0;
+  min-height: 48px;
+  background-color: var(--color-bg-card, #121212);
+  border: 1px solid var(--color-border, rgba(212, 175, 55, 0.25));
+  color: var(--color-text-muted, #bbbbbb);
+  padding: 0.8rem 1.4rem;
+  font-family: var(--font-heading, serif);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  font-weight: 700;
+  cursor: pointer;
+  border-radius: 6px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  text-decoration: none;
+
+  @media (min-width: 768px) {
+    font-size: 0.9rem;
+    padding: 0.9rem 1.8rem;
+  }
+
+  .tab-icon {
+    color: var(--color-accent-gold, #d4af37);
+    transition: transform 0.3s ease, color 0.3s ease;
+    flex-shrink: 0;
+  }
+
+  &:hover {
+    color: #ffffff;
+    border-color: var(--color-accent-gold, #d4af37);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(212, 175, 55, 0.25);
+
+    .tab-icon {
+      transform: scale(1.15);
+    }
+  }
+
+  &.active {
+    background: linear-gradient(135deg, #e6c265 0%, var(--color-accent-gold, #d4af37) 50%, #b8860b 100%);
+    color: #0d0d0d;
+    border-color: rgba(255, 235, 175, 0.6);
+    box-shadow: 0 8px 25px rgba(212, 175, 55, 0.45);
+
+    .tab-icon {
+      color: #0d0d0d;
+    }
+  }
+
+  &:focus-visible {
+    outline: 3px solid #ffffff;
+    outline-offset: 3px;
+  }
+}
+
+/* ================= ÁREA DE CONTENIDO DINÁMICO ================= */
+.dynamic-tab-section {
+  min-height: 50vh;
+  padding-bottom: 4rem;
+
+  @media (min-width: 768px) {
+    padding-bottom: 6rem;
+  }
+}
+
+/* Animación de entrada para los componentes inyectados */
+.tab-wrapper {
+  animation: tabFadeIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes tabFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

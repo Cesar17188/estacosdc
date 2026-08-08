@@ -1,122 +1,506 @@
-/* Estilos de la Página */
-      .section-header { text-align: center; margin-bottom: 5rem; }
-      .section-subtitle { color: var(--color-accent-gold); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 1rem; display: block; font-weight: 500; }
-      .section-header h1 { font-family: var(--font-heading); font-size: clamp(2.5rem, 4vw, 3.5rem); color: var(--color-text-main); margin: 0; text-transform: uppercase; letter-spacing: 2px; }
-      .rommeliers-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 3rem; }
+/* ================= ESTILOS COMPONENTE ROMMELIER CARD (MOBILE FIRST) ================= */
 
-      /* Estilos de la Tarjeta (Integrados para evitar errores de renderizado en Canvas) */
-      .rommelier-card { background-color: var(--color-bg-card); border: 1px solid var(--color-border); border-radius: 4px; overflow: hidden; display: flex; flex-direction: column; transition: var(--transition-smooth); position: relative; text-align: center; height: 100%; }
-      .rommelier-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6); border-color: rgba(212, 175, 55, 0.3); }
-      .rommelier-img-wrapper { width: 100%; height: 380px; overflow: hidden; position: relative; }
-      .rommelier-img-wrapper::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 50%; background: linear-gradient(to top, var(--color-bg-card) 0%, transparent 100%); pointer-events: none; }
-      .rommelier-img { width: 100%; height: 100%; object-fit: cover; object-position: top center; transition: transform 0.6s ease; filter: grayscale(40%); }
-      .rommelier-card:hover .rommelier-img { transform: scale(1.05); filter: grayscale(0%); }
-      .rommelier-info { padding: 0 2rem 2.5rem 2rem; position: relative; z-index: 2; margin-top: -30px; display: flex; flex-direction: column; flex-grow: 1; }
-      .rommelier-name { font-family: var(--font-heading); font-size: 1.5rem; color: var(--color-accent-gold); margin: 0 0 0.5rem 0; letter-spacing: 1px; }
-      .rommelier-role { font-size: 0.85rem; text-transform: uppercase; color: var(--color-text-main); letter-spacing: 2px; margin-bottom: 1.5rem; font-weight: 500; }
-      .rommelier-desc { color: var(--color-text-muted); font-size: 0.95rem; line-height: 1.6; margin-bottom: 2rem; font-weight: 300; flex-grow: 1; }
-      .social-icons { display: flex; justify-content: center; gap: 1.2rem; border-top: 1px solid var(--color-border); padding-top: 1.5rem; }
-      .social-link { color: var(--color-text-muted); transition: var(--transition-smooth); display: flex; align-items: center; justify-content: center; }
-      .social-link:hover { color: var(--color-accent-gold); transform: translateY(-3px); }
-      .social-link svg { width: 22px; height: 22px; }
+.rommeliers-section {
+  background-color: var(--color-bg-base, #0a0a0a);
+  color: var(--color-text-main, #ffffff);
+  padding: 3.5rem 1rem;
 
-      main { flex-grow: 1; }
+  @media (min-width: 768px) {
+    padding: 6rem 0;
+  }
+}
 
-      /* ================= QUÉ ES ESTANCOS ================= */
-      .about-estancos {
-        background-color: var(--color-bg-surface);
-        border-bottom: 1px solid var(--color-border);
-        position: relative;
-        overflow: hidden;
+.section-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+
+  @media (min-width: 768px) {
+    margin-bottom: 4.5rem;
+  }
+
+  .section-subtitle {
+    color: var(--color-accent-gold, #d4af37);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    margin-bottom: 0.6rem;
+    display: block;
+    font-weight: 600;
+
+    @media (min-width: 768px) {
+      font-size: 0.9rem;
+      letter-spacing: 3px;
+    }
+  }
+
+  h1 {
+    font-family: var(--font-heading, serif);
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    color: #ffffff;
+    margin: 0 0 0.8rem 0;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+  }
+
+  .header-description {
+    color: var(--color-text-muted, #a0a0a0);
+    font-size: 0.95rem;
+    max-width: 620px;
+    margin: 0 auto;
+    line-height: 1.65;
+
+    @media (min-width: 768px) {
+      font-size: 1.05rem;
+    }
+  }
+}
+
+/* ================= GRID DE 3 TARJETAS (MOBILE FIRST) ================= */
+.rommeliers-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  @media (min-width: 650px) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2.2rem;
+  }
+
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2.5rem;
+  }
+}
+
+/* ================= TARJETA DE ROMMELIER (MOBILE FIRST) ================= */
+.rommelier-card {
+  background-color: var(--color-bg-card, #121212);
+  border: 1px solid var(--color-border, rgba(212, 175, 55, 0.2));
+  border-radius: 6px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease, border-color 0.4s ease;
+  position: relative;
+  text-align: left;
+  height: 100%;
+
+  &:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
+    border-color: rgba(212, 175, 55, 0.5);
+
+    .rommelier-img {
+      transform: scale(1.03);
+      filter: grayscale(0%);
+    }
+  }
+}
+
+/* FOTOGRAFÍA MOSTRANDO CONTENIDO COMPLETO */
+.rommelier-img-wrapper {
+  width: 100%;
+  aspect-ratio: 9 / 16;
+  overflow: hidden;
+  position: relative;
+  background-color: var(--color-bg-card, #121212);
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 25%;
+    background: linear-gradient(to top, var(--color-bg-card, #121212) 0%, transparent 100%);
+    pointer-events: none;
+  }
+
+  .badge-role {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    z-index: 3;
+    background: rgba(18, 18, 18, 0.85);
+    border: 1px solid var(--color-accent-gold, #d4af37);
+    color: var(--color-accent-gold, #d4af37);
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    padding: 0.3rem 0.75rem;
+    border-radius: 30px;
+    backdrop-filter: blur(6px);
+  }
+
+  .rommelier-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+    transition: transform 0.6s ease, filter 0.5s ease;
+    filter: grayscale(10%);
+  }
+}
+
+/* INFORMACIÓN Y DETALLES DE LA TARJETA */
+.rommelier-info {
+  padding: 0 1.2rem 1.8rem 1.2rem;
+  position: relative;
+  z-index: 2;
+  margin-top: -20px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+
+  @media (min-width: 768px) {
+    padding: 0 1.5rem 2.2rem 1.5rem;
+    margin-top: -25px;
+  }
+
+  .rommelier-name {
+    font-family: var(--font-heading, serif);
+    font-size: 1.25rem;
+    color: #ffffff;
+    margin: 0 0 0.3rem 0;
+    line-height: 1.25;
+    letter-spacing: 0.2px;
+
+    @media (min-width: 768px) {
+      font-size: 1.38rem;
+    }
+  }
+
+  .rommelier-role {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    color: var(--color-accent-gold, #d4af37);
+    letter-spacing: 1.8px;
+    margin-bottom: 1rem;
+    font-weight: 600;
+    display: block;
+
+    @media (min-width: 768px) {
+      font-size: 0.82rem;
+    }
+  }
+
+  .rommelier-desc {
+    color: var(--color-text-muted, #cccccc);
+    font-size: 0.9rem;
+    line-height: 1.65;
+    margin-bottom: 1.2rem;
+    font-weight: 300;
+
+    @media (min-width: 768px) {
+      font-size: 0.95rem;
+    }
+  }
+
+  /* Etiquetas de Especialidad */
+  .expertise-tags-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-bottom: 1.2rem;
+
+    .exp-tag {
+      font-size: 0.68rem;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--color-text-muted, #bbbbbb);
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      letter-spacing: 0.5px;
+    }
+  }
+
+  /* ================= BLOQUE DE TRIPLETAS SEMÁNTICAS (AEO) ================= */
+  .semantic-triplets-box {
+    background: radial-gradient(circle at top left, rgba(30, 25, 18, 0.85) 0%, rgba(15, 15, 15, 0.95) 100%);
+    border: 1px solid rgba(212, 175, 55, 0.25);
+    border-left: 3px solid var(--color-accent-gold, #d4af37);
+    border-radius: 4px;
+    padding: 0.9rem;
+    margin-bottom: 1.4rem;
+
+    .triplets-header-title {
+      display: block;
+      font-family: var(--font-heading, serif);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--color-accent-gold, #d4af37);
+      margin-bottom: 0.6rem;
+      font-weight: 600;
+    }
+
+    .triplets-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .triplet-item {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 0.3rem;
+      font-size: 0.8rem;
+      line-height: 1.45;
+      padding-bottom: 0.4rem;
+      border-bottom: 1px dashed rgba(255, 255, 255, 0.06);
+
+      &:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
       }
-      .about-bg-accent {
-        position: absolute;
-        top: -50%; left: -20%;
-        width: 70%; height: 150%;
-        background: radial-gradient(circle, rgba(212, 175, 55, 0.03) 0%, transparent 70%);
-        pointer-events: none;
+
+      .triplet-subject {
+        font-weight: 700;
+        color: #ffffff;
       }
-      .about-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 4rem;
+
+      .triplet-predicate {
+        color: var(--color-accent-gold, #d4af37);
+        font-style: italic;
+        font-size: 0.78rem;
+      }
+
+      .triplet-object {
+        color: var(--color-text-muted, #bbbbbb);
+      }
+    }
+  }
+
+  /* FOOTER Y ENLACES SOCIALES */
+  .card-footer {
+    margin-top: auto;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+
+    .social-icons {
+      display: flex;
+      justify-content: flex-start;
+      gap: 1rem;
+
+      .social-link {
+        color: var(--color-text-muted, #a0a0a0);
+        transition: color 0.3s ease, transform 0.3s ease;
+        display: flex;
         align-items: center;
-        position: relative;
-        z-index: 2;
+        justify-content: center;
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+
+        &:hover {
+          color: var(--color-accent-gold, #d4af37);
+          border-color: var(--color-accent-gold, #d4af37);
+          background: rgba(212, 175, 55, 0.1);
+          transform: translateY(-3px);
+        }
+
+        svg {
+          width: 18px;
+          height: 18px;
+        }
       }
-      .about-content h2 {
-        font-family: var(--font-heading);
-        font-size: clamp(2rem, 3.5vw, 3rem);
-        color: var(--color-text-main);
-        margin-bottom: 1.5rem;
-        line-height: 1.2;
+    }
+  }
+}
+
+/* ================= QUÉ ES ESTANCOS (HISTORIA & FILOSOFÍA) ================= */
+.about-estancos {
+  background-color: var(--color-bg-surface, #121212);
+  border-top: 1px solid var(--color-border, rgba(255, 255, 255, 0.08));
+  position: relative;
+  overflow: hidden;
+  padding: 3.5rem 1rem;
+
+  @media (min-width: 768px) {
+    padding: 6rem 0;
+  }
+
+  .about-bg-accent {
+    position: absolute;
+    top: -50%;
+    left: -20%;
+    width: 70%;
+    height: 150%;
+    background: radial-gradient(circle, rgba(212, 175, 55, 0.04) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+
+    @media (min-width: 900px) {
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 3.5rem;
+    }
+  }
+
+  .about-content {
+    .section-subtitle {
+      color: var(--color-accent-gold, #d4af37);
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 2.5px;
+      margin-bottom: 0.6rem;
+      display: block;
+      font-weight: 600;
+
+      @media (min-width: 768px) {
+        font-size: 0.85rem;
+        letter-spacing: 3px;
       }
-      .about-content p {
-        color: var(--color-text-muted);
+    }
+
+    h2 {
+      font-family: var(--font-heading, serif);
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      color: #ffffff;
+      margin-bottom: 1.2rem;
+      line-height: 1.2;
+    }
+
+    p {
+      color: var(--color-text-muted, #cccccc);
+      font-size: 0.95rem;
+      line-height: 1.75;
+      margin-bottom: 1.2rem;
+
+      @media (min-width: 768px) {
         font-size: 1.05rem;
         line-height: 1.8;
-        margin-bottom: 1.5rem;
-        font-weight: 300;
-        text-align: justify;
       }
 
-      /* Cita de T. Jefferson */
-      .jefferson-quote {
-        margin-top: 3rem;
+      &.lead-text {
+        color: #ffffff;
+        font-weight: 400;
+      }
+    }
+
+    /* Cita de T. Jefferson */
+    .jefferson-quote {
+      margin-top: 2rem;
+      padding: 1.2rem 1.4rem;
+      border-left: 3px solid var(--color-accent-gold, #d4af37);
+      background: linear-gradient(to right, rgba(212, 175, 55, 0.05), transparent);
+      border-radius: 0 4px 4px 0;
+
+      @media (min-width: 768px) {
+        margin-top: 2.5rem;
         padding: 1.5rem 2rem;
-        border-left: 3px solid var(--color-accent-gold);
-        background: linear-gradient(to right, rgba(212, 175, 55, 0.05), transparent);
-        border-radius: 0 4px 4px 0;
       }
-      .jefferson-quote p {
-        font-family: var(--font-heading);
-        color: var(--color-accent-gold);
-        font-size: 1.15rem;
+
+      p {
+        font-family: var(--font-heading, serif);
+        color: var(--color-accent-gold, #d4af37);
+        font-size: 1.05rem;
         font-style: italic;
-        margin-bottom: 0.8rem;
-        text-align: left;
+        margin-bottom: 0.6rem;
+        line-height: 1.5;
+
+        @media (min-width: 768px) {
+          font-size: 1.15rem;
+        }
       }
-      .jefferson-quote span {
-        color: var(--color-text-main);
-        font-size: 0.85rem;
+
+      cite {
+        color: #ffffff;
+        font-size: 0.8rem;
         text-transform: uppercase;
         letter-spacing: 2px;
-        font-weight: 500;
-      }
+        font-weight: 600;
+        font-style: normal;
 
-      /* Imagen Decorativa Historia */
-      .about-visual { position: relative; }
-      .about-image-wrapper {
-        position: relative;
-        z-index: 2;
-        border-radius: 4px;
-        overflow: hidden;
-        box-shadow: 0 25px 50px rgba(0,0,0,0.6);
-        border: 1px solid var(--color-border);
+        @media (min-width: 768px) {
+          font-size: 0.85rem;
+        }
       }
+    }
+  }
+
+  /* IMAGEN DECORATIVA Y BADGE EN SECCIÓN HISTÓRICA COMPACTA */
+  .about-visual {
+    position: relative;
+    width: 100%;
+    max-width: 440px;
+    margin: 0 auto;
+
+    .about-image-wrapper {
+      position: relative;
+      z-index: 2;
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.7);
+      border: 1px solid rgba(212, 175, 55, 0.25);
+      background-color: var(--color-bg-card, #121212);
+      width: 100%;
+      aspect-ratio: 4 / 5;
+
       .about-image {
         width: 100%;
-        height: auto;
+        height: 100%;
+        object-fit: contain;
+        object-position: center;
         display: block;
-        filter: grayscale(50%) contrast(1.1);
-        transition: var(--transition-smooth);
+        filter: grayscale(15%) contrast(1.05);
+        transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), filter 0.5s ease;
       }
-      .about-image-wrapper:hover .about-image {
+
+      &:hover .about-image {
         filter: grayscale(0%) contrast(1);
         transform: scale(1.03);
       }
-      .about-visual-accent {
-        position: absolute;
-        top: -20px; right: -20px;
-        width: 100%; height: 100%;
-        border: 2px solid var(--color-accent-gold);
-        z-index: 1;
-        opacity: 0.3;
-        border-radius: 2px;
-      }
 
-      @media (max-width: 900px) {
-        .about-grid { grid-template-columns: 1fr; gap: 3rem; }
-        .about-visual { order: -1; }
-        .about-visual-accent { top: -10px; right: -10px; }
+      .visual-badge {
+        position: absolute;
+        bottom: 1rem;
+        left: 1rem;
+        z-index: 3;
+        background: rgba(10, 10, 10, 0.85);
+        border: 1px solid var(--color-accent-gold, #d4af37);
+        color: var(--color-accent-gold, #d4af37);
+        font-size: 0.7rem;
+        font-weight: 600;
+        letter-spacing: 1.2px;
+        padding: 0.4rem 0.8rem;
+        border-radius: 4px;
+        backdrop-filter: blur(8px);
       }
+    }
+
+    .about-visual-accent {
+      position: absolute;
+      top: -12px;
+      right: -12px;
+      width: 100%;
+      height: 100%;
+      border: 2px solid var(--color-accent-gold, #d4af37);
+      z-index: 1;
+      opacity: 0.25;
+      border-radius: 4px;
+
+      @media (min-width: 768px) {
+        top: -16px;
+        right: -16px;
+      }
+    }
+  }
+}

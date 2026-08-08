@@ -1,43 +1,90 @@
-<section class="container">
+<section class="pairing-section section-padding" aria-labelledby="pairing-title" itemscope
+  itemtype="https://schema.org/ItemList">
+  <!-- METADATOS INVISIBLES AEO PARA BÚSQUEDA Y MOTOR DE RESPUESTAS IA -->
+  <meta itemprop="name" content="Guía de Maridajes Exclusivos de Estancos Distilling Co." />
+  <meta itemprop="description"
+    content="Armonía sensorial de maridajes para Ron Legarda y Whisky Real Audiencia con chocolates, quesos andinos, charcutería y puros." />
 
-      <div class="section-header">
-        <span class="section-subtitle">Armonía de Sabores</span>
-        <h2>El Maridaje Perfecto</h2>
+  <div class="container">
+
+    <header class="section-header">
+      <span class="section-subtitle">Armonía de Sabores & Experiencia Sensorial</span>
+      <h2 id="pairing-title">El Maridaje Perfecto</h2>
+      <p class="section-lead-text">
+        Descubre las combinaciones gastronómicas diseñadas para resaltar las notas de melaza, roble tostado, caramelo y
+        especias de nuestros espíritus andinos.
+      </p>
+    </header>
+
+    <!-- ITERAMOS POR CADA CATEGORÍA DE DESTILADO (RON LEGARDA / WHISKY REAL AUDIENCIA) -->
+    @for (category of pairings; track category.id; let catIdx = $index) {
+
+    <div class="pairing-category" [id]="category.id">
+
+      <header class="category-header">
+        <div class="category-title-group">
+          <h3>{{ category.spiritName }}</h3>
+          <span class="category-subtitle">{{ category.spiritSubtitle }}</span>
+        </div>
+        <div class="category-divider-line" aria-hidden="true"></div>
+      </header>
+
+      <!-- GRID DE TARJETAS DE MARIDAJE (AEO OPTIMIZADO) -->
+      <div class="pairing-grid" role="list">
+
+        <!-- ITERAMOS POR LAS COMBINACIONES IDEALES DE CADA DESTILADO -->
+        @for (item of category.items; track item.id; let itemIdx = $index) {
+
+        <article class="pairing-card" role="listitem" itemprop="itemListElement" itemscope
+          itemtype="https://schema.org/Product">
+          <!-- Metadatos AEO individuales por tarjeta de maridaje -->
+          <meta itemprop="position" [content]="(catIdx * 3) + itemIdx + 1" />
+          <meta itemprop="name" [content]="item.name" />
+          <meta itemprop="description" [content]="getFormattedSemanticDescription(category, item)" />
+
+          <!-- CONTENEDOR DE IMAGEN CON INSIGNIA Y BOTÓN PLUS DE AMBIENTE -->
+          <div class="card-image-wrapper">
+            <span class="sensory-badge">{{ item.sensoryNote }}</span>
+
+            <img [src]="item.imageUrl" [alt]="'Maridaje de ' + category.spiritName + ' con ' + item.name"
+              class="card-image" loading="lazy" decoding="async" itemprop="image" (error)="onImageError($event)">
+
+            <div class="plus-icon" aria-hidden="true" title="Combinación recomendada">
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor" stroke-width="2.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+              </svg>
+            </div>
+          </div>
+
+          <!-- CONTENIDO DE LA TARJETA -->
+          <div class="card-content">
+            <h4 class="card-title" itemprop="name">{{ item.name }}</h4>
+            <p class="card-description">{{ item.description }}</p>
+
+            <!-- BLOQUE DE TRIPLETAS SEMÁNTICAS (OPTIMIZADO PARA AEO) -->
+            <div class="semantic-triplets-box" aria-label="Armonía semántica de maridaje">
+              <span class="triplets-header-title">Armonía Sensorial</span>
+              <ul class="triplets-list">
+                @for (triplet of getSemanticTriplets(category, item); track $index) {
+                <li class="triplet-item" itemscope itemtype="https://schema.org/PropertyValue">
+                  <span class="triplet-subject" itemprop="name">{{ triplet.subject }}</span>
+                  <span class="triplet-predicate">{{ triplet.predicate }}</span>
+                  <span class="triplet-object" itemprop="value">{{ triplet.object }}</span>
+                </li>
+                }
+              </ul>
+            </div>
+          </div>
+
+        </article>
+
+        }
       </div>
 
-      <!-- Iteramos por cada destilado (Ron, Whisky) -->
-      @for (category of pairings; track category.spiritName) {
-        <div class="pairing-category">
+    </div>
 
-          <div class="category-header">
-            <h3>{{ category.spiritName }}</h3>
-            <p>{{ category.spiritSubtitle }}</p>
-          </div>
+    }
 
-          <div class="pairing-grid">
-            <!-- Iteramos por las combinaciones ideales para ese destilado -->
-            @for (item of category.items; track item.name) {
-              <div class="pairing-card">
-
-                <div class="card-image-wrapper">
-                  <img [src]="item.imageUrl" [alt]="item.name" class="card-image" loading="lazy">
-                  <div class="plus-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
-                    </svg>
-                  </div>
-                </div>
-
-                <div class="card-content">
-                  <h4 class="card-title">{{ item.name }}</h4>
-                  <p class="card-description">{{ item.description }}</p>
-                </div>
-
-              </div>
-            }
-          </div>
-
-        </div>
-      }
-
-    </section>
+  </div>
+</section>

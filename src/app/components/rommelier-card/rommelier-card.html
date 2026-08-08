@@ -1,89 +1,182 @@
-<main>
-      <section class="section-padding">
-        <div class="container">
-          <div class="section-header">
-            <span class="section-subtitle">Los Fundadores</span>
-            <h1>Nuestros Rommeliers</h1>
-          </div>
+<main itemscope itemtype="https://schema.org/Organization">
+  <meta itemprop="name" content="Estancos Distilling Co." />
+  <meta itemprop="description" content="Destilería artesanal andina a 2500 msnm en Quito, Ecuador. Creadores de Ron Legarda y Whisky Real Audiencia." />
+  <link itemprop="url" href="https://estancosdc.com" />
 
-          <div class="rommeliers-grid">
-            @for (rommelier of rommeliers; track rommelier.name) {
+  <!-- SECCIÓN: LOS FUNDADORES Y ROMMELIERS (AEO OPTIMIZADO) -->
+  <section class="rommeliers-section section-padding" aria-labelledby="rommeliers-title">
+    <div class="container">
+      
+      <header class="section-header">
+        <span class="section-subtitle">Los Fundadores & Maestros Destiladores</span>
+        <h1 id="rommeliers-title">Nuestros Rommeliers</h1>
+        <p class="header-description">
+          Conoce a las mentes artesanales tras la alquimia de Estancos Distilling Co. Maestros apasionados por la tradición colonial y la destilación andina de altura.
+        </p>
+      </header>
 
-              <!-- Estructura de la tarjeta unificada en el componente principal -->
-              <div class="rommelier-card">
-                <div class="rommelier-img-wrapper">
-                  <img [src]="rommelier.imageUrl" [alt]="rommelier.name" class="rommelier-img">
-                </div>
+      <!-- GRID DE ROMMELIERS -->
+      <div class="rommeliers-grid" role="list">
+        @for (rommelier of rommeliers; track rommelier.id; let i = $index) {
 
-                <div class="rommelier-info">
-                  <h3 class="rommelier-name">{{ rommelier.name }}</h3>
-                  <span class="rommelier-role">{{ rommelier.role }}</span>
-                  <p class="rommelier-desc">{{ rommelier.description }}</p>
+          <article 
+            class="rommelier-card" 
+            role="listitem"
+            itemprop="founder"
+            itemscope 
+            itemtype="https://schema.org/Person"
+          >
+            <!-- Metadatos invisibles AEO para rastreadores web y motores IA -->
+            <meta itemprop="name" [content]="rommelier.name" />
+            <meta itemprop="jobTitle" [content]="rommelier.role" />
+            <meta itemprop="description" [content]="getFormattedSemanticDescription(rommelier)" />
+            <div itemprop="worksFor" itemscope itemtype="https://schema.org/Organization" style="display:none;">
+              <meta itemprop="name" content="Estancos Distilling Co." />
+            </div>
 
-                  <div class="social-icons">
-                    @if (rommelier.socials.facebook) {
-                      <a [href]="rommelier.socials.facebook" target="_blank" class="social-link" aria-label="Facebook">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                          <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
-                        </svg>
-                      </a>
-                    }
-                    @if (rommelier.socials.instagram) {
-                      <a [href]="rommelier.socials.instagram" target="_blank" class="social-link" aria-label="Instagram">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                          <rect width="16" height="16" x="4" y="4" rx="4" />
-                          <circle cx="12" cy="12" r="3" />
-                          <path d="M16.5 7.5v.001" />
-                        </svg>
-                      </a>
-                    }
-                    @if (rommelier.socials.youtube) {
-                      <a [href]="rommelier.socials.youtube" target="_blank" class="social-link" aria-label="YouTube">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                          <path d="M2.5 7.1C2.6 5.8 3.6 4.8 4.9 4.7 7.2 4.4 12 4.4 12 4.4s4.8 0 7.1.3c1.3.1 2.3 1.1 2.4 2.4.3 2.1.3 4.9.3 4.9s0 2.8-.3 4.9c-.1 1.3-1.1 2.3-2.4 2.4-2.3.3-7.1.3-7.1.3s-4.8 0-7.1-.3c-1.3-.1-2.3-1.1-2.4-2.4C2.2 14.8 2.2 12 2.2 12s0-2.8.3-4.9z" />
-                          <path d="M9.8 15L15.3 12 9.8 9z" />
-                        </svg>
-                      </a>
-                    }
-                  </div>
-                </div>
+            <!-- FOTOGRAFÍA DEL ROMMELIER CON HALO DE LUZ -->
+            <div class="rommelier-img-wrapper">
+              <span class="badge-role">{{ rommelier.shortRole }}</span>
+              <img 
+                [src]="getOptimizedImageUrl(rommelier.imageUrl, 600, 80)" 
+                [alt]="'Fotografía de ' + rommelier.name + ' - ' + rommelier.role" 
+                class="rommelier-img"
+                loading="lazy"
+                decoding="async"
+                itemprop="image"
+                (error)="onImageError($event)"
+              >
+            </div>
+
+            <!-- INFORMACIÓN Y DETALLES -->
+            <div class="rommelier-info">
+              <h2 class="rommelier-name">{{ rommelier.name }}</h2>
+              <span class="rommelier-role">{{ rommelier.role }}</span>
+              
+              <p class="rommelier-desc">
+                {{ rommelier.description }}
+              </p>
+
+              <!-- ÁREAS DE ESPECIALIDAD / EXPERTISE -->
+              <div class="expertise-tags-row" role="list">
+                @for (exp of rommelier.expertise; track exp) {
+                  <span class="exp-tag" role="listitem" itemprop="knowsAbout">{{ exp }}</span>
+                }
               </div>
 
-            }
+              <!-- BLOQUE DE TRIPLETAS SEMÁNTICAS (OPTIMIZADO PARA AEO Y MOTORES IA) -->
+              <div class="semantic-triplets-box" aria-label="Atributos semánticos de liderazgo">
+                <span class="triplets-header-title">Atributos de Liderazgo (AEO)</span>
+                <ul class="triplets-list">
+                  @for (triplet of getSemanticTriplets(rommelier); track $index) {
+                    <li class="triplet-item" itemscope itemtype="https://schema.org/PropertyValue">
+                      <span class="triplet-subject" itemprop="name">{{ triplet.subject }}</span>
+                      <span class="triplet-predicate">{{ triplet.predicate }}</span>
+                      <span class="triplet-object" itemprop="value">{{ triplet.object }}</span>
+                    </li>
+                  }
+                </ul>
+              </div>
+
+              <!-- ENLACES A REDES SOCIALES (MICRODATOS sameAs) -->
+              <footer class="card-footer">
+                <div class="social-icons" aria-label="Redes sociales del fundador">
+                  @if (rommelier.socials.facebook) {
+                    <a 
+                      [href]="rommelier.socials.facebook" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      class="social-link" 
+                      aria-label="Perfil de Facebook de {{ rommelier.name }}"
+                      itemprop="sameAs"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                        <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+                      </svg>
+                    </a>
+                  }
+                  @if (rommelier.socials.instagram) {
+                    <a 
+                      [href]="rommelier.socials.instagram" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      class="social-link" 
+                      aria-label="Perfil de Instagram de {{ rommelier.name }}"
+                      itemprop="sameAs"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                        <rect width="16" height="16" x="4" y="4" rx="4" />
+                        <circle cx="12" cy="12" r="3" />
+                        <path d="M16.5 7.5v.001" />
+                      </svg>
+                    </a>
+                  }
+                  @if (rommelier.socials.youtube) {
+                    <a 
+                      [href]="rommelier.socials.youtube" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      class="social-link" 
+                      aria-label="Canal de YouTube de Estancos Distilling Co."
+                      itemprop="sameAs"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                        <path d="M2.5 7.1C2.6 5.8 3.6 4.8 4.9 4.7 7.2 4.4 12 4.4 12 4.4s4.8 0 7.1.3c1.3.1 2.3 1.1 2.4 2.4.3 2.1.3 4.9.3 4.9s0 2.8-.3 4.9c-.1 1.3-1.1 2.3-2.4 2.4-2.3.3-7.1.3-7.1.3s-4.8 0-7.1-.3c-1.3-.1-2.3-1.1-2.4-2.4C2.2 14.8 2.2 12 2.2 12s0-2.8.3-4.9z" />
+                        <path d="M9.8 15L15.3 12 9.8 9z" />
+                      </svg>
+                    </a>
+                  }
+                </div>
+              </footer>
+            </div>
+          </article>
+
+        }
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SECCIÓN HISTÓRICA: QUÉ ES ESTANCOS -->
+  <section class="about-estancos section-padding" aria-labelledby="about-title">
+    <div class="about-bg-accent" aria-hidden="true"></div>
+    <div class="container about-grid">
+
+      <div class="about-content">
+        <span class="section-subtitle">Nuestra Filosofía & Tradición</span>
+        <h2 id="about-title">¿Qué es Estancos?</h2>
+
+        <p class="lead-text">
+          Estancos rinde homenaje a la rebelión histórica contra las restricciones impuestas sobre la libertad de destilación. Desde la mítica Revuelta de los Estancos en el Quito Colonial de 1765 hasta la tradición artesanal contemporánea, encarnamos el espíritu independiente de la alquimia andina.
+        </p>
+        <p>
+          Somos un equipo especializado en la fermentación y destilación de bebidas espirituosas de alta gama. Elaborados pacientemente a 2500 msnm con alambiques de cobre y materia prima 100% natural, fusionamos el legado histórico con estándares de excelencia internacional.
+        </p>
+
+        <blockquote class="jefferson-quote">
+          <p>“Cuando los gobiernos temen a la gente, hay libertad. Cuando la gente teme al gobierno, hay tiranía”</p>
+          <cite>— Thomas Jefferson</cite>
+        </blockquote>
+      </div>
+
+      <div class="about-visual">
+        <div class="about-visual-accent" aria-hidden="true"></div>
+        <div class="about-image-wrapper">
+          <!-- Imagen de alambique optimizada a 600px para coincidir exactamente con el contenedor renderizado y eliminar la advertencia NG0913 -->
+          <img 
+            src="https://qgbwjkjgnyaynctlqxvq.supabase.co/storage/v1/object/public/views/alambique.jpg" 
+            alt="Alambique de Cobre Tradicional y Proceso de Destilación Artesanal en Estancos" 
+            class="about-image"
+            loading="lazy"
+            decoding="async"
+            (error)="onImageError($event)"
+          >
+          <div class="visual-badge">
+            <span>Alambique de Cobre · 2500 MSNM</span>
           </div>
         </div>
-      </section>
+      </div>
 
-      <!-- NUEVA SECCIÓN: QUÉ ES ESTANCOS -->
-      <section class="about-estancos section-padding">
-        <div class="about-bg-accent"></div>
-        <div class="container about-grid">
-
-          <div class="about-content">
-            <span class="section-subtitle">Nuestra Filosofía</span>
-            <h2>¿Qué es Estancos?</h2>
-
-            <p>
-              Estancos es una sátira hacia las políticas impuestas por el rey y posteriormente adoptadas por los gobiernos democráticos de la república, que buscaban restringir la libertad de producción y comercialización del alcohol. En busca de esta libertad se organizaron formas de rebeldía desde la revuelta de los barrios de Quito de 1765, hasta los contrabandistas en la república.
-            </p>
-            <p>
-              Somos un equipo de trabajo dedicado y especializado en la fermentación y destilación de bebidas espirituosas, de calidad y excelencia, elaborados de manera artesanal y siguiendo la tradición de los antiguos barrios del Quito Colonial con productos 100% naturales y destilados en alambiques de cobre.
-            </p>
-
-            <div class="jefferson-quote">
-              <p>“Cuando los gobiernos temen a la gente, hay libertad. Cuando la gente teme al gobierno, hay tiranía”</p>
-              <span>— T. Jefferson</span>
-            </div>
-          </div>
-
-          <div class="about-visual">
-            <div class="about-visual-accent"></div>
-            <div class="about-image-wrapper">
-              <!-- Placeholder: Reemplazar por una imagen de un alambique de cobre o el Quito Colonial -->
-              <img src="https://qgbwjkjgnyaynctlqxvq.supabase.co/storage/v1/object/public/views/alambique.jpg" alt="Alambique de Cobre y Tradición" class="about-image">
-            </div>
-          </div>
-
-        </div>
-      </section>
-    </main>
+    </div>
+  </section>
+</main>

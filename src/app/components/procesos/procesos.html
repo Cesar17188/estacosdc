@@ -1,34 +1,94 @@
- <section class="section-padding">
-      <div class="container">
+<section 
+  class="processes-section section-padding" 
+  aria-labelledby="processes-title"
+  itemscope 
+  itemtype="https://schema.org/HowTo"
+>
+  <!-- METADATOS INVISIBLES AEO PARA BÚSQUEDA Y MOTOR DE RESPUESTAS IA -->
+  <meta itemprop="name" content="Proceso Artesanal de Destilación Andina Estancos Distilling Co." />
+  <meta itemprop="description" content="Proceso de elaboración artesanal en tres etapas: Fermentación Lenta, Destilación en Cobre y Añejamiento Dinámico a 2500 msnm." />
 
-        <div class="section-header">
-          <span class="section-subtitle">Artesanía Pura</span>
-          <h2>Nuestros Procesos</h2>
-        </div>
+  <div class="container">
 
-        <div class="processes-timeline">
-          @for (step of processSteps; track step.id) {
-            <div class="process-step">
+    <header class="section-header">
+      <span class="section-subtitle">Artesanía & Alquimia Andina</span>
+      <h2 id="processes-title">Nuestros Procesos</h2>
+      <p class="section-lead-text">
+        De la materia prima seleccionada al envejecimiento en barrica a 2500 msnm. Tres etapas artesanales que definen la excelencia de Estancos Distilling Co.
+      </p>
+    </header>
 
-              <div class="timeline-dot"></div>
+    <!-- TIMELINE DE PROCESOS AEO OPTIMIZADO -->
+    <div class="processes-timeline" role="list">
+      @for (step of processSteps; track step.id; let i = $index) {
+        
+        <article 
+          class="process-step" 
+          [id]="step.id"
+          role="listitem"
+          itemprop="step"
+          itemscope 
+          itemtype="https://schema.org/HowToStep"
+        >
+          <meta itemprop="position" [content]="i + 1" />
+          <meta itemprop="name" [content]="step.title" />
+          <meta itemprop="text" [content]="getFormattedSemanticDescription(step)" />
 
-              <!-- Imagen del Proceso -->
-              <div class="process-image-col">
-                <div class="process-image-wrapper">
-                  <img [src]="step.imageUrl" [alt]="step.title" class="process-image">
-                </div>
-              </div>
+          <!-- Punto central dorado en la línea de tiempo -->
+          <div class="timeline-dot" aria-hidden="true"></div>
 
-              <!-- Descripción del Proceso -->
-              <div class="process-text-col">
-                <span class="step-number">{{ step.number }}</span>
-                <h3>{{ step.title }}</h3>
-                <p>{{ step.description }}</p>
-              </div>
-
+          <!-- COLUMNA IZQUIERDA/DERECHA: FOTOGRAFÍA DEL PROCESO -->
+          <div class="process-image-col">
+            <div class="process-image-wrapper">
+              <span class="step-badge-number">ETAPA {{ step.number }}</span>
+              <img 
+                [src]="getOptimizedImageUrl(step.imageUrl, 700, 80)" 
+                [alt]="'Fotografía ilustrativa de ' + step.title + ' en Estancos Distilling Co.'" 
+                class="process-image"
+                loading="lazy"
+                decoding="async"
+                itemprop="image"
+                (error)="onImageError($event)"
+              >
             </div>
-          }
-        </div>
+          </div>
 
-      </div>
-    </section>
+          <!-- COLUMNA DE CONTENIDO Y DESCRIPCIÓN DEL PROCESO -->
+          <div class="process-text-col">
+            <span class="step-number" aria-hidden="true">{{ step.number }}</span>
+            <span class="step-subtitle">{{ step.subtitle }}</span>
+            <h3 class="step-title">{{ step.title }}</h3>
+            
+            <p class="step-description">
+              {{ step.description }}
+            </p>
+
+            <!-- HIGHLIGHTS / PUNTOS CLAVE -->
+            <div class="process-highlights-row" role="list">
+              @for (hl of step.highlights; track hl) {
+                <span class="highlight-pill" role="listitem">{{ hl }}</span>
+              }
+            </div>
+
+            <!-- BLOQUE DE TRIPLETAS SEMÁNTICAS (OPTIMIZADO PARA AEO Y MOTORES IA) -->
+            <div class="semantic-triplets-box" [attr.aria-label]="step.tripletsTitle">
+              <span class="triplets-header-title">{{ step.tripletsTitle }}</span>
+              <ul class="triplets-list">
+                @for (triplet of getSemanticTriplets(step); track $index) {
+                  <li class="triplet-item" itemscope itemtype="https://schema.org/PropertyValue">
+                    <span class="triplet-subject" itemprop="name">{{ triplet.subject }}</span>
+                    <span class="triplet-predicate">{{ triplet.predicate }}</span>
+                    <span class="triplet-object" itemprop="value">{{ triplet.object }}</span>
+                  </li>
+                }
+              </ul>
+            </div>
+          </div>
+
+        </article>
+
+      }
+    </div>
+
+  </div>
+</section>

@@ -2,8 +2,13 @@ import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SupabaseService } from '../../services/supabase';
 
-// Interfaz actualizada con los nuevos campos de contenido
-interface CocktailPost {
+export interface SemanticTriplet {
+  subject: string;
+  predicate: string;
+  object: string;
+}
+
+export interface CocktailPost {
   id: string;
   title: string;
   base_spirit: string;
@@ -14,9 +19,9 @@ interface CocktailPost {
   instructions?: string[];
 }
 
-
 @Component({
   selector: 'app-cocteleria',
+  standalone: true,
   imports: [CommonModule],
   templateUrl: './cocteleria.html',
   styleUrl: './cocteleria.scss',
@@ -27,20 +32,14 @@ export class Cocteleria implements OnInit {
   // Estados reactivos
   cocktails = signal<CocktailPost[]>([]);
   isLoading = signal<boolean>(true);
-
-  // NUEVO ESTADO: Rastrea qué cóctel está seleccionado actualmente
   selectedCocktail = signal<CocktailPost | null>(null);
-
-  // NUEVOS ESTADOS PARA EL FILTRADO
   activeFilter = signal<string>('todos');
 
-  // Extraemos las categorías únicas (licores base) dinámicamente de los datos
   categories = computed(() => {
     const uniqueSpirits = new Set(this.cocktails().map(c => c.base_spirit));
     return ['todos', ...Array.from(uniqueSpirits)];
   });
 
-   // Filtramos la cuadrícula de cócteles basándonos en el filtro activo
   filteredCocktails = computed(() => {
     const filter = this.activeFilter();
     const allCocktails = this.cocktails();
@@ -64,16 +63,12 @@ export class Cocteleria implements OnInit {
     }
   }
 
-  // ACCIONES DE LA UI
   setFilter(category: string) {
     this.activeFilter.set(category);
   }
 
-  // ACCIONES DE LA UI
   openRecipe(post: CocktailPost) {
     this.selectedCocktail.set(post);
-    // Hacemos scroll suave específicamente hacia la sección del componente
-    // Utilizamos setTimeout para asegurar que la vista del detalle ya fue renderizada en el DOM
     setTimeout(() => {
       const section = document.getElementById('cocteleria-section');
       if (section) {
@@ -84,7 +79,6 @@ export class Cocteleria implements OnInit {
 
   closeRecipe() {
     this.selectedCocktail.set(null);
-    // Opcional: También podemos hacer scroll al volver a la cuadrícula
     setTimeout(() => {
       const section = document.getElementById('cocteleria-section');
       if (section) {
@@ -93,7 +87,31 @@ export class Cocteleria implements OnInit {
     }, 50);
   }
 
-  // Fallback por si la imagen de la base de datos se rompe
+  /**
+   * Genera tripletas semánticas (Sujeto - Predicado - Objeto) para AEO de cada cóctel
+   */
+  getSemanticTriplets(post: CocktailPost): SemanticTriplet[] {
+    const title = post.title || 'Cóctel de Autor';
+    const spirit = post.base_spirit || 'Destilado Artesanal';
+    const time = post.read_time || '5 min';
+    const ingCount = post.ingredients ? post.ingredients.length : 4;
+
+    return [
+      { subject: `El cóctel ${title}`, predicate: 'utiliza como base espirituosa', object: `${spirit} de Estancos Distilling Co.` },
+      { subject: `El cóctel ${title}`, predicate: 'requiere un tiempo de preparación de', object: `${time}.` },
+      { subject: `La mezcla de ${title}`, predicate: 'combina', object: `${ingCount} ingredientes seleccionados para equilibrio y perfil aromático.` }
+    ];
+  }
+
+  /**
+   * Retorna una descripción semántica unificada para los metadatos schema.org AEO
+   */
+  getFormattedSemanticDescription(post: CocktailPost): string {
+    const triplets = this.getSemanticTriplets(post);
+    const tripletsText = triplets.map(t => `${t.subject} ${t.predicate} ${t.object}`).join(' ');
+    return `${post.excerpt || ''} ${tripletsText}`.trim();
+  }
+
   onImageError(event: Event) {
     const target = event.target as HTMLImageElement;
     target.src = 'https://images.unsplash.com/photo-1551538827-9c037cb4f32a?q=80&w=800&auto=format&fit=crop';
