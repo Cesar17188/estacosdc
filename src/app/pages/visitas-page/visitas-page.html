@@ -1,178 +1,298 @@
-<main>
-      <!-- HERO -->
-      <section class="visit-hero">
-        <div class="visit-hero-overlay"></div>
-        <div class="container visit-hero-content">
-          <h1>Enoturismo de Altura</h1>
-          <p>Adéntrate en nuestra destilería a 2500 msnm. Descubre los secretos de la fermentación lenta, la majestuosidad de nuestros alambiques de cobre y el silencio de nuestras bodegas de añejamiento.<br>Si quieres algo que hacer en Quito, reserva una cata de Ron y Whisky en la destilería Estancos</p>
-        </div>
-      </section>
+<main itemscope itemtype="https://schema.org/TouristAttraction">
+  <!-- METADATOS INVISIBLES AEO PARA BÚSQUEDA Y MOTOR DE RESPUESTAS IA -->
+  <meta itemprop="name" content="Enoturismo de Altura & Catas de Ron y Whisky — Estancos Distilling Co." />
+  <meta itemprop="description"
+    content="Recorridos guiados por la destilería artesanal de ron y whisky a 2500 msnm en Quito, Ecuador. Fermentación, destilación en alambiques de cobre y catas de honor." />
+  <meta itemprop="touristType" content="Enoturismo, Cata de Licores, Destilería Artesanal" />
 
-      <!-- EXPERIENCIAS / TOURS -->
-      <section class="section-padding">
-        <div class="container">
-          <div class="section-header">
-            <span class="section-subtitle">Nuestras Experiencias</span>
-            <h2>Elige tu Recorrido</h2>
-          </div>
+  <!-- BREADCRUMBS SCHEMA.ORG PARA AEO Y SEO -->
+  <nav class="breadcrumb-container container" aria-label="Navegación secundaria">
+    <ol class="breadcrumb-list" itemscope itemtype="https://schema.org/BreadcrumbList">
+      <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="/">
+          <span itemprop="name">Inicio</span>
+        </a>
+        <meta itemprop="position" content="1" />
+      </li>
+      <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" aria-current="page">
+        <span itemprop="name">Visitas & Catas de Altura</span>
+        <meta itemprop="position" content="2" />
+      </li>
+    </ol>
+  </nav>
 
-          @if (isLoading()) {
-            <div class="loader-container">
-              <div class="spinner"></div>
-              <div class="loader-text">Cargando Experiencias...</div>
-            </div>
-          } @else {
-            <div class="experiences-grid">
-              @for (tour of tours(); track tour.id) {
-                <div class="tour-card">
-
-                  <div class="tour-image-wrapper">
-                    <img [src]="tour.image_url" [alt]="tour.name" class="tour-image">
-                  </div>
-
-                  <div class="tour-content">
-                    <div class="tour-meta">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                      <span>Duración: {{ tour.tour_details.duration }}</span>
-                    </div>
-
-                    <div class="tour-header-row">
-                      <h3 class="tour-title">{{ tour.name }}</h3>
-                      <span class="tour-price">\${{ tour.price | number:'1.2-2' }}</span>
-                    </div>
-
-                    <p class="tour-description">{{ tour.description }}</p>
-
-                    <div class="tour-includes">
-                      <h4>¿Qué incluye?</h4>
-                      <ul>
-                        @for (item of tour.tour_details.includes; track item) {
-                          <li>{{ item }}</li>
-                        }
-                      </ul>
-                    </div>
-
-                    <!-- BOTÓN QUE ABRE EL MODAL DE RESERVA -->
-                    <button class="btn-primary" (click)="openBookingModal(tour)">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                      </svg>
-                      Reservar Experiencia
-                    </button>
-                  </div>
-
-                </div>
-              }
-            </div>
-          }
-        </div>
-      </section>
-
-      <!-- INFORMACIÓN PRÁCTICA -->
-      <section class="info-section section-padding">
-        <div class="container info-grid">
-          <div class="info-content">
-            <div class="section-header" style="text-align: left; margin-bottom: 3rem;">
-              <span class="section-subtitle">Planifica tu visita</span>
-              <h2>Información Práctica</h2>
-            </div>
-
-            <div class="info-block">
-              <div class="info-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" /></svg></div>
-              <div class="info-text"><h3>Ubicación</h3><p>Pje. Juan Manuel Yanchapaxi<br>San y Juan de Dios Tipán<br>Quito, Pichincha, Ecuador.</p></div>
-            </div>
-
-            <div class="info-block">
-              <div class="info-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg></div>
-              <div class="info-text"><h3>Horarios de Atención</h3><p>Jueves a Sábado: 10:00 AM – 4:00 PM<br>Domingo: 10:00 AM – 2:00 PM<br><em>*Se requiere reserva previa.</em></p></div>
-            </div>
-          </div>
-
-          <div class="map-wrapper">
-            <iframe src="https://www.google.com/maps?q=pje+Juan+manuel+Yanchapaxi,+San+y+Juan+de+Dios+Tipan,+170804+Quito&output=embed" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-          </div>
-        </div>
-      </section>
-    </main>
-
-    <!-- MODAL DE RESERVA -->
-    <div class="modal-overlay" [class.open]="isBookingModalOpen()" (click)="closeBookingModal()">
-      <div class="modal-content" (click)="$event.stopPropagation()">
-
-        <div class="modal-header">
-          <h2>Agendar Visita</h2>
-          <button class="btn-close" (click)="closeBookingModal()">
-            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
-          </button>
-        </div>
-
-        <div class="modal-body">
-          @if (selectedTour()) {
-            <div class="selected-tour-info">
-              <h3>{{ selectedTour()?.name }}</h3>
-              <p>Precio base: \${{ selectedTour()?.price | number:'1.2-2' }} por persona</p>
-            </div>
-
-            <form [formGroup]="bookingForm">
-
-              <div class="form-group">
-                <label>Nombre del Titular de la Reserva</label>
-                <input type="text" formControlName="userName" placeholder="Ej. Carlos Mendoza" [class.is-invalid]="isInvalid('userName')">
-              </div>
-
-              <div class="form-group">
-                <label>Correo Electrónico (Para confirmación)</label>
-                <input type="email" formControlName="userEmail" placeholder="ejemplo@correo.com" [class.is-invalid]="isInvalid('userEmail')">
-              </div>
-
-              <div class="form-row">
-                <div class="form-group">
-                  <label>Fecha de la Visita</label>
-                  <!-- Validamos al cambiar la fecha/hora -->
-                  <input type="date" formControlName="bookingDate" [min]="todayDate()" (change)="validateDateTime()" [class.is-invalid]="isInvalid('bookingDate') || dateTimeError()">
-                </div>
-                <div class="form-group">
-                  <label>Hora</label>
-                  <input type="time" formControlName="bookingTime" (change)="validateDateTime()" [class.is-invalid]="isInvalid('bookingTime') || dateTimeError()">
-                </div>
-              </div>
-
-              <!-- Mensaje de error dinámico de los horarios de la destilería -->
-              @if (dateTimeError()) {
-                <div class="warning-msg">
-                  {{ dateTimeError() }}
-                </div>
-              }
-
-              <div class="form-group" style="margin-top: 1.5rem;">
-                <label>Número de Asistentes</label>
-                <input type="number" formControlName="attendees" min="1" max="15" (input)="updateAttendeesCount()" [class.is-invalid]="isInvalid('attendees')">
-              </div>
-
-            </form>
-
-            <div class="booking-summary">
-              <span>Total a Pagar:</span>
-              <strong>\${{ calculatedTotal() | number:'1.2-2' }}</strong>
-            </div>
-
-            <button class="btn-primary" [disabled]="bookingForm.invalid || dateTimeError() !== ''" (click)="confirmBooking()">
-              Confirmar y Añadir al Carrito
-            </button>
-          }
-        </div>
-
+  <!-- HERO NEOCLÁSICO DE VISITAS Y ENOTURISMO -->
+  <header class="visit-hero">
+    <div class="visit-hero-overlay" aria-hidden="true"></div>
+    <div class="container visit-hero-content">
+      <div class="hero-crest" aria-hidden="true">
+        <span class="crest-symbol">⚜</span>
       </div>
+      <span class="hero-subtitle">Angamarca · Alangasí · Quito · 2500 MSNM</span>
+      <h1 itemprop="headline">Enoturismo de Altura</h1>
+
+      <div class="classic-divider" aria-hidden="true">
+        <span class="divider-line"></span>
+        <span class="divider-diamond">◆</span>
+        <span class="divider-line"></span>
+      </div>
+
+      <p itemprop="abstract">
+        Adéntrate en nuestra destilería a 2500 msnm. Descubre los secretos de la fermentación lenta, la majestuosidad de
+        nuestros alambiques de cobre y el silencio de nuestras bodegas de añejamiento.<br>
+        <strong>Si buscas una experiencia imperdible en Quito, reserva una cata de Ron y Whisky en la destilería
+          Estancos.</strong>
+      </p>
+    </div>
+  </header>
+
+  <!-- EXPERIENCIAS / TOURS (SCHEMA.ORG ITEMLIST & OFFER) -->
+  <section class="section-padding" aria-labelledby="tours-title">
+    <div class="container">
+
+      <header class="section-header">
+        <span class="section-subtitle">Catas Dirigidas & Recorridos Guiados</span>
+        <h2 id="tours-title">Elige tu Experiencia</h2>
+        <p class="section-lead-text">
+          Diseñadas para entusiastas del buen beber y amantes de la alquimia artesanal. Recorridos privados dirigidos
+          por nuestros Maestros Rommeliers.
+        </p>
+      </header>
+
+      <!-- ESTADO DE CARGA ACCESIBLE -->
+      @if (isLoading()) {
+      <div class="loader-container" role="status" aria-live="polite">
+        <div class="spinner" aria-hidden="true"></div>
+        <div class="loader-text">Cargando Experiencias de Altura...</div>
+      </div>
+      } @else {
+
+      <!-- GRID DE TARJETAS DE EXPERIENCIA (AEO OPTIMIZADO) -->
+      <div class="experiences-grid" role="list">
+        @for (tour of tours(); track tour.id; let i = $index) {
+
+        <article class="tour-card" role="listitem" itemprop="makesOffer" itemscope itemtype="https://schema.org/Offer">
+          <meta itemprop="position" [content]="i + 1" />
+          <meta itemprop="name" [content]="tour.name" />
+          <meta itemprop="priceCurrency" content="USD" />
+          <meta itemprop="price" [content]="tour.price" />
+          <meta itemprop="description" [content]="getFormattedSemanticDescription(tour)" />
+
+          <!-- IMAGEN DE LA EXPERIENCIA CON INSIGNIAS -->
+          <div class="tour-image-wrapper">
+            <span class="badge-duration">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                stroke-width="2" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span>{{ tour.tour_details.duration }}</span>
+            </span>
+
+            <img [src]="getOptimizedImageUrl(tour.image_url, 700, 80)"
+              [alt]="'Recorrido y cata ' + tour.name + ' en Estancos Distilling Co.'" class="tour-image" loading="lazy"
+              decoding="async" itemprop="image" (error)="onImageError($event)">
+          </div>
+
+          <!-- CONTENIDO DE LA TARJETA -->
+          <div class="tour-content">
+            <div class="tour-header-row">
+              <h3 class="tour-title" itemprop="name">{{ tour.name }}</h3>
+              <span class="tour-price">\${{ tour.price | number:'1.2-2' }}</span>
+            </div>
+
+            <p class="tour-description">{{ tour.description }}</p>
+
+            <!-- INCLUSIONES DE LA EXPERIENCIA -->
+            <div class="tour-includes">
+              <h4>¿Qué incluye?</h4>
+              <ul role="list">
+                @for (item of tour.tour_details.includes; track item) {
+                <li role="listitem">{{ item }}</li>
+                }
+              </ul>
+            </div>
+
+            <!-- BLOQUE DE TRIPLETAS SEMÁNTICAS (AEO) -->
+            <div class="semantic-triplets-box" aria-label="Atributos semánticos de la experiencia">
+              <span class="triplets-header-title">Atributos de la Experiencia (AEO)</span>
+              <ul class="triplets-list">
+                @for (triplet of getSemanticTriplets(tour); track $index) {
+                <li class="triplet-item" itemscope itemtype="https://schema.org/PropertyValue">
+                  <span class="triplet-subject" itemprop="name">{{ triplet.subject }}</span>
+                  <span class="triplet-predicate">{{ triplet.predicate }}</span>
+                  <span class="triplet-object" itemprop="value">{{ triplet.object }}</span>
+                </li>
+                }
+              </ul>
+            </div>
+
+            <!-- BOTÓN QUE ABRE EL MODAL DE RESERVA -->
+            <button type="button" class="btn-primary" (click)="openBookingModal(tour)"
+              aria-label="Reservar experiencia {{ tour.name }}">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              <span>Reservar Experiencia</span>
+            </button>
+          </div>
+
+        </article>
+        }
+      </div>
+      }
+    </div>
+  </section>
+
+  <!-- INFORMACIÓN PRÁCTICA (SCHEMA.ORG PLACE & CIVIC STRUCTURE) -->
+  <section class="info-section section-padding" aria-labelledby="info-title">
+    <div class="container info-grid">
+
+      <div class="info-content" itemscope itemtype="https://schema.org/Place">
+        <header class="section-header align-left">
+          <span class="section-subtitle">Planifica tu Visita</span>
+          <h2 id="info-title">Información Práctica</h2>
+        </header>
+
+        <div class="info-block" itemprop="address" itemscope itemtype="https://schema.org/PostalAddress">
+          <div class="info-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+            </svg>
+          </div>
+          <div class="info-text">
+            <h3>Ubicación de la Destilería</h3>
+            <p>
+              <span itemprop="streetAddress">Pje. Juan Manuel Yanchapaxi, San José de Tipán</span><br>
+              <span itemprop="addressLocality">Quito</span>, <span itemprop="addressRegion">Pichincha</span>, <span
+                itemprop="addressCountry">Ecuador</span>.
+            </p>
+          </div>
+        </div>
+
+        <div class="info-block">
+          <div class="info-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <div class="info-text">
+            <h3>Horarios de Atención</h3>
+            <p>
+              Jueves a Sábado: 10:00 AM – 4:00 PM<br>
+              Domingo: 10:00 AM – 2:00 PM<br>
+              <em>*Se requiere reserva previa enviada con anticipación.</em>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="map-wrapper">
+        <iframe
+          src="https://www.google.com/maps?q=pje+Juan+manuel+Yanchapaxi,+San+y+Juan+de+Dios+Tipan,+170804+Quito&output=embed"
+          allowfullscreen="" loading="lazy" title="Ubicación en Google Maps de Estancos Distilling Co. en Quito"
+          referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+
+    </div>
+  </section>
+</main>
+
+<!-- MODAL DE RESERVA ACCESIBLE -->
+<div class="modal-overlay" [class.open]="isBookingModalOpen()" (click)="closeBookingModal()" role="dialog"
+  aria-modal="true" [attr.aria-hidden]="!isBookingModalOpen()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+
+    <header class="modal-header">
+      <h2>Agendar Visita & Cata</h2>
+      <button type="button" class="btn-close" (click)="closeBookingModal()" aria-label="Cerrar ventana de reserva">
+        <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="none" viewBox="0 0 24 24"
+          stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </header>
+
+    <div class="modal-body">
+      @if (selectedTour(); as tour) {
+      <div class="selected-tour-info">
+        <h3>{{ tour.name }}</h3>
+        <p>Precio base: <strong>\${{ tour.price | number:'1.2-2' }}</strong> por persona</p>
+      </div>
+
+      <form [formGroup]="bookingForm">
+
+        <div class="form-group">
+          <label htmlFor="userName">Nombre del Titular de la Reserva</label>
+          <input id="userName" type="text" formControlName="userName" placeholder="Ej. Carlos Mendoza"
+            [class.is-invalid]="isInvalid('userName')">
+        </div>
+
+        <div class="form-group">
+          <label htmlFor="userEmail">Correo Electrónico (Para confirmación)</label>
+          <input id="userEmail" type="email" formControlName="userEmail" placeholder="ejemplo@correo.com"
+            [class.is-invalid]="isInvalid('userEmail')">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label htmlFor="bookingDate">Fecha de la Visita</label>
+            <input id="bookingDate" type="date" formControlName="bookingDate" [min]="todayDate()"
+              (change)="validateDateTime()" [class.is-invalid]="isInvalid('bookingDate') || dateTimeError()">
+          </div>
+          <div class="form-group">
+            <label htmlFor="bookingTime">Hora</label>
+            <input id="bookingTime" type="time" formControlName="bookingTime" (change)="validateDateTime()"
+              [class.is-invalid]="isInvalid('bookingTime') || dateTimeError()">
+          </div>
+        </div>
+
+        <!-- Mensaje de error dinámico de los horarios de la destilería -->
+        @if (dateTimeError()) {
+        <div class="warning-msg" role="alert">
+          {{ dateTimeError() }}
+        </div>
+        }
+
+        <div class="form-group" style="margin-top: 1.5rem;">
+          <label htmlFor="attendees">Número de Asistentes (Máx 30 personas)</label>
+          <input id="attendees" type="number" formControlName="attendees" min="1" max="15"
+            (input)="updateAttendeesCount()" [class.is-invalid]="isInvalid('attendees')">
+        </div>
+
+      </form>
+
+      <div class="booking-summary">
+        <span>Total a Pagar:</span>
+        <strong>\${{ calculatedTotal() | number:'1.2-2' }}</strong>
+      </div>
+
+      <button type="button" class="btn-primary"
+        [disabled]="bookingForm.invalid || dateTimeError() !== '' || isSubmitting()" (click)="confirmBooking()">
+        @if (isSubmitting()) {
+        <span>Procesando Reserva...</span>
+        } @else {
+        <span>Confirmar y Añadir al Carrito</span>
+        }
+      </button>
+      }
     </div>
 
-    <!-- TOAST NOTIFICATION -->
-    @if (toastMessage()) {
-      <div class="toast-notification">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-        </svg>
-        <span>{{ toastMessage() }}</span>
-      </div>
-    }
+  </div>
+</div>
+
+<!-- TOAST NOTIFICATION ACCESIBLE -->
+@if (toastMessage(); as msg) {
+<div class="toast-notification" role="status" aria-live="polite">
+  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+    stroke-width="2.5" aria-hidden="true">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+  </svg>
+  <span>{{ msg }}</span>
+</div>
+}

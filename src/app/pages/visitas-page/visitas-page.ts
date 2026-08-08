@@ -4,7 +4,12 @@ import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { SupabaseService } from '../../services/supabase';
 import { CartService } from '../../services/cart';
 
-// Interfaz que mapea a lo que recibimos de Supabase
+export interface SemanticTriplet {
+  subject: string;
+  predicate: string;
+  object: string;
+}
+
 interface TourProduct {
   id: string;
   name: string;
@@ -20,14 +25,13 @@ interface TourProduct {
 
 @Component({
   selector: 'app-visitas-page',
+  standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './visitas-page.html',
   styleUrl: './visitas-page.scss',
 })
 export class VisitasPage implements OnInit {
-  // En tu entorno real, esto sería: inject(SupabaseService)
   supabaseService = inject(SupabaseService);
-  // En tu entorno real, esto sería: inject(CartService)
   cartService = inject(CartService);
   private fb = inject(FormBuilder);
 
@@ -43,7 +47,7 @@ export class VisitasPage implements OnInit {
   attendeesCount = signal<number>(1);
   dateTimeError = signal<string>('');
 
-  // NUEVO ESTADO PARA CARGA DEL BOTÓN
+  // ESTADO PARA CARGA DEL BOTÓN
   isSubmitting = signal<boolean>(false);
 
   calculatedTotal = computed(() => {
@@ -63,7 +67,6 @@ export class VisitasPage implements OnInit {
   async ngOnInit() {
     try {
       this.isLoading.set(true);
-      // Usamos el servicio simulado para obtener los tours en la vista previa
       const dbTours = await this.supabaseService.getTours();
       this.tours.set(dbTours || []);
     } catch (error) {
@@ -73,6 +76,47 @@ export class VisitasPage implements OnInit {
     }
   }
 
+  /**
+   * Transforma URLs de Supabase Storage para solicitar imágenes redimensionadas y optimizadas
+   */
+  getOptimizedImageUrl(url: string, width = 700, quality = 80): string {
+    if (!url) return '';
+    if (url.includes('/storage/v1/object/public/')) {
+      const renderUrl = url.replace('/storage/v1/object/public/', '/storage/v1/render/image/public/');
+      return `${renderUrl}?width=${width}&quality=${quality}`;
+    }
+    return url;
+  }
+
+  /**
+   * Genera tripletas semánticas (Sujeto - Predicado - Objeto) para AEO de cada experiencia de visita
+   */
+  getSemanticTriplets(tour: TourProduct): SemanticTriplet[] {
+    return [
+      { subject: `La experiencia "${tour.name}"`, predicate: 'ofrece un recorrido guiado por', object: 'la destilería artesanal Estancos a 2500 msnm.' },
+      { subject: `La cata de "${tour.name}"`, predicate: 'incluye la degustación de', object: 'espirituosos añejados en barricas de roble andino.' }
+    ];
+  }
+
+  /**
+   * Retorna una descripción continua enriquecida con tripletas semánticas para metadatos AEO
+   */
+  getFormattedSemanticDescription(tour: TourProduct): string {
+    const triplets = this.getSemanticTriplets(tour);
+    const tripletsText = triplets.map(t => `${t.subject} ${t.predicate} ${t.object}`).join(' ');
+    return `${tour.description} ${tripletsText}`.trim();
+  }
+
+  onImageError(event: Event) {
+    const target = event.target as HTMLImageElement;
+    if (target.src.includes('/render/image/public/')) {
+      const originalUrl = target.src.split('?')[0].replace('/render/image/public/', '/object/public/');
+      target.src = originalUrl;
+      return;
+    }
+    target.src = 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?q=80&w=700&auto=format&fit=crop';
+  }
+
   // Abre el modal y prepara el formulario
   openBookingModal(tour: TourProduct) {
     this.selectedTour.set(tour);
@@ -80,7 +124,7 @@ export class VisitasPage implements OnInit {
     this.attendeesCount.set(1);
     this.dateTimeError.set('');
     this.isBookingModalOpen.set(true);
-    document.body.style.overflow = 'hidden'; // Bloquea el scroll del fondo
+    document.body.style.overflow = 'hidden';
   }
 
   closeBookingModal() {
@@ -114,9 +158,8 @@ export class VisitasPage implements OnInit {
       return true;
     }
 
-    // Usamos T00:00:00 para evitar desajustes de zona horaria local
     const dateObj = new Date(`${dateVal}T00:00:00`);
-    const dayOfWeek = dateObj.getDay(); // 0 = Domingo, 1 = Lunes, ..., 6 = Sábado
+    const dayOfWeek = dateObj.getDay();
     const hour = parseInt(timeVal.split(':')[0], 10);
 
     // Días Cerrados (Lunes a Miércoles)
@@ -145,7 +188,7 @@ export class VisitasPage implements OnInit {
     return true;
   }
 
-  // MÉTODO ACTUALIZADO: Guarda en BD y añade al carrito
+  // Guarda en BD y añade al carrito
   async confirmBooking() {
     if (this.bookingForm.invalid || !this.validateDateTime()) {
       this.bookingForm.markAllAsTouched();
@@ -155,11 +198,10 @@ export class VisitasPage implements OnInit {
     const tour = this.selectedTour();
     if (!tour) return;
 
-    this.isSubmitting.set(true); // Activamos estado de carga
+    this.isSubmitting.set(true);
     const formValues = this.bookingForm.value;
 
     try {
-      // 1. Guardar primero en la base de datos de Supabase como "Pendiente"
       await this.supabaseService.submitTourBooking({
         tour_slug: tour.id,
         user_name: formValues.userName,
@@ -170,7 +212,6 @@ export class VisitasPage implements OnInit {
         status: 'pendiente'
       });
 
-      // 2. Si guardó exitosamente, procedemos a añadirlo al carrito local
       const dateObj = new Date(`${formValues.bookingDate}T00:00:00`);
       const dateStr = dateObj.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
 
@@ -184,7 +225,6 @@ export class VisitasPage implements OnInit {
 
       this.cartService.addToCart(cartProduct, formValues.attendees || 1);
 
-      // 3. Cerramos modal y mostramos confirmación
       this.closeBookingModal();
       this.showToast(`Tu reserva para el ${dateStr} se guardó y añadió al carrito.`);
 
@@ -192,7 +232,7 @@ export class VisitasPage implements OnInit {
       console.error('Error procesando reserva:', error);
       this.dateTimeError.set('Hubo un problema al procesar la reserva. Intenta de nuevo.');
     } finally {
-      this.isSubmitting.set(false); // Desactivamos el estado de carga
+      this.isSubmitting.set(false);
     }
   }
 
