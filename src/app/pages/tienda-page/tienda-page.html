@@ -1,95 +1,240 @@
-<main>
-      <!-- HERO DE LA TIENDA -->
-      <section class="store-hero">
-        <div class="container">
-          <h1>Boutique Online de Destilados Premium Estancos</h1>
-          <p>Adquiere nuestros destilados de altura, ediciones de colección y accesorios exclusivos directamente desde nuestra destilería hasta tu copa.</p>
-        </div>
-      </section>
+<main itemscope itemtype="https://schema.org/LiquorStore">
+  <!-- METADATOS INVISIBLES AEO PARA MOTOR DE BÚSQUEDA Y RESPUESTAS IA -->
+  <meta itemprop="name" content="Boutique & Celler de Destilados Premium — Estancos Distilling Co." />
+  <meta itemprop="description" content="Catálogo exclusivo de Rones Añejos, Whiskies de Malta y Accesorios de Colección elaborados a 2500 msnm en Quito, Ecuador. Venta directa de destilería." />
+  <meta itemprop="currenciesAccepted" content="USD" />
 
-      <section class="section-padding">
-        <div class="container">
+  <!-- BREADCRUMBS SCHEMA.ORG PARA AEO Y SEO -->
+  <nav class="breadcrumb-container container" aria-label="Navegación secundaria">
+    <ol class="breadcrumb-list" itemscope itemtype="https://schema.org/BreadcrumbList">
+      <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="/">
+          <span itemprop="name">Inicio</span>
+        </a>
+        <meta itemprop="position" content="1" />
+      </li>
+      <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" aria-current="page">
+        <span itemprop="name">Boutique & Celler</span>
+        <meta itemprop="position" content="2" />
+      </li>
+    </ol>
+  </nav>
 
-          <!-- BÚSQUEDA Y FILTROS -->
-          <div class="filters-wrapper">
-            <input
-              type="text"
-              placeholder="Buscar por nombre o categoría..."
-              class="search-input"
-              (input)="onSearch($event)"
-            >
-
-          <!-- BARRA DE FILTROS -->
-          <div class="filters-container">
-            <button class="filter-btn" [class.active]="activeCategory() === 'todos'" (click)="setCategory('todos')">Todos</button>
-            <button class="filter-btn" [class.active]="activeCategory() === 'ron'" (click)="setCategory('ron')">Rones</button>
-            <button class="filter-btn" [class.active]="activeCategory() === 'whisky'" (click)="setCategory('whisky')">Whiskies</button>
-            <button class="filter-btn" [class.active]="activeCategory() === 'accesorios'" (click)="setCategory('accesorios')">Accesorios</button>
-          </div>
-          </div>
-
-
-          <!-- GRID DE PRODUCTOS -->
-          <div class="products-grid">
-
-            @if (filteredProducts().length === 0) {
-              <div class="no-products">
-                No hay productos disponibles en esta categoría por el momento.
-              </div>
-            } @else {
-              @for (product of filteredProducts(); track product.id) {
-                <div class="product-card">
-
-                  <div class="product-image-wrapper">
-                    @if (product.badge) {
-                      <span class="product-badge">{{ product.badge }}</span>
-                    } @else if (product.discount_price && product.discount_price > 0) {
-                        <!-- Si no hay un badge personalizado pero sí hay descuento, mostramos 'Oferta' -->
-                        <span class="product-badge sale">Oferta</span>
-                      }
-                    <img [src]="product.image_url" [alt]="product.name" class="product-image" loading="lazy">
-                  </div>
-
-                  <div class="product-content">
-                    <span class="product-category">{{ product.category }}</span>
-                    <h3 class="product-title">{{ product.name }}</h3>
-
-
-                    <!-- LÓGICA DE PRECIOS -->
-                      <div class="price-container">
-                        @if (product.discount_price && product.discount_price > 0) {
-                          <span class="original-price strikethrough">\${{ product.price | number:'1.2-2' }}</span>
-                          <span class="discount-price">\${{ product.discount_price | number:'1.2-2' }}</span>
-                        } @else {
-                          <span class="original-price">\${{ product.price | number:'1.2-2' }}</span>
-                        }
-                      </div>
-
-                    <button class="btn-primary" [disabled]="product.badge === 'Agotado' || product.stock_quantity <= 0 "
-                    (click)="addToCart(product)">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                          <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                        </svg>
-                        {{ product.stock_quantity <= 0 ? 'Sin Stock' : 'Añadir' }}
-                    </button>
-                  </div>
-
-                </div>
-              }
-            }
-
-          </div>
-
-        </div>
-      </section>
-    </main>
-
-    <!-- TOAST NOTIFICATION DE AGREGADO AL CARRITO -->
-    @if (toastMessage()) {
-      <div class="toast-notification">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-        </svg>
-        <span>{{ toastMessage() }}</span>
+  <!-- HERO BOUTIQUE NEOCLÁSICO DE LA TIENDA -->
+  <header class="store-hero">
+    <div class="store-hero-overlay" aria-hidden="true"></div>
+    <div class="container store-hero-content">
+      <div class="hero-crest" aria-hidden="true">
+        <span class="crest-symbol">⚜</span>
       </div>
-    }
+      <span class="hero-subtitle">Selección Privada · Destilería Andina · 2500 MSNM</span>
+      <h1 itemprop="headline">Boutique & Celler Oficial</h1>
+      
+      <div class="classic-divider" aria-hidden="true">
+        <span class="divider-line"></span>
+        <span class="divider-diamond">◆</span>
+        <span class="divider-line"></span>
+      </div>
+
+      <p itemprop="abstract">
+        Adquiere nuestros espirituosos de altura, ediciones limitadas de colección y cristalería fina directamente desde nuestras cavas en Quito hasta la comodidad de tu hogar.
+      </p>
+    </div>
+  </header>
+
+  <section class="section-padding" aria-label="Catálogo de productos de la boutique">
+    <div class="container">
+
+      <!-- BÚSQUEDA Y FILTROS BOUTIQUE -->
+      <div class="filters-wrapper">
+        <div class="search-box">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true" class="search-icon">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+          <input
+            id="store-search-input"
+            name="storeSearchQuery"
+            type="text"
+            placeholder="Buscar por nombre, ron, whisky o accesorio..."
+            class="search-input"
+            aria-label="Buscar producto en la boutique"
+            (input)="onSearch($event)"
+          >
+        </div>
+
+        <!-- BARRA DE FILTROS BOUTIQUE -->
+        <div class="filters-container" role="group" aria-label="Filtrar por categoría">
+          <button 
+            type="button" 
+            class="filter-btn" 
+            [class.active]="activeCategory() === 'todos'" 
+            [attr.aria-pressed]="activeCategory() === 'todos'"
+            (click)="setCategory('todos')"
+          >
+            Todos los Destilados
+          </button>
+          <button 
+            type="button" 
+            class="filter-btn" 
+            [class.active]="activeCategory() === 'ron'" 
+            [attr.aria-pressed]="activeCategory() === 'ron'"
+            (click)="setCategory('ron')"
+          >
+            Rones Añejos
+          </button>
+          <button 
+            type="button" 
+            class="filter-btn" 
+            [class.active]="activeCategory() === 'whisky'" 
+            [attr.aria-pressed]="activeCategory() === 'whisky'"
+            (click)="setCategory('whisky')"
+          >
+            Whiskies de Malta
+          </button>
+          <button 
+            type="button" 
+            class="filter-btn" 
+            [class.active]="activeCategory() === 'accesorios'" 
+            [attr.aria-pressed]="activeCategory() === 'accesorios'"
+            (click)="setCategory('accesorios')"
+          >
+            Accesorios & Cristalería
+          </button>
+        </div>
+      </div>
+
+      <!-- ESTADO DE CARGA BOUTIQUE -->
+      @if (isLoading()) {
+        <div class="loader-container" role="status" aria-live="polite">
+          <div class="spinner" aria-hidden="true"></div>
+          <div class="loader-text">Cargando Celler de Colección...</div>
+        </div>
+      } @else {
+
+        <!-- GRID DE PRODUCTOS BOUTIQUE -->
+        <div class="products-grid" role="list">
+          @if (filteredProducts().length === 0) {
+            <div class="no-products" role="status">
+              <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+              <p>No encontramos destilados o productos disponibles en esta categoría por el momento.</p>
+            </div>
+          } @else {
+            @for (product of filteredProducts(); track product.id; let i = $index) {
+              
+              <article 
+                class="product-card" 
+                role="listitem"
+                itemprop="hasOfferCatalog"
+                itemscope 
+                itemtype="https://schema.org/Offer"
+              >
+                <meta itemprop="position" [content]="i + 1" />
+                <meta itemprop="name" [content]="product.name" />
+                <meta itemprop="priceCurrency" content="USD" />
+                <meta itemprop="price" [content]="(product.discount_price && product.discount_price > 0) ? product.discount_price : product.price" />
+                <meta itemprop="availability" [content]="product.stock_quantity > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock'" />
+                <meta itemprop="description" [content]="getFormattedSemanticDescription(product)" />
+
+                <!-- BARRA SUPERIOR DE CABECERA DE LA TARJETA (BADGES SEPARADOS) -->
+                <div class="card-top-bar">
+                  @if (product.badge) {
+                    <span class="product-badge">{{ product.badge }}</span>
+                  } @else if (product.discount_price && product.discount_price > 0) {
+                    <span class="product-badge sale">Oferta Exclusiva</span>
+                  } @else {
+                    <span class="product-badge default">Destilado de Altura</span>
+                  }
+                  <span class="origin-tag">2500 MSNM</span>
+                </div>
+
+                <!-- VITRINA FOTOGRÁFICA 100% DESPEJADA Y SIN SUPERPOSICIONES -->
+                <div class="product-image-wrapper">
+                  <div class="bottle-light-halo" aria-hidden="true"></div>
+
+                  <img 
+                    [src]="getOptimizedImageUrl(product.image_url, 600, 80)" 
+                    [alt]="'Botella de ' + product.name + ' - Estancos Distilling Co.'" 
+                    class="product-image" 
+                    loading="lazy"
+                    decoding="async"
+                    itemprop="image"
+                    (error)="onImageError($event)"
+                  >
+                </div>
+
+                <!-- CONTENIDO DETALLADO DE LA TARJETA -->
+                <div class="product-content">
+                  <span class="product-category">✨ {{ product.category }}</span>
+                  <h3 class="product-title" itemprop="name">{{ product.name }}</h3>
+
+                  <!-- CONTENEDOR DE PRECIOS CON INSIGNIA DE AHORRO -->
+                  <div class="price-container">
+                    @if (product.discount_price && product.discount_price > 0) {
+                      <div class="price-row">
+                        <span class="original-price strikethrough">\${{ product.price | number:'1.2-2' }}</span>
+                        <span class="discount-price">\${{ product.discount_price | number:'1.2-2' }}</span>
+                      </div>
+                      <span class="savings-pill">Ahorras \${{ (product.price - product.discount_price) | number:'1.2-2' }}</span>
+                    } @else {
+                      <div class="price-row">
+                        <span class="original-price">\${{ product.price | number:'1.2-2' }}</span>
+                      </div>
+                    }
+                  </div>
+
+                  <!-- BADGES DE GARANTÍA Y ORIGEN -->
+                  <div class="trust-badge-row" aria-label="Garantía del producto">
+                    <span class="trust-item">✓ Destilería Oficial</span>
+                    <span class="trust-item">✓ Envío Garantizado</span>
+                  </div>
+
+                  <!-- BLOQUE DE TRIPLETAS SEMÁNTICAS (AEO) -->
+                  <div class="semantic-triplets-box" aria-label="Atributos del destilado">
+                    <span class="triplets-header-title">Atributos del Destilado (AEO)</span>
+                    <ul class="triplets-list">
+                      @for (triplet of getSemanticTriplets(product); track $index) {
+                        <li class="triplet-item" itemscope itemtype="https://schema.org/PropertyValue">
+                          <span class="triplet-subject" itemprop="name">{{ triplet.subject }}</span>
+                          <span class="triplet-predicate">{{ triplet.predicate }}</span>
+                          <span class="triplet-object" itemprop="value">{{ triplet.object }}</span>
+                        </li>
+                      }
+                    </ul>
+                  </div>
+
+                  <!-- BOTÓN DE COMPRA Y ADICIÓN AL CARRITO -->
+                  <button 
+                    type="button" 
+                    class="btn-primary" 
+                    [disabled]="product.badge === 'Agotado' || product.stock_quantity <= 0"
+                    (click)="addToCart(product)"
+                    aria-label="Añadir {{ product.name }} al carrito por \${{ (product.discount_price && product.discount_price > 0) ? product.discount_price : product.price }}"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                    <span>{{ product.stock_quantity <= 0 ? 'Sin Stock' : 'Añadir a la Cesta' }}</span>
+                  </button>
+                </div>
+
+              </article>
+            }
+          }
+        </div>
+      }
+
+    </div>
+  </section>
+</main>
+
+<!-- TOAST NOTIFICATION DE AGREGADO AL CARRITO -->
+@if (toastMessage(); as msg) {
+  <div class="toast-notification" role="status" aria-live="polite">
+    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+    </svg>
+    <span>{{ msg }}</span>
+  </div>
+}
