@@ -25,7 +25,7 @@ export const routes: Routes = [
         title: 'Ron y Whisky Artesanal de los Andes | Estancos Distilling Co.',
         data: {
           description: 'Descubre nuestros destilados premium madurados a 2500 msnm. Ron añejo y whisky andino elaborados con pasión y tradición en Ecuador.',
-          ogImage: 'https://qgbwjkjgnyaynctlqxvq.supabase.co/storage/v1/object/public/views/hero.jpeg'
+          ogImage: 'https://qgbwjkjgnyaynctlqxvq.supabase.co/storage/v1/object/public/views/fotosFondoEstancosall.jpeg'
         }
     },
     {
