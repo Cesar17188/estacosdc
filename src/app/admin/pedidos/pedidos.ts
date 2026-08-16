@@ -68,14 +68,63 @@ export class Pedidos implements OnInit{
     this.isLoadingDetails.set(true);
 
     try {
-      // Cargamos los items de la orden seleccionada
-      const items = await this.crmService.getOrderDetails(order.id);
+      // Cargamos los items de la orden seleccionada usando el UUID original
+      const targetId = order.original_id || order.id;
+      const items = await this.crmService.getOrderDetails(targetId);
       this.orderItems.set(items);
     } catch (error) {
-      console.error('Error', error);
+      console.error('Error al cargar items del pedido:', error);
     } finally {
       this.isLoadingDetails.set(false);
     }
+  }
+
+  printReceipt() {
+    window.print();
+  }
+
+  sendInvoiceEmail() {
+    const order = this.selectedOrder();
+    if (!order || !order.email) {
+      this.dialogType.set('error');
+      this.dialogMessage.set('El pedido no tiene un correo electrónico registrado.');
+      return;
+    }
+
+    const items = this.orderItems();
+    const itemsText = items.length > 0
+      ? items.map(i => `• ${i.quantity}x ${i.product_name} - $${(i.quantity * i.unit_price).toFixed(2)}`).join('\n')
+      : `• Total del pedido: $${order.total_amount.toFixed(2)}`;
+
+    const subject = encodeURIComponent(`Comprobante de Pedido #${order.id} | Estancos D.C.`);
+    const body = encodeURIComponent(
+      `Estimado/a ${order.billing_razon_social || order.customer},\n\n` +
+      `Gracias por tu compra en Estancos Destilería Clandestina. A continuación encontrarás el resumen y comprobante de tu pedido:\n\n` +
+      `--------------------------------------------------\n` +
+      `N° PEDIDO: ${order.id}\n` +
+      `FECHA: ${this.formatDate(order.created_at)}\n` +
+      `ESTADO: ${(order.status || 'Pendiente').toUpperCase()}\n` +
+      `--------------------------------------------------\n\n` +
+      `DATOS DE FACTURACIÓN:\n` +
+      `Razón Social / Nombre: ${order.billing_razon_social || 'Consumidor Final'}\n` +
+      `RUC / C.I.: ${order.billing_ruc_ci || '9999999999999'}\n` +
+      `Correo: ${order.email}\n` +
+      `Dirección de Envío: ${order.shipping_address?.address || 'N/A'}, ${order.shipping_address?.sector || ''}, ${order.shipping_address?.city || ''}\n\n` +
+      `DETALLE DE PRODUCTOS:\n` +
+      `${itemsText}\n\n` +
+      `TOTAL A PAGAR: $${order.total_amount.toFixed(2)}\n\n` +
+      `--------------------------------------------------\n` +
+      `Puedes guardar o imprimir este comprobante como respaldo de tu compra.\n\n` +
+      `Atentamente,\n` +
+      `Estancos Destilería Clandestina\n` +
+      `WhatsApp: +593 99 858 1721\n` +
+      `estancos.d.c@outlook.com`
+    );
+
+    window.open(`mailto:${order.email}?subject=${subject}&body=${body}`, '_blank');
+
+    this.dialogType.set('success');
+    this.dialogMessage.set(`Se abrió tu gestor de correo para enviar el comprobante a ${order.email}`);
   }
 
   closeModal() {

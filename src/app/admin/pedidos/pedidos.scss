@@ -164,55 +164,181 @@
       /* ================= MODAL DETALLE DE PEDIDO ================= */
       .modal-overlay {
         position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-        background-color: rgba(0,0,0,0.8); backdrop-filter: blur(5px);
-        z-index: 100; display: flex; justify-content: center; align-items: center;
-        opacity: 0; visibility: hidden; transition: all 0.3s;
+        background-color: rgba(0,0,0,0.85); backdrop-filter: blur(6px);
+        z-index: 1000; display: flex; justify-content: center; align-items: center;
+        opacity: 0; visibility: hidden; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        padding: 1.5rem;
       }
       .modal-overlay.open { opacity: 1; visibility: visible; }
 
       .modal-content {
         background-color: var(--crm-bg-surface);
         border: 1px solid var(--crm-border);
-        border-radius: 8px; width: 100%; max-width: 800px; max-height: 90vh;
+        border-radius: 10px; width: 100%; max-width: 900px; max-height: 90vh;
         display: flex; flex-direction: column;
-        transform: translateY(20px); transition: all 0.3s;
-        box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+        transform: translateY(20px) scale(0.98); transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        box-shadow: 0 25px 60px rgba(0,0,0,0.6);
+        overflow: hidden;
       }
-      .modal-overlay.open .modal-content { transform: translateY(0); }
+      .modal-overlay.open .modal-content { transform: translateY(0) scale(1); }
 
-      .modal-header { padding: 1.5rem 2rem; border-bottom: 1px solid var(--crm-border); display: flex; justify-content: space-between; align-items: center; }
-      .modal-header h2 { margin: 0; font-family: var(--font-heading); font-size: 1.4rem; color: var(--crm-text-main); }
-      .modal-header .order-id { color: var(--crm-text-muted); font-family: monospace; font-size: 1rem; margin-left: 1rem; }
+      .modal-header {
+        padding: 1.5rem 2rem;
+        border-bottom: 1px solid var(--crm-border);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: rgba(255,255,255,0.015);
+      }
+      .modal-header h2 { margin: 0; font-family: var(--font-heading); font-size: 1.4rem; color: var(--crm-text-main); letter-spacing: 0.5px; }
+      .modal-header .order-id {
+        color: var(--crm-accent);
+        font-family: monospace;
+        font-size: 0.95rem;
+        background: rgba(212, 175, 55, 0.1);
+        padding: 0.2rem 0.6rem;
+        border-radius: 4px;
+        border: 1px solid rgba(212, 175, 55, 0.2);
+      }
 
-      .btn-close { background: transparent; border: none; color: var(--crm-text-muted); cursor: pointer; transition: color 0.2s; padding: 0; }
-      .btn-close:hover { color: var(--crm-accent); }
+      .btn-close {
+        background: transparent; border: none; color: var(--crm-text-muted);
+        cursor: pointer; transition: all 0.2s; padding: 0.3rem; border-radius: 4px;
+        display: flex; align-items: center; justify-content: center;
+      }
+      .btn-close:hover { color: #fff; background-color: rgba(255,255,255,0.05); }
 
-      .modal-body { padding: 2rem; overflow-y: auto; display: grid; grid-template-columns: 2fr 1fr; gap: 3rem; }
-      @media (max-width: 768px) { .modal-body { grid-template-columns: 1fr; gap: 2rem; } }
+      .modal-body {
+        padding: 2rem;
+        overflow-y: auto;
+        display: grid;
+        grid-template-columns: 1.6fr 1fr;
+        gap: 2.5rem;
+      }
+      @media (max-width: 820px) { .modal-body { grid-template-columns: 1fr; gap: 2rem; padding: 1.5rem; } }
+
+      /* Elementos impresos ocultos por defecto en pantalla */
+      .print-invoice-header,
+      .print-invoice-footer {
+        display: none;
+      }
 
       /* Secciones dentro del modal */
-      .detail-section { margin-bottom: 2rem; }
-      .detail-section h3 { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; color: var(--crm-text-muted); margin: 0 0 1rem 0; border-bottom: 1px solid var(--crm-border); padding-bottom: 0.5rem; }
+      .detail-section {
+        background-color: var(--crm-bg-card);
+        border: 1px solid var(--crm-border);
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+      }
+      .detail-section:last-child { margin-bottom: 0; }
 
-      /* Lista de Items */
-      .order-item-list { list-style: none; padding: 0; margin: 0; }
-      .order-item { display: flex; justify-content: space-between; align-items: center; padding: 1rem 0; border-bottom: 1px dashed var(--crm-border); }
-      .order-item:last-child { border-bottom: none; }
-      .item-name { font-weight: 500; color: var(--crm-text-main); margin-bottom: 0.2rem; }
-      .item-qty { font-size: 0.85rem; color: var(--crm-text-muted); }
-      .item-price { font-weight: 600; color: var(--crm-text-main); }
+      .section-title {
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: var(--crm-accent);
+        margin: 0 0 1.2rem 0;
+        border-bottom: 1px solid var(--crm-border);
+        padding-bottom: 0.6rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+      }
 
-      /* Datos de envío */
-      .shipping-info p { margin: 0 0 0.5rem 0; font-size: 0.95rem; line-height: 1.5; color: var(--crm-text-main); }
-      .shipping-info strong { color: var(--crm-text-muted); font-weight: 500; font-size: 0.85rem; display: block; margin-top: 1rem; }
+      /* Tabla de productos en comprobante */
+      .order-items-table-wrapper { width: 100%; overflow-x: auto; }
+      .receipt-items-table { width: 100%; border-collapse: collapse; text-align: left; }
+      .receipt-items-table th {
+        font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.8px;
+        color: var(--crm-text-muted); padding: 0.6rem 0.5rem;
+        border-bottom: 1px solid var(--crm-border);
+      }
+      .receipt-items-table td {
+        padding: 0.8rem 0.5rem; font-size: 0.9rem;
+        border-bottom: 1px dashed var(--crm-border);
+        color: var(--crm-text-main);
+      }
+      .item-name-cell { font-weight: 500; }
+      .tfoot-total td {
+        padding-top: 1.2rem;
+        border-bottom: none;
+        border-top: 1px solid var(--crm-border);
+        color: var(--crm-text-main);
+        font-size: 0.95rem;
+      }
+      .grand-total-val {
+        color: var(--crm-accent) !important;
+        font-size: 1.25rem !important;
+        font-family: var(--font-heading);
+      }
+
+      /* Estilos de fichas de información (Facturación / Envío) */
+      .info-grid { display: flex; flex-direction: column; gap: 0.7rem; }
+      .info-row { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; }
+      .info-label { font-size: 0.82rem; color: var(--crm-text-muted); text-transform: uppercase; letter-spacing: 0.5px; flex-shrink: 0; }
+      .info-value { font-size: 0.92rem; color: var(--crm-text-main); text-align: right; word-break: break-word; font-weight: 500; }
+      .info-value.highlight-val { color: var(--crm-accent); font-weight: 600; }
+
+      /* Botones de acción del comprobante */
+      .receipt-actions { display: flex; flex-direction: column; gap: 0.8rem; }
+      
+      .btn-action-pdf {
+        width: 100%;
+        background-color: var(--crm-accent);
+        color: #111;
+        border: none;
+        padding: 0.9rem 1.2rem;
+        font-weight: 700;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.6rem;
+        box-shadow: 0 4px 12px rgba(212, 175, 55, 0.2);
+      }
+      .btn-action-pdf:hover {
+        background-color: #e5be3c;
+        transform: translateY(-1px);
+        box-shadow: 0 6px 16px rgba(212, 175, 55, 0.3);
+      }
+
+      .btn-action-email {
+        width: 100%;
+        background-color: transparent;
+        color: var(--crm-text-main);
+        border: 1px solid var(--crm-border);
+        padding: 0.9rem 1.2rem;
+        font-weight: 600;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.6rem;
+      }
+      .btn-action-email:hover {
+        border-color: var(--crm-accent);
+        color: var(--crm-accent);
+        background-color: rgba(212, 175, 55, 0.05);
+      }
 
       /* Acciones de Estado */
-      .status-actions { background-color: var(--crm-bg-card); padding: 1.5rem; border-radius: 4px; border: 1px solid var(--crm-border); }
+      .status-actions { background-color: transparent; padding: 0; }
       .status-select { width: 100%; background-color: var(--crm-bg-base); border: 1px solid var(--crm-border); color: var(--crm-text-main); padding: 0.8rem; border-radius: 4px; margin-bottom: 1rem; font-family: var(--font-ui); outline: none; }
       .status-select:focus { border-color: var(--crm-accent); }
 
-      .btn-primary { width: 100%; background-color: var(--crm-accent); color: #121212; border: none; padding: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; border-radius: 2px; cursor: pointer; transition: all 0.2s; }
-      .btn-primary:hover:not(:disabled) { background-color: #b5952f; }
+      .btn-primary { width: 100%; background-color: #2b2e3b; color: var(--crm-text-main); border: 1px solid var(--crm-border); padding: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; border-radius: 4px; cursor: pointer; transition: all 0.2s; }
+      .btn-primary:hover:not(:disabled) { background-color: var(--crm-accent); color: #111; border-color: var(--crm-accent); }
       .btn-primary:disabled { background-color: var(--crm-border); color: var(--crm-text-muted); cursor: not-allowed; }
 
       /* Loader */
@@ -237,3 +363,237 @@
           white-space: nowrap;
         }
       }
+
+      /* ========================================================= */
+      /* ================= CSS ESPECIAL: @media print ============ */
+      /* Transforma el modal en un comprobante PDF blanco y limpio */
+      /* ========================================================= */
+      @media print {
+        @page {
+          size: portrait;
+          margin: 15mm 15mm 15mm 15mm;
+        }
+
+        /* Ocultar elementos generales y de interfaz oscura */
+        :host {
+          background: #ffffff !important;
+          color: #111827 !important;
+          padding: 0 !important;
+          min-height: auto !important;
+        }
+
+        .screen-only,
+        .page-header,
+        .data-panel,
+        .header-actions,
+        .btn-close,
+        .btn-action-pdf,
+        .btn-action-email,
+        .status-actions,
+        .modal-header,
+        app-dialog,
+        .crm-sidebar,
+        .crm-topbar,
+        .sidebar-overlay {
+          display: none !important;
+          visibility: hidden !important;
+        }
+
+        /* Reconfigurar el overlay para flujo normal de impresión */
+        .modal-overlay {
+          position: static !important;
+          background: transparent !important;
+          backdrop-filter: none !important;
+          padding: 0 !important;
+          margin: 0 !important;
+          display: block !important;
+          opacity: 1 !important;
+          visibility: visible !important;
+        }
+
+        .modal-content.printable-receipt {
+          position: static !important;
+          width: 100% !important;
+          max-width: 100% !important;
+          max-height: none !important;
+          background: #ffffff !important;
+          color: #111827 !important;
+          border: none !important;
+          box-shadow: none !important;
+          transform: none !important;
+          padding: 0 !important;
+          overflow: visible !important;
+          border-radius: 0 !important;
+        }
+
+        .modal-body {
+          padding: 0 !important;
+          display: block !important;
+          overflow: visible !important;
+        }
+
+        .modal-main-col {
+          width: 100% !important;
+        }
+
+        /* ENCABEZADO OFICIAL DE COMPROBANTE IMPRESO */
+        .print-invoice-header {
+          display: flex !important;
+          justify-content: space-between !important;
+          align-items: center !important;
+          border-bottom: 2px solid #111827 !important;
+          padding-bottom: 1.5rem !important;
+          margin-bottom: 2rem !important;
+        }
+
+        .invoice-brand-wrapper {
+          display: flex !important;
+          align-items: center !important;
+          gap: 1.25rem !important;
+        }
+
+        .invoice-logo {
+          width: 70px !important;
+          height: 70px !important;
+          object-fit: contain !important;
+          display: block !important;
+        }
+
+        .invoice-brand .brand-title {
+          font-family: var(--font-heading), 'Cinzel', serif !important;
+          font-size: 2rem !important;
+          font-weight: 800 !important;
+          color: #111827 !important;
+          margin: 0 0 0.15rem 0 !important;
+          letter-spacing: 2.5px !important;
+        }
+
+        .invoice-brand .brand-sub {
+          font-size: 0.95rem !important;
+          font-style: italic !important;
+          color: #4b5563 !important;
+          margin: 0 0 0.4rem 0 !important;
+          letter-spacing: 1px !important;
+        }
+
+        .invoice-brand .brand-meta {
+          font-size: 0.8rem !important;
+          color: #6b7280 !important;
+          margin: 0 !important;
+        }
+
+        .invoice-meta-box {
+          text-align: right !important;
+          border: 1px solid #d1d5db !important;
+          padding: 0.8rem 1.2rem !important;
+          border-radius: 4px !important;
+          background-color: #f9fafb !important;
+        }
+
+        .invoice-meta-box .invoice-title {
+          font-size: 0.95rem !important;
+          font-weight: 700 !important;
+          letter-spacing: 1px !important;
+          color: #111827 !important;
+          margin-bottom: 0.3rem !important;
+        }
+
+        .invoice-meta-box .invoice-number {
+          font-family: monospace !important;
+          font-size: 1.1rem !important;
+          font-weight: 700 !important;
+          color: #1f2937 !important;
+          margin-bottom: 0.4rem !important;
+        }
+
+        .invoice-meta-box .invoice-date,
+        .invoice-meta-box .invoice-status {
+          font-size: 0.85rem !important;
+          color: #374151 !important;
+          margin-bottom: 0.2rem !important;
+        }
+
+        /* SECCIONES Y TABLAS */
+        .detail-section {
+          background-color: transparent !important;
+          border: 1px solid #e5e7eb !important;
+          border-radius: 6px !important;
+          padding: 1.2rem !important;
+          margin-bottom: 1.5rem !important;
+          page-break-inside: avoid !important;
+        }
+
+        .section-title {
+          color: #111827 !important;
+          font-size: 0.85rem !important;
+          border-bottom: 1px solid #e5e7eb !important;
+          margin-bottom: 0.8rem !important;
+          padding-bottom: 0.4rem !important;
+        }
+
+        .receipt-items-table th {
+          background-color: #f3f4f6 !important;
+          color: #111827 !important;
+          border-bottom: 1px solid #d1d5db !important;
+          font-weight: 700 !important;
+          padding: 0.6rem !important;
+        }
+
+        .receipt-items-table td {
+          color: #1f2937 !important;
+          border-bottom: 1px solid #e5e7eb !important;
+          padding: 0.6rem !important;
+        }
+
+        .tfoot-total td {
+          border-top: 2px solid #111827 !important;
+          color: #111827 !important;
+          padding-top: 0.8rem !important;
+        }
+
+        .grand-total-val {
+          color: #111827 !important;
+          font-size: 1.3rem !important;
+          font-weight: 800 !important;
+        }
+
+        .info-label {
+          color: #6b7280 !important;
+          font-weight: 600 !important;
+        }
+
+        .info-value {
+          color: #111827 !important;
+          font-weight: 600 !important;
+        }
+
+        .info-value.highlight-val {
+          color: #111827 !important;
+          font-weight: 700 !important;
+        }
+
+        /* PIE DE PÁGINA IMPRESO */
+        .print-invoice-footer {
+          display: block !important;
+          text-align: center !important;
+          margin-top: 3rem !important;
+          padding-top: 1.5rem !important;
+          border-top: 1px dashed #d1d5db !important;
+          page-break-inside: avoid !important;
+        }
+
+        .print-thanks {
+          font-family: var(--font-heading), 'Cinzel', serif !important;
+          font-size: 1rem !important;
+          font-weight: 600 !important;
+          color: #111827 !important;
+          margin: 0 0 0.3rem 0 !important;
+        }
+
+        .print-disclaimer {
+          font-size: 0.75rem !important;
+          color: #9ca3af !important;
+          margin: 0 !important;
+        }
+      }
+

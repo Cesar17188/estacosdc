@@ -35,6 +35,46 @@
       .is-invalid { border-color: #ef4444 !important; }
       .error-text { color: #ef4444; font-size: 0.8rem; margin-top: 0.5rem; display: block; }
 
+      /* === DATOS DE FACTURACIÓN === */
+      .billing-section {
+        margin-top: 2rem;
+        padding-top: 1.5rem;
+        border-top: 1px dashed var(--color-border);
+      }
+      .billing-header {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 0.5rem;
+      }
+      .billing-header h3 {
+        font-family: var(--font-heading);
+        font-size: 1.15rem;
+        color: var(--color-text-main);
+        margin: 0;
+      }
+      .billing-badge {
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        background: rgba(212, 175, 55, 0.12);
+        color: var(--color-accent-gold);
+        padding: 0.2rem 0.6rem;
+        border-radius: 12px;
+        border: 1px solid rgba(212, 175, 55, 0.25);
+        font-weight: 600;
+      }
+      .billing-note {
+        font-size: 0.85rem;
+        color: var(--color-text-muted);
+        margin-top: 0;
+        margin-bottom: 1.25rem;
+        line-height: 1.4;
+      }
+      .billing-note strong {
+        color: var(--color-accent-gold);
+      }
+
       /* === RESUMEN DEL PEDIDO === */
       .order-summary {
         background-color: var(--color-bg-card);

@@ -233,6 +233,8 @@ export class SupabaseService {
       total_amount: totalAmount,
       contact_email: orderDetails.email,
       status: 'pendiente',
+      billing_ruc_ci: orderDetails.billingRucCi?.trim() || '9999999999999',
+      billing_razon_social: orderDetails.billingRazonSocial?.trim() || 'Consumidor Final',
       shipping_address: {
         fullName: orderDetails.fullName,
         phone: orderDetails.phone,
@@ -352,7 +354,9 @@ export class SupabaseService {
         amount: Number(order.total_amount),
         total_amount: Number(order.total_amount),
         status: order.status,
-        shipping_address: order.shipping_address
+        shipping_address: order.shipping_address,
+        billing_ruc_ci: order.billing_ruc_ci || '9999999999999',
+        billing_razon_social: order.billing_razon_social || 'Consumidor Final'
       };
     });
   }

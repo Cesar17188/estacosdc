@@ -46,7 +46,9 @@ export class CheckoutPage implements OnInit {
     email: ['', [Validators.required, Validators.email]],
     city: ['', Validators.required],
     sector: ['', Validators.required],
-    address: ['', Validators.required]
+    address: ['', Validators.required],
+    billingRazonSocial: [''],
+    billingRucCi: ['']
   });
 
   ngOnInit() {
@@ -80,6 +82,8 @@ export class CheckoutPage implements OnInit {
 
     // 2. Extraemos los datos del formulario
     const form = this.checkoutForm.value;
+    const billingRazonSocial = form.billingRazonSocial?.trim() || 'Consumidor Final';
+    const billingRucCi = form.billingRucCi?.trim() || '9999999999999';
 
     try {
       // 3. Guardar la orden en Supabase (tabla 'orders') con estado 'pendiente'
@@ -92,6 +96,10 @@ export class CheckoutPage implements OnInit {
       message += `Nombre: ${form.fullName}\n`;
       message += `Teléfono: ${form.phone}\n`;
       message += `Dirección: ${form.address}, ${form.sector}, ${form.city}\n\n`;
+
+      message += `*Datos de Facturación:*\n`;
+      message += `Razón Social / Nombre: ${billingRazonSocial}\n`;
+      message += `RUC / C.I.: ${billingRucCi}\n\n`;
 
       message += `*Resumen del Pedido:*\n`;
       this.cartService.cartItems().forEach(item => {

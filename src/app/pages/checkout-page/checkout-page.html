@@ -54,6 +54,25 @@
                   @if (isInvalid('address')) { <span class="error-text">La dirección es obligatoria</span> }
                 </div>
 
+                <div class="billing-section">
+                  <div class="billing-header">
+                    <h3>Datos de Facturación</h3>
+                    <span class="billing-badge">Opcional</span>
+                  </div>
+                  <p class="billing-note">Si no completas estos campos, tu factura se emitirá automáticamente a nombre de <strong>Consumidor Final</strong>.</p>
+
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label>Razón Social / Nombre</label>
+                      <input type="text" formControlName="billingRazonSocial" placeholder="Ej: Consumidor Final o Tu Nombre / Empresa">
+                    </div>
+                    <div class="form-group">
+                      <label>RUC o Cédula</label>
+                      <input type="text" formControlName="billingRucCi" placeholder="Ej: 9999999999999 o 17XXXXXXXX001">
+                    </div>
+                  </div>
+                </div>
+
                 <!-- NOTA: El botón de envío se movió al final de la columna derecha para fluidez UX -->
               </form>
             </div>
