@@ -10,7 +10,8 @@
   <router-outlet></router-outlet>
 </main>
 
-<!-- Mostrar Footer y Sidebar del Carrito SOLO si NO estamos en una ruta de admin -->
+<!-- Mostrar Footer y ChatBot SOLO si NO estamos en una ruta de admin -->
 @if (!isAdminRoute()) {
   <app-footer></app-footer>
+  <app-chat-bot></app-chat-bot>
 }

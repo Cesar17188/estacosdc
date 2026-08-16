@@ -5,12 +5,14 @@ import { filter, map, mergeMap } from 'rxjs/operators';
 import { Header } from './shared/header/header';
 import { Footer } from "./shared/footer/footer";
 import { Agegate } from "./shared/agegate/agegate";
-import { isPlatformBrowser } from '@angular/common';
+import { ChatBot } from "./shared/chat-bot/chat-bot";
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 
 declare let gtag: Function;
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, Header, Footer, Agegate],
+  standalone: true,
+  imports: [CommonModule, RouterOutlet, Header, Footer, Agegate, ChatBot],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })

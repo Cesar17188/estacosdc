@@ -264,6 +264,29 @@ export class SupabaseService {
     return { success: true, orderId: orderId };
   }
 
+  /**
+   * Consulta pública segura del estado de un pedido para el Asistente Virtual / Bot
+   */
+  async getPublicOrderStatus(queryId: string) {
+    try {
+      const cleanId = queryId.replace(/^ORD-/i, '').trim().toLowerCase();
+      if (!cleanId || cleanId.length < 3) return null;
+
+      const { data, error } = await this.supabase
+        .from('orders')
+        .select('id, status, total_amount, created_at, billing_razon_social, shipping_address')
+        .or(`id.ilike.${cleanId}%,id.eq.${cleanId}`)
+        .limit(1)
+        .maybeSingle();
+
+      if (error || !data) return null;
+      return data;
+    } catch (err) {
+      console.warn('Error al consultar estado de orden:', err);
+      return null;
+    }
+  }
+
 
   // ==========================================================================
   // 4. MÓDULO CRM (PANEL DE ADMINISTRADOR)
